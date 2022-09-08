@@ -51,15 +51,20 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class ToolRegistrationForm(forms.ModelForm):
-    pass
-    class Meta:
-        pass
-
-
-class BorrowingForm:
-    pass
+    tool_id = forms.IntegerField(required=True)
+    tool_name = forms.CharField(required=True)
+    tool_image = forms.ImageField(required=True)
+    storage = forms.CharField(required=True)
+    layer = forms.CharField(required=True)
 
     class Meta:
-        pass
+        model = Tools
+        fields = ["tool_id", "tool_name", "tool_image", "storage", "layer"]
 
-    
+
+class ToolReservationForm:
+    class Meta:
+        model = Transactions
+        fields = ["borrower_id", "fullname", "year_course", "borrow_datetime", "return_datetime"]
+        
+   

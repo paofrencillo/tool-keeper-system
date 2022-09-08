@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 class Tools(models.Model):
     tool_id = models.BigIntegerField(primary_key=True)
-    tool_name = models.CharField()
+    tool_name = models.CharField(unique=True)
     tool_image = models.ImageField(upload_to='imgs/', null=False, blank=False)
     storage = models.CharField()
     layer = models.CharField()
@@ -23,7 +23,7 @@ class Transactions(models.Model):
     year_course = models.CharField()
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
-    status = models.CharField()
+    status = models.CharField(default="AVAILABLE")
 
 
 class ToolsBorrowed(models.Model):
