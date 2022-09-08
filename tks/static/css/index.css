@@ -1,10 +1,67 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+
 body {
-    overflow-x: hidden !important;
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: gray;
+}
+
+.login_form {
+    width: 425px;
+    height: min-content;
+    padding: 20px;
+    border-radius: 12px;
+    border-color: #BD2131;
+    background: white;
+}
+
+.bg-image {
+    opacity: 0.2;
+    position: absolute;
+    z-index: 0;
+}
+
+.login_form p {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.login_form hr {
+    position: relative;
+    border: none;
+    height: 3px;
+    background: #BD2131;
+    margin-bottom: 20px;
+}
+
+.login_form h3 {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #BD2131;
+    margin-top: 25px;   
+}
+
+.login_form form {
+    font-size: 16px;
+}
+
+.login_form form .form-group {
+    margin-bottom: 12px;
+}
+
+.btn-success {
+    font-size: 20px;
+    margin-top: 12px;
+}
+
+.btn-info {
+    font-size: 20px;
 }
 
