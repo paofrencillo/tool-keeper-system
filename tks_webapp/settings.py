@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms'
     'tks',
 ]
 
@@ -75,12 +76,24 @@ WSGI_APPLICATION = 'tks_webapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'tool_keeper_system',
+        'USER': 'root,',
+        'PASSWORD': '', # Note: Don't forgot to put a password before deployment!! 
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
+
 
 
 # Password validation
@@ -132,5 +145,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Enable BootStrap using crispy
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# Customized User Model
 AUTH_USER_MODEL = 'tks_User'
