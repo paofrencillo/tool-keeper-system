@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 class Tools(models.Model):
     tool_id = models.BigIntegerField(primary_key=True)
-    tool_name = models.CharField(unique=True)
+    tool_name = models.CharField(max_length=25, unique=True)
     tool_image = models.ImageField(upload_to='imgs/', null=False, blank=False)
     storage = models.CharField(max_length=10)
     layer = models.CharField(max_length=8)
