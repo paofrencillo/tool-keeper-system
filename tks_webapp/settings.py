@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'tks_webapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tool_keeper_system',
-        'USER': 'root,',
+        'USER': 'root',
         'PASSWORD': '', # Note: Don't forgot to put a password before deployment!! 
         'HOST': 'localhost',
         'PORT': '3306'
@@ -134,10 +134,10 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'tks/media/')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'tks/static/')
 ]
 
 # Default primary key field type
