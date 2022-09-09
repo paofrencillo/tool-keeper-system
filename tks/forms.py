@@ -4,8 +4,11 @@ from .models import *
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
+    username = forms.CharField(label='',
+                                widget=forms.TextInput(attrs={"placeholder": "Username"}),
+                                required=True)
+    password = forms.CharField(label='',
+                                widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
                                 required=True)
     
 class UserRegistrationForm(UserCreationForm):

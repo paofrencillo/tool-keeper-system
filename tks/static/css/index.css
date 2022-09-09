@@ -18,6 +18,8 @@ body {
     border-color: #BD2131;
     background: whitesmoke;
     z-index: 0;
+    border: 3px solid #BD2131;
+    position: relative;
 }
 
 .bg-image {
@@ -61,28 +63,44 @@ body {
     margin-bottom: 12px;
 }
 
+.form-control, input {
+    height: calc(1.75em + 1.15rem + 1.25px);
+    border-radius: 10px;
+    border: 2px solid #BD2131;
+    background-color: transparent;
+}
+
 .btn-block {
     color: black;
-    border: 3px solid #BD2131;
-    border-radius: 12px;
+    border: 2px solid #BD2131;
+    border-radius: 10px;
     background: rgba(189, 33, 49, 0.3);
     font-size: 20px;
     font-weight: bolder;
 }
 
-#username, #password {
+.btn-block:hover {
     color: black;
-    font-weight: 500;
-    border: 3px solid #BD2131;
-    border-radius: 12px;
-    background-color: transparent;
-    
+    border: 2px solid #BD2131;
+    border-radius: 10px;
+    background: rgba(237, 4, 27, 0.5);
+    font-size: 20px;
+    font-weight: bolder;
 }
 
 .btn-success {
     border: 3px solid #17750F;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 20px;
     font-weight: 500;
 }
 
+.alert-danger {
+    color: red;
+    font-size: 12px;
+    background-color: rgba(180, 103, 111, 0.3);
+}
+
+.alert {
+    padding: 0.5rem 1rem;
+}

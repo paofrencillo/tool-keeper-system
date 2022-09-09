@@ -1,4 +1,3 @@
-from pyexpat.errors import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
@@ -30,9 +29,9 @@ def index(request):
                     return redirect(request, "home_sf.html")
                 elif user.role == "TOOL KEEPER":
                     return redirect(request, "home_tk.html")
-        else:
-            messages.add_message(request, messages.ERROR, "Username or password incorrect!")
-
+            else:
+                messages.add_message(request, messages.ERROR, "Username or password incorrect!")
+                return redirect('/')
     else:
         login_form = LoginForm()
 

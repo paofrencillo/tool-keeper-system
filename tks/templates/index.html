@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
-   <title> TKS | Login </title> 
+  TKS | Login
 {% endblock %}
 
 {% block style %}
@@ -11,35 +12,39 @@
 
 
 {% block main_content %}
-    <div class="login_form alert">
-        <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
-        <form action="">
-            <div class="header">
-                <p>Technological University of the Philippines - Cavite</p>
-                <p>Department of Industrial Technology</p>
-                <h3 class="title">TOOL KEEPER SYSTEM</h3>
-                <hr>
-                <form name="login-form" class="was-validated">
-                    <div class="form-group">
-                      <input type="text" id="username" class="form-control" placeholder="Username"/>
-                    </div>
-                    <div class="form-group">
-                      <input type="password" id="password" class="form-control" placeholder="Password" />
-                    </div>
-                    <div class="form-group">
-                      <input class="btn btn-block w-75" type="submit" value="LOGIN">
-                    </div>   
-                    <div class="form-group">
-                      <a href=""> Forgot Passowrd? </a>
-                    </div> 
-                    <hr>
-                    <div class="form-group">
-                        <input class="btn btn-info w-100" type="submit" value="Create Account">
-                      </div>   
-            </div>  
-        </form>
-    </div>  
-
+  <div class="login_form"> 
+    <form method="POST" action="{% url 'index' %}" class="was-validated">
+      {% csrf_token %}
+      <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
+      <div>
+        <p>Technological University of the Philippines - Cavite</p>
+        <p>Department of Industrial Technology</p>
+        <h3 class="title">TOOL KEEPER SYSTEM</h3>
+        <hr>
+          {{ login_form.username|as_crispy_field }}
+          {{ login_form.password|as_crispy_field }}
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger">
+            {{ message }}
+          </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="mt-4 form-group">
+          <input class="btn btn-block" type="submit" value="LOGIN">
+        </div>   
+        <div class="form-group">
+          <a href=""> Forgot Password? </a>
+        </div> 
+        <hr>  
+      </div>  
+    </form>
+    <div class="container-fluid row justify-content-center m-0">
+      <input class="btn btn-success w-75" type="submit" value="Create Account">
+    </div>
+  </div>  
 {% endblock %}
 
 {% block js %}
