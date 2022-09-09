@@ -149,4 +149,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Customized User Model
-AUTH_USER_MODEL = 'tks_User'
+AUTH_USER_MODEL = 'tks.User'
