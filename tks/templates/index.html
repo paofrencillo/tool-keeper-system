@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock %}
 
-
 {% block main_content %}
   <div class="login_form"> 
     <form method="POST" action="{% url 'index' %}" class="was-validated">
@@ -42,7 +41,9 @@
       </div>  
     </form>
     <div class="container-fluid row justify-content-center m-0">
-      <input class="btn btn-success w-75" type="submit" value="Create Account">
+      <a href="{% url 'registration_role' %}" class="row justify-content-center w-75">
+        <button class="btn btn-success w-75">Create Account</button>
+      </a> 
     </div>
   </div>  
 {% endblock %}

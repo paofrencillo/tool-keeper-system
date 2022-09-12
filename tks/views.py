@@ -38,7 +38,16 @@ def index(request):
     context = {"login_form": login_form}
     return render(request, 'index.html', context)
 
-def registration(request):
+def registration_role(request):
+    return render(request, "register_as.html")
+
+def registration_student(request):
+    pass
+
+def registration_faculty(request):
+    pass
+
+def registration_toolkeeper(request):
     pass
 
 def home_sf(request):

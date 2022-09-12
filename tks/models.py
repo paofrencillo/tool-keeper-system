@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     tupc_id = models.BigIntegerField(primary_key=True)
-    year_course = models.CharField(max_length=20)
+    year_course = models.CharField(max_length=20, null=True)
     role = models.CharField(max_length=11)
 
 

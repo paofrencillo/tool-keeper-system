@@ -2,6 +2,7 @@
 
 
 body {
+    font-family: 'Inter';
     height: 100vh;
     display: flex;
     align-items: center;
@@ -9,47 +10,55 @@ body {
     background: gray;
 }
 
-.login_form {
-    font-family: 'Inter';
+.wrapper {
     width: 450px;
-    height: min-content;
     padding: 20px;
     border-radius: 12px;
     border-color: #BD2131;
-    background: whitesmoke;
+    background-color: whitesmoke;
+    position: relative;
     z-index: 0;
 }
 
+.role-btn {
+    height: calc(1.75em + 1.15rem + 1.25px);
+    border-radius: 10px;
+    border: 2px solid #BD2131;
+    background: rgba(237, 4, 27, 0.2);
+    font-size: 20px;
+    margin: 10px auto;
+    color: rgb(40, 40, 40);
+    font-weight: bold;
+}
+
+.role-btn:hover {
+    color: black;
+    border: 2px solid #BD2131;
+    border-radius: 10px;
+    background: rgba(237, 4, 27, 0.5);
+    font-weight: bolder;   
+}
+
 .bg-image {
-    opacity: 0.5;
-    
+    opacity: 0.3;
     position: absolute;
     z-index: -1;
     margin: 80px 115px;
 }
 
-.login_form hr {
+.wrapper hr {
     position: relative;
     border: none;
     height: 3px;
     background: #BD2131;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
-.login_form h3 {
+.wrapper h3 {
     display: flex;
     font-size: 20px;
     font-weight: bold;
-    color: #BD2131;
-    margin-top: 25px;   
-}
-
-.login_form form {
-    font-size: 16px;
-}
-
-.login_form form .form-group {
-    margin-bottom: 12px;
+    color: #BD2131; 
 }
 
 .btn-success {

@@ -104,3 +104,7 @@ body {
 .alert {
     padding: 0.5rem 1rem;
 }
+
+a, a:hover {
+    text-decoration: none;
+}

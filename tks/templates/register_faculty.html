@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Account</title>
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+{% block title %}
+  TKS | Account Registration
+{% endblock %}
 
-    <link rel="stylesheet" href="../static/css/registration.css">
-</head>
-<body>
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+{% endblock %}
+
+{% block main_content %}
     <div class="login_form alert">
-        <img src="../static/res/tup_logo.png" class="bg-image">
+        <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
         <form action="">
             <div class="header">
                 <h3 class="title"> REGISTRATION </h3>
@@ -45,21 +44,11 @@
                     </div> 
                     <div class="form-group">
                         <input class="btn btn-block w-100" type="submit" value="Register">
-                      </div>  
+                    </div>  
                     <div class="form-group">
-                      <a href=""> I already have an account </a>
+                    <a href=""> I already have an account </a>
                     </div> 
             </div>  
         </form>
     </div>  
-    
-</body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- ========== Popper JS ========== -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-<!-- ========== Latest compiled JavaScript ========== -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</html>
+{% endblock %}
