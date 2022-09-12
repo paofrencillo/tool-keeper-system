@@ -9,9 +9,9 @@ from .forms import *
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
     if request.user.is_authenticated:
-        if user.role == "STUDENT" or user.role == "FACULTY":
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect(request, "home_sf.html")
-        elif user.role == "TOOL KEEPER":
+        elif request.user.role == "TOOL KEEPER":
             return redirect(request, "home_tk.html")
 
     if request.method == "POST":
@@ -42,8 +42,27 @@ def registration_role(request):
     return render(request, "register_as.html")
 
 def registration_student(request):
-    pass
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect(request, "home_sf.html")
+        elif request.user.role == "TOOL KEEPER":
+            return redirect(request, "home_tk.html")
+    
+    if request.method == "POST":
+        registration_form = StudentRegistrationForm(request.POST)
 
+        if registration_form.is_valid():
+            registration_form.save()
+        else:
+            # messages.add_message(request, messages.ERROR, "Username or password incorrect!")
+            # return redirect('/')
+            pass
+    else:
+        registration_form = StudentRegistrationForm()
+
+    context = {"registration_form": registration_form}
+    return render(request, 'register_student.html', context)
+    
 def registration_faculty(request):
     pass
 

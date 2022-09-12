@@ -13,42 +13,38 @@ class LoginForm(forms.Form):
                                 required=True)
     
 class StudentRegistrationForm(UserCreationForm):
-    COURSES = [('BSCE', 'BS - Civil Engineering'),
-                ('BSEE', 'BS - Electrical Engineering'),
-                ('BSME', 'BS - Mechanical Engineering'),
-                ('BET-ET', 'BET - Electrical Technology'),
-                ('BET-ESET', 'BET - Electronics Technology Track: Industrial Automation Technology'),
-                ('BET-COET', 'BET - Computer Engineering Technology'),
-                ('BET-CT', 'BET - Civil Technology'),
-                ('BET-MT', 'BET - Mechanical Technology'),
-                ('BET-AT', 'BET - Mechanical Engineering Technology Track: Automative Technology'),
-                ('BET-PPT', 'BET - Mechanical Engineering Technology Track: Power Plant Technology'),
-                ('BSIE-ICT', 'BSIE - Information and Communication Technology'),
-                ('BTTE-AU', 'BTTE - Automative'),
-                ('BTTE-EL', 'BTTE - Electrical'),
-                ('BTTE-E', 'BTTE - Electronics'),
-                ('BTTE-HVACT', 'BTTE - Heating, Ventilation, and Air Conditioning'),
-                ('BTTE-CP', 'BTTE - Computer Programming')]
-
-    first_name = forms.CharField(widget=forms.TextInput(
+    first_name = forms.CharField(label='',
+                                widget=forms.TextInput(
                                 attrs={"placeholder": "First Name"}),
                                 required=True)
-    last_name = forms.CharField(widget=forms.TextInput(
+    last_name = forms.CharField(label='',
+                                widget=forms.TextInput(
                                 attrs={"placeholder": "Last Name"}),
                                 required=True)
-    role = forms.CharField(widget=forms.TextInput(attrs={'value': 'STUDENT', 'type': 'hidden'}),
+    role = forms.CharField(label='',widget=forms.TextInput(attrs=
+                            {'value': 'STUDENT', 'type': 'hidden'}),
                             required=True)
-    year_course = forms.CharField(widget=forms.Select(choices=COURSES),
-                                    empty_value="Year and Course",
-                                    required=True)
-    tupc_id = forms.IntegerField(widget=forms.NumberInput(attrs={'placeholder': '000000'}),
+    year_course = forms.CharField(label='',
+                                widget=forms.TextInput(attrs={"placeholder": "Year and Course (e.g. BET-COET-NS-1B)"} ),
                                 required=True)
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}),
+    tupc_id = forms.IntegerField(label='',
+                                widget=forms.NumberInput(attrs=
+                                {'placeholder': '000000'}),
+                                required=True)
+    email = forms.EmailField(label='',
+                            widget=forms.EmailInput(attrs=
+                            {"placeholder": "Email"}),
                             required=True)
-    username = forms.CharField(required=True)                           
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
-                                required=True)
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"}),
+    username = forms.CharField(label='',
+                            widget=forms.TextInput(attrs={"placeholder": "Username"}),
+                            required=True)                           
+    password1 = forms.CharField(label='',
+                            widget=forms.PasswordInput(attrs=
+                            {"placeholder": "Password"}),
+                            required=True)
+    password2 = forms.CharField(label='',
+                                widget=forms.PasswordInput(attrs=
+                                {"placeholder": "Confirm Password"}),
                                 required=True)
     class Meta:
         model = User

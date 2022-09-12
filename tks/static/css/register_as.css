@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
-body {
+* {
     font-family: 'Inter';
+    font-size: 16px;
+}
+
+body {
     height: 100vh;
     display: flex;
     align-items: center;
@@ -10,40 +14,26 @@ body {
     background: gray;
 }
 
-.wrapper {
+.wrapper {  
     width: 450px;
+    height: min-content;
     padding: 20px;
     border-radius: 12px;
     border-color: #BD2131;
-    background-color: whitesmoke;
-    position: relative;
+    background: whitesmoke;
     z-index: 0;
-}
-
-.role-btn {
-    height: calc(1.75em + 1.15rem + 1.25px);
-    border-radius: 10px;
-    border: 2px solid #BD2131;
-    background: rgba(237, 4, 27, 0.2);
-    font-size: 20px;
-    margin: 10px auto;
-    color: rgb(40, 40, 40);
-    font-weight: bold;
-}
-
-.role-btn:hover {
-    color: black;
-    border: 2px solid #BD2131;
-    border-radius: 10px;
-    background: rgba(237, 4, 27, 0.5);
-    font-weight: bolder;   
+    border: 3px solid #BD2131;
+    position: relative;
 }
 
 .bg-image {
-    opacity: 0.3;
+    opacity: 0.2;
+    width: 230px;
     position: absolute;
     z-index: -1;
-    margin: 80px 115px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .wrapper hr {
@@ -51,7 +41,6 @@ body {
     border: none;
     height: 3px;
     background: #BD2131;
-    margin-bottom: 20px;
 }
 
 .wrapper h3 {
@@ -61,16 +50,29 @@ body {
     color: #BD2131; 
 }
 
-.btn-success {
+.btn-block {
+    height: calc(1.75em + 1.15rem + 1.25px);
+    border-radius: 10px;
+    border: 2px solid #BD2131;
     font-size: 20px;
-    margin-top: 12px;
+    margin: 10px auto;
+    font-weight: bold;
+    border-radius: 12px;
+    color: rgb(20, 20, 20);
+    background: rgba(189, 33, 49, 0.3);
+    font-size: 20px;
 }
 
-.btn-block {
-    color: white;
-    border: 3px solid #BD2131;
-    border-radius: 12px;
+.role-btn:hover {
+    text-decoration: none;
+}
+
+.btn-block:focus {
+    outline: 0 !important;
+}
+
+.btn-block:hover {
+    color: whitesmoke;
     background: rgba(189, 33, 49, 0.6);
-    font-size: 20px;
-    margin-left: 50px;
+    font-weight: bolder;
 }

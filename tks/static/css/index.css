@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
+* {
+    font-family: 'Inter';
+    font-size: 16px;
+}
+
 body {
     height: 100vh;
     display: flex;
@@ -9,8 +14,7 @@ body {
     background: gray;
 }
 
-.login_form {
-    font-family: 'Inter';
+.login_form {  
     width: 450px;
     height: min-content;
     padding: 20px;
@@ -23,12 +27,13 @@ body {
 }
 
 .bg-image {
-    opacity: 0.3;
-    width: 215px;
-    height: 215px;
+    opacity: 0.2;
+    width: 230px;
     position: absolute;
     z-index: -1;
-    margin: 120px 95px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .login_form p {
@@ -55,19 +60,12 @@ body {
     margin-top: 25px;   
 }
 
-.login_form form {
-    font-size: 16px;
-}
-
-.login_form form .form-group {
-    margin-bottom: 12px;
-}
-
 .form-control, input {
     height: calc(1.75em + 1.15rem + 1.25px);
     border-radius: 10px;
     border: 2px solid #BD2131;
     background-color: transparent;
+    font-weight: 500;
 }
 
 .btn-block {
@@ -80,11 +78,8 @@ body {
 }
 
 .btn-block:hover {
-    color: black;
-    border: 2px solid #BD2131;
-    border-radius: 10px;
-    background: rgba(237, 4, 27, 0.5);
-    font-size: 20px;
+    color: whitesmoke;
+    background: rgba(189, 33, 49, 0.6);
     font-weight: bolder;
 }
 
