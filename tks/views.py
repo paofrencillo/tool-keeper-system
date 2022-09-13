@@ -79,7 +79,7 @@ def registration_faculty(request):
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
-            pass   
+            print(registration_form.errors) 
     else:
         registration_form = FacultyRegistrationForm()
 
@@ -101,7 +101,7 @@ def registration_toolkeeper(request):
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
-            pass   
+            pass
     else:
         registration_form = ToolKeeperRegistrationForm()
 

@@ -100,7 +100,6 @@ body {
 .alert-success {
     position: fixed;
     padding: 0.75rem 1rem;
-    font-size: 12px;
     animation: fadeOut 1s forwards;
     animation-delay: 5s;
 }
