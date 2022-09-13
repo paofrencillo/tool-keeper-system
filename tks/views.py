@@ -75,7 +75,9 @@ def registration_faculty(request):
         registration_form = FacultyRegistrationForm(request.POST)
 
         if registration_form.is_valid():
-            registration_form.save()
+            new_user = registration_form.save(commit=False)
+            new_user.year_course = None
+            new_user.save()
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
@@ -97,7 +99,9 @@ def registration_toolkeeper(request):
         registration_form = ToolKeeperRegistrationForm(request.POST)
 
         if registration_form.is_valid():
-            registration_form.save()
+            new_user = registration_form.save(commit=False)
+            new_user.year_course = None
+            new_user.save()
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:

@@ -59,8 +59,6 @@ class FacultyRegistrationForm(UserCreationForm):
     last_name = forms.CharField(label='', widget=forms.TextInput(
                                 attrs={"placeholder": "Last Name"}),
                                 required=True)
-    year_course = forms.CharField(label='', widget=forms.TextInput(attrs={'disabled': True, 'type': 'hidden'}),
-                                    required=False)
     role = forms.CharField(label='', widget=forms.TextInput(attrs={'value': 'FACULTY', 'readonly': True}),
                             required=True)
     tupc_id = forms.IntegerField(label='', widget=forms.NumberInput(attrs={'placeholder': 'TUP-C ID (e.g. 000000)'}),
@@ -74,7 +72,7 @@ class FacultyRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
+        fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
 class ToolKeeperRegistrationForm(UserCreationForm):
@@ -84,8 +82,6 @@ class ToolKeeperRegistrationForm(UserCreationForm):
     last_name = forms.CharField(label='', widget=forms.TextInput(
                                 attrs={"placeholder": "Last Name"}),
                                 required=True)
-    year_course = forms.CharField(label='', widget=forms.TextInput(attrs={'disabled': True, 'type': 'hidden'}),
-                                    required=False)
     role = forms.CharField(label='', widget=forms.TextInput(attrs={'value': 'TOOL KEEPER', 'readonly': True}),
                             required=True)
     tupc_id = forms.IntegerField(label='', widget=forms.NumberInput(attrs={'placeholder': 'TUP-C ID (e.g. 000000)'}),
@@ -100,7 +96,7 @@ class ToolKeeperRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
+        fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 class ToolRegistrationForm(forms.ModelForm):
     tool_id = forms.IntegerField(required=True)
