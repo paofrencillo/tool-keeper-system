@@ -64,10 +64,48 @@ def registration_student(request):
     return render(request, 'register_student.html', context)
     
 def registration_faculty(request):
-    pass
+    if request.user.is_authenticated:
+        if request.user.role == "FACULTY" or request.user.role == "STUDENT":
+            return redirect(request, "home_sf.html")
+        elif request.user.role == "TOOL KEEPER":
+            return redirect(request, "home_tk.html")
+    
+    if request.method == "POST":
+        registration_form = FacultyRegistrationForm(request.POST)
+
+        if registration_form.is_valid():
+            registration_form.save()
+            messages.add_message(request, messages.SUCCESS, "Account created successfully!")
+            return redirect('/')
+        else:
+            pass   
+    else:
+        registration_form = FacultyRegistrationForm()
+
+    context = {"registration_form": registration_form}
+    return render(request, 'register_faculty.html', context)
 
 def registration_toolkeeper(request):
-    pass
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect(request, "home_tk.html")
+        elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
+            return redirect(request, "home_sf.html")
+    
+    if request.method == "POST":
+        registration_form = ToolKeeperRegistrationForm(request.POST)
+
+        if registration_form.is_valid():
+            registration_form.save()
+            messages.add_message(request, messages.SUCCESS, "Account created successfully!")
+            return redirect('/')
+        else:
+            pass   
+    else:
+        registration_form = ToolKeeperRegistrationForm()
+
+    context = {"registration_form": registration_form}
+    return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
     pass
