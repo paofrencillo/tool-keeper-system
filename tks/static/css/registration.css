@@ -8,22 +8,23 @@
 
 body {
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: gray;
 }
 
 .reg-form {  
+    margin: 20px auto;
+    padding: 10px 20px;
     width: 450px;
     height: min-content;
-    padding: 20px;
     border-radius: 12px;
     border-color: #BD2131;
     background: whitesmoke;
     z-index: 0;
     border: 3px solid #BD2131;
     position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .bg-image {
@@ -80,4 +81,33 @@ body {
     color: whitesmoke;
     background: rgba(189, 33, 49, 0.6);
     font-weight: bolder;
+}
+
+b, strong {
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.alert-success {
+    position: fixed;
+    padding: 0.75rem 1rem;
+    font-size: 12px;
+    animation: fadeOut 1s forwards;
+    animation-delay: 5s;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
 }

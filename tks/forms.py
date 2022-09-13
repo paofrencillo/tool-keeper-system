@@ -29,7 +29,7 @@ class StudentRegistrationForm(UserCreationForm):
                                 required=True)
     tupc_id = forms.IntegerField(label='',
                                 widget=forms.NumberInput(attrs=
-                                {'placeholder': '000000'}),
+                                {'placeholder': 'TUP-C ID (e.g. 190000)'}),
                                 required=True)
     email = forms.EmailField(label='',
                             widget=forms.EmailInput(attrs=
@@ -48,7 +48,7 @@ class StudentRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "role", "email", "username",
+        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
 

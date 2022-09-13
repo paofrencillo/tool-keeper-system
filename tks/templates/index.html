@@ -11,6 +11,15 @@
 {% endblock %}
 
 {% block main_content %}
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'success' %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
   <div class="login_form"> 
     <form method="POST" action="{% url 'index' %}" class="was-validated">
       {% csrf_token %}

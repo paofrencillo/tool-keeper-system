@@ -53,10 +53,10 @@ def registration_student(request):
 
         if registration_form.is_valid():
             registration_form.save()
+            messages.add_message(request, messages.SUCCESS, "Account created successfully!")
+            return redirect('/')
         else:
-            # messages.add_message(request, messages.ERROR, "Username or password incorrect!")
-            # return redirect('/')
-            pass
+            pass   
     else:
         registration_form = StudentRegistrationForm()
 
