@@ -7,48 +7,31 @@
 {% endblock %}
 
 {% block style %}
-  <link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/registration.css' %}">
 {% endblock %}
 
 {% block main_content %}
-    <div class="login_form alert">
-        <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
-        <form action="">
-            <div class="header">
-                <h3 class="title"> REGISTRATION </h3>
-                <hr>
-                <form name="login-form" class="was-validated">
-                    <div class="form-group">
-                        <input type="text" id="firstname" class="form-control" name="username" placeholder="First Name" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="lastname" class="form-control" name="username" placeholder="Last Name" />
-                    </div> 
-                    <div class="form-group">
-                        <input type="text" id="faculty" class="form-control" name="faculty" placeholder="DIT FACULTY" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="id_number" class="form-control" name="id_number" placeholder="ID Number" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="email" class="form-control" name="Email" placeholder="Email" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="username" class="form-control" name="username" placeholder="Username" />
-                    </div> 
-                    <div class="form-group">
-                        <input type="text" id="password" class="form-control" name="password" placeholder="Password" />
-                    </div> 
-                    <div class="form-group">
-                        <input type="text" id="confirm-pass" class="form-control" name="confirm-pass" placeholder="Confirm Password" />
-                    </div> 
-                    <div class="form-group">
-                        <input class="btn btn-block w-100" type="submit" value="Register">
-                    </div>  
-                    <div class="form-group">
-                    <a href=""> I already have an account </a>
-                    </div> 
-            </div>  
-        </form>
+  <form method="POST" action="{% url 'registration_faculty' %}" name="reg-form" class="was-validated m-0 reg-form">
+    {% csrf_token %}
+    <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
+    <h3>REGISTRATION</h3>
+    <hr>
+
+    {{ registration_form.first_name|as_crispy_field }}
+    {{ registration_form.last_name|as_crispy_field }}
+    {{ registration_form.role|as_crispy_field }}
+    {{ registration_form.tupc_id|as_crispy_field }}
+    {{ registration_form.email|as_crispy_field }}
+
+    {{ registration_form.username|as_crispy_field }}
+    {{ registration_form.password1|as_crispy_field }}
+    {{ registration_form.password2|as_crispy_field }}
+    
+    <div class="form-group">
+        <input class="btn btn-block w-100" type="submit" value="Register">
+    </div>
+    <div class="form-group">
+        <a href="{% url 'index' %}"> I already have an account </a>
     </div>  
+  </form>
 {% endblock %}

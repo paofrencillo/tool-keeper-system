@@ -88,6 +88,19 @@ b, strong {
     font-weight: bold !important;
 }
 
+#id_role, #id_year_course {
+    display: block;
+    float: left;
+    width: 195px;
+    margin-bottom: 15px;
+}
+
+#id_tupc_id {
+    display: block;
+    float: right;
+    width: 195px;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

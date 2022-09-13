@@ -17,17 +17,18 @@
     <h3>REGISTRATION</h3>
     <hr>
 
+    {{ registration_form.first_name|as_crispy_field }}
+    {{ registration_form.last_name|as_crispy_field }}
+    {{ registration_form.year_course|as_crispy_field }}
+    {{ registration_form.tupc_id|as_crispy_field }}
+    {{ registration_form.email|as_crispy_field }}
+    
+
+
+    {{ registration_form.role|as_crispy_field }}
     {{ registration_form.username|as_crispy_field }}
     {{ registration_form.password1|as_crispy_field }}
     {{ registration_form.password2|as_crispy_field }}
-    {{ registration_form.first_name|as_crispy_field }}
-    {{ registration_form.last_name|as_crispy_field }}
-
-    
-    {{ registration_form.year_course|as_crispy_field }}
-    {{ registration_form.tupc_id|as_crispy_field }}
-    {{ registration_form.role|as_crispy_field }}
-    {{ registration_form.email|as_crispy_field }}
     
     <div class="form-group">
         <input class="btn btn-block w-100" type="submit" value="Register">
