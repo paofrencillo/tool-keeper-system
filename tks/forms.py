@@ -74,7 +74,7 @@ class FacultyRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "role", "email", "username",
+        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
 class ToolKeeperRegistrationForm(UserCreationForm):
@@ -99,7 +99,7 @@ class ToolKeeperRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "role", "email", "username",
+        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 class ToolRegistrationForm(forms.ModelForm):
     tool_id = forms.IntegerField(required=True)
