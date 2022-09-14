@@ -15,7 +15,7 @@ class LoginForm(forms.Form):
 class StudentRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='',
                                 widget=forms.TextInput(
-                                attrs={"placeholder": "First Name"}),
+                                attrs={"placeholder": "First Name", "autofocus": True}),
                                 required=True)
     last_name = forms.CharField(label='',
                                 widget=forms.TextInput(
@@ -36,7 +36,7 @@ class StudentRegistrationForm(UserCreationForm):
                             {"placeholder": "Email"}),
                             required=True)
     username = forms.CharField(label='',
-                            widget=forms.TextInput(attrs={"placeholder": "Username"}),
+                            widget=forms.TextInput(attrs={"placeholder": "Username", "autofocus": False}),
                             required=True)                           
     password1 = forms.CharField(label='',
                             widget=forms.PasswordInput(attrs=
@@ -54,13 +54,11 @@ class StudentRegistrationForm(UserCreationForm):
 
 class FacultyRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='', widget=forms.TextInput(
-                                attrs={"placeholder": "First Name"}),
+                                attrs={"placeholder": "First Name", "autofocus": True}),
                                 required=True)
     last_name = forms.CharField(label='', widget=forms.TextInput(
                                 attrs={"placeholder": "Last Name"}),
                                 required=True)
-    year_course = forms.CharField(label='', widget=forms.TextInput(attrs={'value': '', 'type': 'hidden'}),
-                                    required=True)
     role = forms.CharField(label='', widget=forms.TextInput(attrs={'value': 'FACULTY', 'readonly': True}),
                             required=True)
     tupc_id = forms.IntegerField(label='', widget=forms.NumberInput(attrs={'placeholder': 'TUP-C ID (e.g. 000000)'}),
@@ -74,32 +72,31 @@ class FacultyRegistrationForm(UserCreationForm):
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
+        fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
 class ToolKeeperRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='', widget=forms.TextInput(
-                                attrs={"placeholder": "First Name"}),
+                                attrs={"placeholder": "First Name", "autofocus": True}),
                                 required=True)
     last_name = forms.CharField(label='', widget=forms.TextInput(
                                 attrs={"placeholder": "Last Name"}),
                                 required=True)
-    year_course = forms.CharField(label='', widget=forms.TextInput(attrs={'value': '', 'type': 'hidden'}),
-                                    required=True)
     role = forms.CharField(label='', widget=forms.TextInput(attrs={'value': 'TOOL KEEPER', 'readonly': True}),
                             required=True)
     tupc_id = forms.IntegerField(label='', widget=forms.NumberInput(attrs={'placeholder': 'TUP-C ID (e.g. 000000)'}),
                                 required=True)
     email = forms.EmailField(label='', widget=forms.EmailInput(attrs={"placeholder": "Email"}),
                             required=True)
-    username = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": "Username"}), required=True)                           
+    username = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": "Username",
+                                "autofocus": False}), required=True)                           
     password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
                                 required=True)
     password2 = forms.CharField(label='', widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"}),
                                 required=True)
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
+        fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 class ToolRegistrationForm(forms.ModelForm):
     tool_id = forms.IntegerField(required=True)
@@ -111,7 +108,7 @@ class ToolRegistrationForm(forms.ModelForm):
         model = Tools
         fields = ["tool_id", "tool_name", "tool_image", "storage", "layer"]
 
-class ToolReservationForm:
+class StudentToolReservationForm:
     class Meta:
         model = Transactions
-        fields = ["borrower_id", "fullname", "year_course", "borrow_datetime", "return_datetime"]
+        fields = ["borrower_id", "fullname", "borrow_datetime", "return_datetime"]
