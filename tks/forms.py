@@ -108,7 +108,7 @@ class ToolRegistrationForm(forms.ModelForm):
         model = Tools
         fields = ["tool_id", "tool_name", "tool_image", "storage", "layer"]
 
-class ToolReservationForm:
+class StudentToolReservationForm:
     class Meta:
         model = Transactions
-        fields = ["borrower_id", "fullname", "year_course", "borrow_datetime", "return_datetime"]
+        fields = ["borrower_id", "fullname", "borrow_datetime", "return_datetime"]

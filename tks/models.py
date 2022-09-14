@@ -20,7 +20,6 @@ class Tools(models.Model):
 class Transactions(models.Model):
     borrower_id = models.ForeignKey("User", on_delete=models.CASCADE)
     fullname = models.CharField(max_length=255)
-    year_course = models.CharField(max_length=20)
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
     status = models.CharField(max_length=25)
