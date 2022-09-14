@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
 
