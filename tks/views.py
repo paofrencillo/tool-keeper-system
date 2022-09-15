@@ -81,7 +81,7 @@ def registration_faculty(request):
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
-            print(registration_form.errors) 
+            pass
     else:
         registration_form = FacultyRegistrationForm()
 
