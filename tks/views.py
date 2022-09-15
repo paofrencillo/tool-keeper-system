@@ -6,13 +6,12 @@ from .models import *
 from .forms import *
 
 # Create your views here.
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
     if request.user.is_authenticated:
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
-            return redirect(request, "home_sf.html")
+            return redirect("home_sf")
         elif request.user.role == "TOOL KEEPER":
-            return redirect(request, "home_tk.html")
+            return redirect("home_tk")
 
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -26,9 +25,9 @@ def index(request):
             if user is not None:
                 login(request, user)
                 if user.role == "STUDENT" or user.role == "FACULTY":
-                    return redirect(request, "home_sf.html")
+                    return redirect("home_sf")
                 elif user.role == "TOOL KEEPER":
-                    return redirect(request, "home_tk.html")
+                    return redirect("home_tk")
             else:
                 messages.add_message(request, messages.ERROR, "Username or password incorrect!")
                 return redirect('/')
@@ -112,7 +111,7 @@ def registration_toolkeeper(request):
     return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
-    pass
+    return render(request, 'home_sf.html')
 
 def home_tk(request):
     pass

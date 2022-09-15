@@ -1,118 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-    
+{% block title %}
+  TKS | Home
+{% endblock %}
 
-    <link rel="stylesheet" href="../static/css/home.css">
-</head>
-<body>
-    <nav id="main-navbar" class="navbar navbar-expand-lg fixed-top ">
-        <div class="container-fluid">
-            <form class="nav-search input-group d-none d-md-flex mx-auto my-auto">
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/home.css' %}" />   
+{% endblock %}
+
+{% block main_content %}
+    <section class="left-section">
+        <nav class="menu">
+            <div class="home-logo">
+                <div class="tup-icon-wrapper">
+                    <img class="tup-icon" src="{% static 'res/tup_logo.png' %}" alt="TOOL KEEPER TUP-C">
+                </div>
+                <div class="tupc-label-wrapper">
+                    <h6 class="tupc-label">TOOL KEEPER TUP-C</label>
+                </div>
+            </div>
+            <div class="avatar">
+                <img src="{% static 'res/profile.png' %}" />
+                <h4>User User</h4>
+            </div>
+            <div class="container-fluid justify-content-center">
+                <div class="menus container-fluid justify-content-center mx-0 mt-5 mb-3">
+                    <a id="" href="#" title="">
+                        <i class="bi bi-house-fill"></i><span> Home</span> 
+                    </a>
+                </div>
+                <div class="menus container-fluid justify-content-center mx-0 my-3">
+                    <a id="" href="#" title="">
+                        <i class="bi bi-journal-text"></i><span> Transactions</span> 
+                    </a>
+                </div>
+                <div class="menus container-fluid justify-content-center mx-0 my-3">
+                    <a id="" href="#" title="">
+                        <i class="bi bi-person-fill"></i><span> Profile</span> 
+                    </a>
+                </div>
+            </div>
+            
+        </nav>        
+    </section>
+
+    <section class="right-section">
+        <nav id="main-navbar" class="navbar navbar-expand-lg container-fluid sticky-top">
+            <form class="nav-search form-inline input-group col col-xl-5 col-lg-5 col-md-5 col-sm-5">
                 <input autocomplete="off" type="search" class="form-control rounded" placeholder='Search here...'/>
                 <span class="input-group-text"><img src="../static/res/search-3-16.png" alt=""></span>
             </form>
-            <form class="nav-user py-1">
-                <img class="rounded-circle" src="../static/res/profile.png" alt="User Image"/>
-                <h2 class="user"> User </h2>
-            </form>
-            <form class="nav-logout py-1">
-                <img class="rounded-circle" src="../static/res/logout-48 1.png" alt="User Image"/>
-                <h2 class="logout" role="button"> Logout </h2>
-            </form>
-        </div>
-    </nav>
-    
-    <div>
-        
-    </div>
-    <div>
-        <nav class="menu">
-            <form class="home-logo">
-                <div>
-                    <img class="tup-icon" src="../static/res/tup_logo.png" alt="TOOL KEEPER TUP-C">
+            <div class="container-fluid justify-content-end col col-xl-7 col-lg-7 col-md-7 col-sm-7">
+                <div class="nav-user mr-5">
+                    <img class="rounded-circle" src="../static/res/profile.png" alt="User Image"/>
+                    <h5 class="mb-0">User</h5>
                 </div>
-                <div>
-                    <label class="tupc_label" for="hompage"> TOOL KEEPER TUP-C </label>
+                <div class="nav-logout">
+                    <img src="../static/res/logout-48 1.png" alt="User Image"/>
+                    <h5 class="logout mb-0">Logout</h5>
                 </div>
-            </form>
-            <header class="avatar">
-                <img src="../static/res/profile.png" />
-                <h2>User User</h2>
-            </header>
-                <ul>
-                    <li class="icon-home"><span>Home</span></li>
-                    <li class="icon-transactions"><span>Transactions</span></li>
-                    <li class="icon-profile"><span>Profile</span></li>
-                </ul>
+            </div>
         </nav>
-    </div>
-    
-    <main>
-      <div class="container">
-        <div class="dropdown">
-            <h2> TOOLS </h2>
-            <button class="btn btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Tools Status
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Available</a></li>
-              <li><a href="#">Not Available</a></li>
-            </ul>
-        </div>
-        <div class="row">
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Long Nose Pliers </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Lan Tester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Analog Multitester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Digital Multitester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Shovel </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Power Supply </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Screwdriver </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> UTP cable </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Hammer </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Tape Measure </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-        </div>
-      </div>
-    </main>
 
-    <nav class="tools fixed-bottom" > 
-        <h4> 0 Item Selected </h4>
-    </nav>
-</body>
-</html>
+        <main>
+            <div class="container-fluid">
+                <div class="dropdown">
+                    <h3> TOOLS </h3>
+                    <button class="btn btn-block dropdown-toggle" type="button" data-toggle="dropdown">Tools Status</button>
+                    <ul class="dropdown-menu">
+                    <li><a href="#">Available</a></li>
+                    <li><a href="#">Not Available</a></li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Long Nose Pliers </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Lan Tester </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Analog Multitester </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Digital Multitester </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Shovel </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Power Supply </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Screwdriver </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> UTP cable </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Hammer </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                    <div class="card" role="button">
+                        <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Tape Measure </a>
+                        <img src="../static/res/image.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="tools" > 
+            <h4> 0 Item Selected </h4>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %} 
