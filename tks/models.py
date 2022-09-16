@@ -3,13 +3,13 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    tupc_id = models.BigIntegerField(primary_key=True)
+    tupc_id = models.BigIntegerField(unique=True)
     year_course = models.CharField(max_length=20, null=True)
     role = models.CharField(max_length=11)
 
 
 class Tools(models.Model):
-    tool_id = models.BigIntegerField(primary_key=True)
+    tool_id = models.BigIntegerField(unique=True)
     tool_name = models.CharField(max_length=25, unique=True)
     tool_image = models.ImageField(upload_to='imgs/', null=False, blank=False)
     storage = models.CharField(max_length=10)
@@ -18,7 +18,7 @@ class Tools(models.Model):
 
 
 class Transactions(models.Model):
-    borrower_id = models.ForeignKey("User", on_delete=models.CASCADE)
+    borrower_id = models.ForeignKey("User", to_field="tupc_id" ,on_delete=models.CASCADE)
     fullname = models.CharField(max_length=255)
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
