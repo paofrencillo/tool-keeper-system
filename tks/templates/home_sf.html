@@ -12,61 +12,70 @@
 
 {% block main_content %}
     <nav class="navbar navbar-expand-lg justify-content-between sticky-top">
-        <div class="navbar-brand m-0">
-            <div class="tup-icon-wrapper">
-                <img class="tup-icon" src="{% static 'res/tup_logo.png' %}" alt="TOOL KEEPER TUP-C">
+        <div class="container justify-content-start m-0 p-0">
+            <div class="navbar-brand ms-0 me-3">
+                <div class="tup-icon-wrapper">
+                    <img class="tup-icon" src="{% static 'res/tup_logo.png' %}" alt="TOOL KEEPER TUP-C">
+                </div>
+                <div class="tupc-label-wrapper">
+                    <h6>TOOL KEEPER</label>
+                    <h6>TUP-C</h6>
+                </div>
             </div>
-            <div class="tupc-label-wrapper">
-                <h6>TOOL KEEPER</label>
-                <h6>TUP-C</h6>
+            <form class="d-flex me-3" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            </form>
+            <div class="availability-btn nav-item dropdown me-3">
+                <a id="availability" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  AVAILABLE
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Available</a></li>
+                  <li><a class="dropdown-item" href="#">Not Available</a></li>
+                </ul>
             </div>
         </div>
-        <div>
-            <ul class="navbar-nav justify-content-center align-items-center d-flex flex-row">
-                <li class="nav-item mr-3">
-                    <a class="nav-link" href="#">
+        <div class="container justify-content-end">
+            <ul class="nav align-items-center">
+                <li class="nav-item mr-e">
+                    <a class="nav-link active" aria-current="page" href="#">
                         <i class="bi bi-house-fill"></i><span> Home</span>
                     </a>
                 </li>
-                <li class="nav-item mr-3">
-                    <a id="" href="#" title="">
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="#" title="Transaction">
                         <i class="bi bi-journal-text"></i><span> Transactions</span> 
                     </a>
                 </li>
-                <li class="nav-item dropdown ml-5 mr-3">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
+                <li class="nav-item dropdown rounded-circle ms-5 me-2">
+                    <a id="user" class="nav-link dropdown p-0" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                        <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                    <ul id="user" class="dropdown-menu">         
+                        <li id="name" class="px-3 py-2">Harry Roque</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-person-fill"></i><span> Profile</span> 
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-box-arrow-right"></i><span> Logout</span> 
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul> 
         </div>   
     </nav>
 
-
-
     <section class="right-section">
 
     </section>
 
-    <main>
-        <div class="header container-fluid row justify-content-between">
-            <h3> TOOLS </h3>
-            <div class="dropdown">  
-                <button class="btn btn-block dropdown-toggle" type="button" data-toggle="dropdown">Tools Status</button>
-                <ul class="dropdown-menu">
-                <li><a href="#">Available</a></li>
-                <li><a href="#">Not Available</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row">
+    <main>    
+        <div class="container-fluid row justify-content-center m-0 p-0">
             <div class="card" role="button">
                 <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Long Nose Pliers </a>
                 <img src="../static/res/image.png" alt="">
@@ -113,5 +122,6 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'navbar1.js' %}"></script>
 
 {% endblock %} 

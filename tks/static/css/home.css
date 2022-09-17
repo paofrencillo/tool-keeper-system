@@ -33,6 +33,7 @@ body {
     padding: 5px 10px;
     max-height: 60px;
     height: 60px;
+    width: 200px
 }
 
 .navbar-brand h6 {
@@ -51,11 +52,19 @@ body {
     color: white;
 }
 
-.navbar-nav {
-    font-size: 20px;
+form[role="search"] {
+    width: max-content;
 }
 
-.nav-item a, .nav-item a:hover{
+.form-control[type="search"] {
+    width: 250px;
+}
+
+.nav {
+    font-size: 18px;
+}
+
+.nav-item a, .nav-item a:hover, .nav-item a:focus{
     color: white;
     text-decoration: none;
 }
@@ -64,41 +73,48 @@ body {
     margin-bottom: 0 !important;
 }
 
-.dropdown-menu {
+.dropdown-menu[data-bs-popper] {
     right: 0;
     left: auto;
+    width: 250px;
+    background-color: #bd2131; 
 }
 
-.dropdown-wrapper {
-    float: right;
+#avatar {
+    width: 50px;
+    border: 2px solid #fff;
 }
 
-.nav-user, .nav-logout {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+#name {
+    color: #fff;
+    font-weight: bold;
 }
 
-.nav-user img, .nav-logout img {
-    width: 35px;
+.dropdown-item:hover {
+    background-color: #5f131b;
 }
 
 main {
     position: relative;
-    margin: 20px 350px 2em 5em;
+    margin: 20px 400px 20px 50px;
 }
 
 .header {
     position: absolute;
-    top: 0;
     z-index: 1;
+    margin: auto 350px 50px auto;
+    background-color: var(--color-1st);
 }
 
-.dropdown .btn-block {
-    max-width: 150px;
-    background: #f1fdec;
+.availability-btn {
+    padding: 0.3em 1em;
+    background-color: #fff;
+    border-radius: 5px;
     border: 2px solid #207A29;
+}
+
+#availability {
+    color: #207A29;
 }
 
 .card {
@@ -108,6 +124,7 @@ main {
     margin: 10px 20px;
     padding: 10px 10px;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    width: 200px;
 }
 
 .card img {
@@ -132,5 +149,36 @@ main {
     height: 100%;
     overflow: auto;
     border-left: 3px solid #bd2131;
+}
+
+
+ /* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+ /* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+
+}
+
+@media (min-width: px) {
+    
 }
 
