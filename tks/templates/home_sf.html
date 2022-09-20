@@ -13,7 +13,7 @@
 {% block main_content %}
     <nav class="navbar navbar-expand-lg justify-content-between sticky-top">
         <div class="container justify-content-start m-0 p-0">
-            <div class="navbar-brand ms-0 me-3">
+            <a class="navbar-brand ms-0 me-3" href="">
                 <div class="tup-icon-wrapper">
                     <img class="tup-icon" src="{% static 'res/tup_logo.png' %}" alt="TOOL KEEPER TUP-C">
                 </div>
@@ -21,7 +21,7 @@
                     <h6>TOOL KEEPER</label>
                     <h6>TUP-C</h6>
                 </div>
-            </div>
+            </a>
             <form class="d-flex me-3" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             </form>
@@ -37,16 +37,6 @@
         </div>
         <div class="container justify-content-end">
             <ul class="nav align-items-center">
-                <li class="nav-item mr-e">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        <i class="bi bi-house-fill"></i><span> Home</span>
-                    </a>
-                </li>
-                <li class="nav-item me-3">
-                    <a class="nav-link" href="#" title="Transaction">
-                        <i class="bi bi-journal-text"></i><span> Transactions</span> 
-                    </a>
-                </li>
                 <li class="nav-item dropdown rounded-circle ms-5 me-2">
                     <a id="user" class="nav-link dropdown p-0" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                         <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">
@@ -54,6 +44,11 @@
                     <ul id="user" class="dropdown-menu">         
                         <li id="name" class="px-3 py-2">Harry Roque</li>
                         <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-journal-text"></i><span> Transactions</span> 
+                            </a>
+                        </li>
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-person-fill"></i><span> Profile</span> 
