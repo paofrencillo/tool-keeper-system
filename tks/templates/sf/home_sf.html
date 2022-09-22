@@ -7,25 +7,23 @@
 {% endblock %}
 
 {% block style %}
-  <link rel="stylesheet" href="{% static 'css/home.css' %}" />   
+  <link rel="stylesheet" href="{% static 'css/sf/home.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar.css' %}" />  
 {% endblock %}
 
 {% block main_content %}
-    <nav class="navbar navbar-expand-lg justify-content-between sticky-top">
-        <div class="container justify-content-start m-0 p-0">
-            <a class="navbar-brand ms-0 me-3" href="">
-                <div class="tup-icon-wrapper">
-                    <img class="tup-icon" src="{% static 'res/tup_logo.png' %}" alt="TOOL KEEPER TUP-C">
-                </div>
-                <div class="tupc-label-wrapper">
-                    <h6>TOOL KEEPER</label>
-                    <h6>TUP-C</h6>
-                </div>
-            </a>
+    {% include 'sf/navbar.html' %}
+
+    <section class="right-section">
+
+    </section>
+
+    <main>
+        <div class="d-flex">
             <form class="d-flex me-3" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             </form>
-            <div class="availability-btn nav-item dropdown me-3">
+            <div class="availability-btn nav-item dropdown">
                 <a id="availability" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   AVAILABLE
                 </a>
@@ -35,44 +33,26 @@
                 </ul>
             </div>
         </div>
-        <div class="container justify-content-end">
-            <ul class="nav align-items-center">
-                <li class="nav-item dropdown rounded-circle ms-5 me-2">
-                    <a id="user" class="nav-link dropdown p-0" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                        <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">
-                    </a>
-                    <ul id="user" class="dropdown-menu">         
-                        <li id="name" class="px-3 py-2">Harry Roque</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-journal-text"></i><span> Transactions</span> 
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-person-fill"></i><span> Profile</span> 
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-box-arrow-right"></i><span> Logout</span> 
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul> 
-        </div>   
-    </nav>
 
-    <section class="right-section">
-
-    </section>
-
-    <main>    
         <div class="container-fluid row justify-content-center m-0 p-0">
+            <a href="#">
+
+            </a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+
             <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Long Nose Pliers </a>
+                <h5>
+                    
+                </h5>
+                Long Nose Pliers
                 <img src="../static/res/image.png" alt="">
             </div>
             <div class="card" role="button">
@@ -88,7 +68,7 @@
                 <img src="../static/res/image.png" alt="">
             </div>
             <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Shovel </a>
+                <a href="">Shovel </a>
                 <img src="../static/res/image.png" alt="">
             </div>
             <div class="card" role="button">
@@ -113,10 +93,8 @@
             </div>
         </div>
     </main>
-
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'navbar1.js' %}"></script>
 
 {% endblock %} 

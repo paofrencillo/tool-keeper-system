@@ -65,9 +65,9 @@ def registration_student(request):
 def registration_faculty(request):
     if request.user.is_authenticated:
         if request.user.role == "FACULTY" or request.user.role == "STUDENT":
-            return redirect(request, "home_sf.html")
+            return redirect(request, "sf/home_sf.html")
         elif request.user.role == "TOOL KEEPER":
-            return redirect(request, "home_tk.html")
+            return redirect(request, "tk/home_tk.html")
     
     if request.method == "POST":
         registration_form = FacultyRegistrationForm(request.POST)
@@ -89,9 +89,9 @@ def registration_faculty(request):
 def registration_toolkeeper(request):
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
-            return redirect(request, "home_tk.html")
+            return redirect(request, "tk/home_tk.html")
         elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
-            return redirect(request, "home_sf.html")
+            return redirect(request, "sf/home_sf.html")
     
     if request.method == "POST":
         registration_form = ToolKeeperRegistrationForm(request.POST)
@@ -111,7 +111,7 @@ def registration_toolkeeper(request):
     return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
-    return render(request, 'home_sf.html')
+    return render(request, 'sf/home_sf.html')
 
 def home_tk(request):
     pass

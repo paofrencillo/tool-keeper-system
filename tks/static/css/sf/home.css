@@ -14,97 +14,13 @@
 }
 
 body {
-    min-height: 100vh;
     background-color: var(--color-1st);
-}
-
-.navbar {
-    height: 60px;
-    background-color: #bd2131;
-    padding: 0;
-}
-
-.navbar-brand {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(127,127,127,1);
-    flex-wrap: nowrap;
-    padding: 5px 10px;
-    max-height: 60px;
-    height: 60px;
-    width: 200px
-}
-
-.navbar-brand h6 {
-    margin: 0 auto;
-    font-size: 14px;
-}
-
-.navbar-brand .tup-icon {
-    width: 50px;
-    margin-right: 10px;
-}
-
-.navbar-brand h6 {
-    text-align: center;
-    font-weight: bold;
-    color: white;
-}
-
-form[role="search"] {
-    width: max-content;
-}
-
-.form-control[type="search"] {
-    width: 250px;
-}
-
-.nav {
-    font-size: 18px;
-}
-
-.nav-item a, .nav-item a:hover, .nav-item a:focus{
-    color: white;
-    text-decoration: none;
-}
-
-.dropdown {
-    margin-bottom: 0 !important;
-}
-
-.dropdown-menu[data-bs-popper] {
-    right: 0;
-    left: auto;
-    width: 250px;
-    background-color: #bd2131; 
-}
-
-#avatar {
-    width: 50px;
-    border: 2px solid #fff;
-}
-
-#name {
-    color: #fff;
-    font-weight: bold;
-}
-
-.dropdown-item:hover {
-    background-color: #5f131b;
 }
 
 main {
-    position: relative;
-    margin: 20px 400px 20px 50px;
+    margin: 20px 350px 20px auto;
 }
 
-.header {
-    position: absolute;
-    z-index: 1;
-    margin: auto 350px 50px auto;
-    background-color: var(--color-1st);
-}
 
 .availability-btn {
     padding: 0.3em 1em;
@@ -121,14 +37,14 @@ main {
     background: #ECFDE5;
     border: 2px solid #207A29;
     border-radius: 20px;
-    margin: 10px 20px;
+    margin: 10px 10px;
     padding: 10px 10px;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    width: 200px;
+    width: 150px;
 }
 
 .card img {
-    width: 150px;
+    width: 125px;
     border-radius: 20px;
 }
 
@@ -143,12 +59,14 @@ main {
 .right-section {
     margin: 0;
     padding: 0;
-    width: 350px;
+    width: 400px;
     position: fixed;
     right: 0;
     height: 100%;
     overflow: auto;
     border-left: 3px solid #bd2131;
+    z-index: 1;
+    
 }
 
 
@@ -163,8 +81,7 @@ main {
 }
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-
+@media (max-width: 992px) {
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
