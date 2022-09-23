@@ -14,83 +14,106 @@
 {% block main_content %}
     {% include 'sf/navbar.html' %}
 
-    <section class="right-section">
-
-    </section>
-
     <main>
-        <div class="d-flex">
-            <form class="d-flex me-3" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <div class="row m-0 px-5 py-3 justify-content-between">
+            <form class="col-sm-12 col-md-6 col-lg-6" role="search">
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
             </form>
-            <div class="availability-btn nav-item dropdown">
-                <a id="availability" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  AVAILABLE
-                </a>
+            <div class="two-btns d-flex justify-content-end col-sm-12 col-md-6 col-lg-6">
+                <button id="#availability" class="availability-btn dropdown-toggle me-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    AVAILABLE
+                </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Available</a></li>
-                  <li><a class="dropdown-item" href="#">Not Available</a></li>
-                </ul>
-            </div>
-        </div>
+                    <li><a class="dropdown-item" href="#">Available</a></li>
+                    <li><a class="dropdown-item" href="#">Not Available</a></li>
+                </ul> 
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    Tools Selected
+                    <span id="tool-quantity" class="badge text-bg-secondary">
+                        0
+                    </span>
+                </button>
+            </div>  
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Tools Selected</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div>
+                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                    </div>
+                    <div class="options d-flex justify-content-evenly mt-3">
+                        <button class="btn btn-success" type="button">RESERVE</button>
+                        <button class="btn btn-danger" type="button">CLEAR</button>
+                    </div>
+                </div>
+            </div> 
 
-        <div class="container-fluid row justify-content-center m-0 p-0">
+            </div>
+
+
+        <div class="cards row justify-content-center mx-5 mt-4 p-0">
             <a href="#">
-
+                <div class="card align-items-center">
+                    <h5>Tool 1</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
             </a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-
-            <div class="card" role="button">
-                <h5>
-                    
-                </h5>
-                Long Nose Pliers
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Lan Tester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Analog Multitester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Digital Multitester </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href="">Shovel </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Power Supply </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Screwdriver </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> UTP cable </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Hammer </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
-            <div class="card" role="button">
-                <a href=""><input type="checkbox" name="tool_name" id="tool_name"> Tape Measure </a>
-                <img src="../static/res/image.png" alt="">
-            </div>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 2</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 3</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 4</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 5</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 6</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 7</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 8</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 9</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+            <a href="#">
+                <div class="card align-items-center">
+                    <h5>Tool 10</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
         </div>
     </main>
 {% endblock %}

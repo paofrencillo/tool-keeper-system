@@ -34,14 +34,6 @@
     color: white;
 }
 
-form[role="search"] {
-    width: max-content;
-}
-
-.form-control[type="search"] {
-    width: 250px;
-}
-
 .nav {
     font-size: 18px;
 }
@@ -74,4 +66,19 @@ form[role="search"] {
 
 .dropdown-item:hover {
     background-color: #5f131b;
+}
+
+ /* Small devices (landscape phones, 576px and up) */
+ @media (max-width: 576px) {
+    * {
+        font-size: 14px;
+    }
+
+    .tupc-label-wrapper {
+        display: none;
+    }
+
+    .navbar-brand {
+        width: 150px;
+    }
 }
