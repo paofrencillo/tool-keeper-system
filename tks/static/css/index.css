@@ -78,9 +78,10 @@ body {
 }
 
 .btn-block:hover {
-    color: whitesmoke;
-    background: rgba(189, 33, 49, 0.6);
-    font-weight: bolder;
+    color: whitesmoke !important;
+    background: rgba(189, 33, 49, 0.6) !important;
+    font-weight: bolder !important;
+    border: 2px solid #BD2131 !important;
 }
 
 .btn-success {

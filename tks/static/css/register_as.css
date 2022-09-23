@@ -76,3 +76,7 @@ body {
     background: rgba(189, 33, 49, 0.6);
     font-weight: bolder;
 }
+
+.login-link, .login-link:hover {
+    text-decoration: none;
+}

@@ -7,7 +7,6 @@
 }
 
 body {
-    height: 100vh;
     background: gray;
 }
 
@@ -65,28 +64,33 @@ body {
     font-weight: 500;
     border-radius: 12px;
     background-color: transparent;
-    color:rgb(40, 40, 40)
+    color:rgb(40, 40, 40);
+    margin-bottom: 1rem;
 }
 
 .btn-block {
-    color: rgb(20, 20, 20);
+    color: black;
     border: 2px solid #BD2131;
-    border-radius: 12px;
+    border-radius: 10px;
     background: rgba(189, 33, 49, 0.3);
     font-size: 20px;
-    font-weight: bold;
-    margin-top: 20px;
+    font-weight: bolder;
 }
 
 .btn-block:hover {
-    color: whitesmoke;
-    background: rgba(189, 33, 49, 0.6);
-    font-weight: bolder;
+    color: whitesmoke !important;
+    background: rgba(189, 33, 49, 0.6) !important;
+    font-weight: bolder !important;
+    border: 2px solid #BD2131 !important;
 }
 
 b, strong {
     font-size: 12px !important;
     font-weight: bold !important;
+}
+
+a, a:hover {
+    text-decoration: none;
 }
 
 input::-webkit-outer-spin-button,
