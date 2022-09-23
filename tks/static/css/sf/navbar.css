@@ -24,11 +24,11 @@
 }
 
 .navbar-brand .tup-icon {
-    width: 50px;
-    margin-right: 10px;
+    width: 50px;   
 }
 
 .navbar-brand h6 {
+    margin-left: 10px;
     text-align: center;
     font-weight: bold;
     color: white;
@@ -70,15 +70,11 @@
 
  /* Small devices (landscape phones, 576px and up) */
  @media (max-width: 576px) {
-    * {
-        font-size: 14px;
-    }
-
     .tupc-label-wrapper {
         display: none;
     }
 
     .navbar-brand {
-        width: 150px;
+        width: 100px;
     }
 }

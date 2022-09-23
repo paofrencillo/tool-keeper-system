@@ -72,11 +72,17 @@ button[data-bs-toggle="offcanvas"] {
 
  /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {
+    * {
+        font-size: 12px;
+    }
+
+    h5 {
+        font-size: 0.95rem;
+    }
+
     .card {
         width: 8em;
     }
-
-
 }
 
  /* Medium devices (tablets, 768px and up) */
