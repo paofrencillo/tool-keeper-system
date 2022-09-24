@@ -114,4 +114,4 @@ def home_sf(request):
     return render(request, 'sf/home_sf.html')
 
 def home_tk(request):
-    pass
+    return render(request, 'tk/home_tk.html')
