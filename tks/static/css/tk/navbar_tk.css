@@ -17,7 +17,7 @@
     font-family: 'Inter';
 }
 
-.nav {
+nav {
     height: 100%;
     background-color: var(--bg-nav);
     width: 200px;
@@ -65,7 +65,7 @@
     border-radius: 50%;
 }
 
-#user-fullname {
+#user-fname {
     color: var(--font-color-nav);
     font-weight: 500;
 }
