@@ -5,7 +5,9 @@
     --bg-nav: #3e3e3e;
     --bg-navbar-brand: #808080;
     --font-color-main: 131313;
-    --font-size-nav-menu: 16px;
+    --font-size-nav-menu: 18px;
+    --font-size-nav: 20px;
+    --font-size-navbar-brand: 14px;
 }
 
 * {
@@ -30,24 +32,21 @@
     z-index: 1000;
 }
 
-.navbar-brand h6 {
-    margin: 0 auto;
-    font-size: 14px;
-}
-
 .navbar-brand .tup-icon {
     width: 50px;   
 }
 
 .navbar-brand h6 {
-    margin-left: 10px;
+    margin: 0;
+    padding-left: 0.5em;
     text-align: center;
     font-weight: bold;
     color: var(--font-color-nav);
+    font-size: var(--font-size-navbar-brand);
 }
 
 .nav {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .nav-item a, .nav-item a:hover, .nav-item a:focus{
@@ -68,7 +67,7 @@
 
 #user-fullname {
     color: var(--font-color-nav);
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .nav-item a {
