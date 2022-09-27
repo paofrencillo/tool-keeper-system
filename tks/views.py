@@ -113,5 +113,10 @@ def registration_toolkeeper(request):
 def home_sf(request):
     return render(request, 'sf/home_sf.html')
 
+
+
 def home_tk(request):
     return render(request, 'tk/home_tk.html')
+
+def transactions_tk(request):
+    return render(request, 'tk/transactions_tk.html')

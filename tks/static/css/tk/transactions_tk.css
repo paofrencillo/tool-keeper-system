@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --btn-color-returned: #0000FF;
+    --btn-color-borrowed: #008000;
+    --btn-color-reserved: #9C9C06;
+    --btn-bg-color-returned: #DEE5FA;
+    --btn-bg-color-borrowed: #DAFDCD;
+    --btn-bg-color-reserved: #EDEDC9;
+    --btn-bg-color-table-btns: #3E3E3E;
+    --font-color-white: #FFFFFF;
+/* 
+    --font-size-nav-menu: 18px;
+    --font-size-nav: 20px;
+    --font-size-navbar-brand: 14px; */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+body {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.top-container button a, .top-container button a:hover {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.top-container button {
+    margin: 0;
+    padding: 0.25em 0.75em;
+    border-radius: 5px;
+}
+
+.top-container button:first-child {
+    background-color: var(--btn-bg-color-returned);
+    border: 2px solid var(--btn-color-returned);  
+}
+
+.top-container button:first-child a {
+    color: var(--btn-color-returned);
+}
+
+.top-container button:nth-child(2) {
+    background-color: var(--btn-bg-color-borrowed);
+    border: 2px solid var(--btn-color-borrowed);  
+}
+
+.top-container button:nth-child(2) a {
+    color: var(--btn-color-borrowed);
+}
+
+.top-container button:last-child {
+    background-color: var(--btn-bg-color-reserved);
+    border: 2px solid var(--btn-color-reserved);  
+}
+
+.top-container button:last-child a {
+    color: var(--btn-color-reserved);
+}
+
+
+/* ========== TABLE BUTTONS ========== */
+table thead tr th {
+    text-align: center;
+}
+
+.table-btns {
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border-radius: 10px;
+    color: var(--font-color-white);
+    background-color: var(--btn-bg-color-table-btns);
+    border: none;
+    
+}
+
