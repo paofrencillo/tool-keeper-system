@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  TKS | Tool Keeper Transaction#00001
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/tk/borrower_transaction/base_borrower_transaction.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+  {% block style_depends_on_status %} {% endblock %}
+{% endblock %}
+
+{% block main_content %}
+  {% include 'tk/navbar_tk.html' %}
+    
+  <main class="container-fluid justify-content-center mx-5 px-5 py-3">
+    <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
+        <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+          <div class="top-wrapper p-3">
+            <h5>Borrower's Information</h5>
+            <div class="borrower-info-wrapper d-flex justify-content-center align-items-center m-0">
+              <div>
+                  <div class="borrower-img-wrapper">
+                      <img id="borrower-img" src="{% static 'res/test.png' %}" alt="">
+                  </div>
+              </div>
+              <div>
+                  <p class="m-2">Harry Roque</p>
+                  <p class="m-2">Unknown Section</p>
+                  <p class="m-2">190000</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+          <div class="top-wrapper p-3">
+            <div class="transaction-details-wrapper m-0">
+              <div class="flex-row">
+                  <p class="transaction-details m-2">Transaction #:<span class="ms-2">N/A</span></p>
+                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2">N/A</span></p>
+                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2">N/A</span></p>
+                  <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{% block status %} {% endblock %}</span></p>
+              </div>
+            </div>
+          </div>   
+        </div>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-start align-items-center">
+      <h5 class="my-0 me-4">TOOLS BORROWED</h5>
+      {% block options_buttons %} {% endblock %}
+    </div>
+    <div class="table-responsive mt-4 p-0">
+      <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">
+        <thead class="table-dark justify-content-center">
+            <tr class="text-center">
+              <th>Tool ID</th>
+              <th>Tool Name</th>
+              <th>Tool Image</th>
+              <th>Storage</th>
+              <th>Layer</th>
+              {% block additional_col %}
+              {% endblock %}
+            </tr>
+        </thead>
+        <tbody id="tabledata">
+          <tr class="text-center">
+              <td>ABCD1234</td>
+              <td>TOOL 1</td>
+              <td class="table-img">
+                <img src="{% static 'res/test.png' %}" alt="" class="table-img">
+              </td>
+              <td>1</td>
+              <td>1</td>
+              {% block additional_data %}
+              {% endblock %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/tk/borrower_transaction.js' %}"></script>   
+{% endblock %}
