@@ -1,0 +1,18 @@
+{% extends 'tk/borrower_transaction/base_borrower_transaction.html' %}
+
+{% block options_buttons %}
+    <button class="btn btn-success option-btn me-2">
+        BORROW
+    </button>
+    <button class="btn btn-danger option-btn">
+        VOID
+    </button>
+{% endblock %}
+
+{% block status %}RESERVED{% endblock %}
+
+{% block additional_col %}
+{% endblock %}
+
+{% block additional_data %}
+{% endblock %}

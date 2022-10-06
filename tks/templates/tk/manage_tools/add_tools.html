@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    TKS | Add Tool
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+
+    <main class="container justify-content-center p-0 mx-5 my-3">
+        <div class="container">
+            <div class="container flex-row">
+                <input type="text">
+                <input type="text">
+                <input type="text">
+                <input type="text">
+            </div>
+            <div class="container flex-row">
+                <div>
+                    <img src="" alt="">
+                </div>
+                <div class="img-options-btns">
+                    <button class="btn btn-outline-success">Capture</button>
+                    <button class="btn btn-outline-danger">Remove</button>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <button class="btn btn-primary">Register Tool</button>
+            <button type="reset" class="btn btn-danger">Clear</button>
+        </div>
+    </main>
+    
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}  

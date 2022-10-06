@@ -23,5 +23,10 @@ urlpatterns = [
     # Tool Keeper
     path('toolkeeper/home/', views.home_tk, name='home_tk'),
     path('toolkeeper/transactions/', views.transactions_tk, name='transactions_tk'),
+    
+    # note: must include the transaction id of the borrower!!
+    path('toolkeeper/transactions/tid', views.borrower_transaction, name='borrower_transaction'),
 
+    # add tool toolkeeper
+    path('toolkeeper/managetools/add', views.add_tools_tk, name='add_tools_tk'),
 ]

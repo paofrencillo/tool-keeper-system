@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block title %}
   TKS | Tool Keeper Transactions
@@ -15,7 +14,7 @@
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
     
-    <main class="container-fluid m-0 px-5 py-3">
+    <main class="px-5 py-3">
         <div class="top-container d-flex justify-content-start">
             <button>
                 <a href="#">RETURNED</a>
@@ -27,8 +26,8 @@
                 <a href="#">RESERVED</a>
             </button>
         </div>
-        <div class="container-fluid justify-content-center table-responsive mt-5 p-0">
-            <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
+        <div class="table-responsive mt-5 p-0">
+            <table id="transactions-table" class="table table-bordered table-hover align-middle">
                 <thead class="table-dark justify-content-center">
                     <tr>
                       <th></th>
@@ -41,10 +40,10 @@
                     </tr>
                   </thead>
                   <tbody id="tabledata">
-                    <tr>
+                    <tr class="rows">
                         <td>
                             <a href="">
-                                <button class="table-btns">View</button>
+                                <button class="btn btn-secondary w-100">View</button>
                             </a>
                         </td>
                         <td>00001</td>
@@ -53,6 +52,19 @@
                         <td>abcd</td>
                         <td>abcd</td>
                         <td>RESERVED</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="">
+                                <button class="btn btn-secondary w-100">View</button>
+                            </a>
+                        </td>
+                        <td>00002</td>
+                        <td>Johnny</td>
+                        <td>696969</td>
+                        <td>abcd</td>
+                        <td>abcd</td>
+                        <td>BORROWED</td>
                     </tr>
                   </tbody>
             </table>

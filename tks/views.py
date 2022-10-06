@@ -133,3 +133,13 @@ def home_tk(request):
 
 def transactions_tk(request):
     return render(request, 'tk/transactions_tk.html')
+
+def borrower_transaction(request):
+    # This line of code is for having
+    # a database with borrower transaction.
+    # For the meantime, this function will
+    # return a reserved status html file
+    return render(request, 'tk/borrower_transaction/reserved_scanned.html')
+
+def add_tools_tk(request):
+    return render(request, 'tk/manage_tools/add_tools.html')

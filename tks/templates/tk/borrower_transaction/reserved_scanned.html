@@ -1,0 +1,20 @@
+{% extends 'tk/borrower_transaction/base_borrower_transaction.html' %}
+{% load static %}
+
+{% block status %}RESERVED{% endblock %}
+
+{% block options_buttons %}
+    <button class="btn btn-danger option-btn">
+        VOID
+    </button>
+{% endblock %}
+
+{% block additional_col %}
+    <th>RFID Scanned</th>
+{% endblock %}
+
+{% block additional_data %}
+    <td class="">
+        <div class="rfid-scanned-indicator"></div>
+    </td>
+{% endblock %}
