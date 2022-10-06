@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Home
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/profile_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+
+    <main>
+        <div class="wrapper">
+            <div class="card align-items-center">
+                <div class="user_avatar">
+                    <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">   
+                </div>
+                <div class="form-group">                  
+                    <input type="text" id="firstname" class="form-control" placeholder="Firstname">
+                    <input type="text" id="lastname" class="form-control"  placeholder="Lastname">
+                </div>
+                <div class="other-info">
+                    <input type="text" class="form-control" placeholder="Student">
+                    <input type="text" class="form-control" placeholder="19-XXXX">
+                    <input type="text" class="form-control" placeholder="email@email.com">
+                    <input type="text" class="form-control" placeholder="Username">
+                </div>
+                <div class="edit_save">
+                    <a href=""><button class="btn btn-info"> EDIT </button></a>
+                    <a href=""><button class="btn btn-success"> SAVE </button></a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %} 

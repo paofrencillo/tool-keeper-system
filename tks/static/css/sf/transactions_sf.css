@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --btn-bg-color-table-btns: #3E3E3E;
+    --font-color-white: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin: 1.5rem 7.5rem;
+}
+
+
+.top-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.top-container label {
+    text-align: left;
+    font-weight: 500;
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    display: inline-flex;
+    margin-bottom: 0.5rem;
+}
+
+.custom-select {
+    width: auto;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+}
+
+/* ========== TABLE BUTTONS ========== */
+table thead tr th {
+    text-align: center;
+}
+
+.table-btns {
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border-radius: 10px;
+    color: var(--font-color-white);
+    background-color: var(--btn-bg-color-table-btns);
+    border: none;
+    
+}
+
+/* ========== paging ========== */
+
+.pagination {
+    display: flex;
+    list-style: none;
+    border: 0.25rem;
+}
+
+.pagination .page-item .page-link {
+    color: #FFFFFF;
+    background-color: #4285f4;
+    border: 0.125rem;
+    transition: all .2s linear;
+}
+
+.pagination .page-item .page-link {
+    font-size: .9rem;
+    color: #212529;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.previous, .next {
+    background: #8FD8E9;
+    border: 1px solid #1B7589;
+}
+
+.page-item.active {
+    color: #fff;
+    background-color: #007bff;
+    border: #007bff;
+    padding-inline: 2px;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.container-fluid #transactions-table thead th {
+    color: white;
+    background: #BD2131;
+    border: 2px solid #FFFFFF;
+}
+
+.container-fluid #transactions-table th, tr, td {
+    border: 2px solid #BD2131;
+}

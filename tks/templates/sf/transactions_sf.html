@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Home
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/transactions_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+
+    <main>
+        <div class="top-container mt-5">
+            <label>
+                show
+                <select id="row-control" class="custom-select form-control form-control-sm">
+                    <option value="10"> 10 </option>
+                    <option value="20"> 20 </option>
+                    <option value="50"> 50 </option>
+                </select>
+                entries
+            </label>
+            <div id="search" class="search_user">
+                <label>
+                    Search:
+                    <input type="search" class="form-control form-control-sm" placeholder="">
+                </label>
+            </div>
+        </div>
+        <div class="container-fluid justify-content-center table-responsive mt-5 p-0">
+            <table id="transactions-table" class="table table-bordered table-hover align-middle">
+                <thead class="table justify-content-center">
+                    <tr>
+                      <th></th>
+                      <th>Transaction #</th>
+                      <th>Name</th>
+                      <th>TUPC-ID</th>
+                      <th>DateTime of Borrow</th>
+                      <th>DateTime of Return</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabledata">
+                    <tr>
+                        <td>
+                            <a href="">
+                                <button class="table-btns">View</button>
+                            </a>
+                        </td>
+                        <td>00001</td>
+                        <td>Paolo</td>
+                        <td>190472</td>
+                        <td>abcd</td>
+                        <td>abcd</td>
+                        <td>RESERVED</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="">
+                                <button class="table-btns">View</button>
+                            </a>
+                        </td>
+                        <td>00022</td>
+                        <td>Nirfec</td>
+                        <td>190185</td>
+                        <td>101010</td>
+                        <td>202020</td>
+                        <td>BORROWED</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="">
+                                <button class="table-btns">View</button>
+                            </a>
+                        </td>
+                        <td>00033</td>
+                        <td>Jojos</td>
+                        <td>19200</td>
+                        <td>212121</td>
+                        <td>343434</td>
+                        <td>RETURNED</td>
+                    </tr>
+                  </tbody>
+            </table>
+            <div class="col-sm12 col-md-7">
+                <div class="foot_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled">
+                            <a href="#" data-dt-idx="0" tabindex="0" class="page-link"> Previous </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="1"  tabindex="0" class="Page-link"> 1 </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="2"  tabindex="0" class="Page-link"> 2 </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="3"  tabindex="0" class="Page-link"> 3 </a>
+                        </li>
+                        <li class="paginate_button page-item next">
+                            <a href="#" data-dt-idx="4" tabindex="0" class="page-link"> Next </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %} 

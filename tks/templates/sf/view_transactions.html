@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Home
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/view_transactions.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+
+    <main>
+        <div class="container">
+            <div class="tools-borrowed">
+                <h4 class="tool-status"> TOOLS BORROWED </h4>
+                <button class="btn btn-block"> VOID </button>
+            </div>
+            <hr>
+            <div class="card">
+                <div class="user-details">
+                    <label class="subtitle"> Transaction #: </label>
+                    <Label class="user-info"> 20230612-11 </Label>
+                    <label class="subtitle">  DateTime of Borrow: </label>
+                    <Label class="user-info"> 2023-06-12 09:00am </Label>
+                    <label class="subtitle"> DateTime of Return: </label>
+                    <Label class="user-info"> 2023-07-10 02:35pm  </Label>
+                    <label class="subtitle"> Status: </label>
+                    <Label class="user-info" id="status"> RESERVED </Label>
+                </div>
+            </div>
+            <a href="#">
+                <div class="card2 align-items-center">
+                    <h5>Long Nose Pliers</h5>
+                    <img src="{% static 'res/image.png' %}" alt="">
+                </div>
+            </a>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %} 

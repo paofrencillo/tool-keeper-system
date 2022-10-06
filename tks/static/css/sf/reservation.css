@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+  
+:root {
+    --color-1st: #F5F5F5F5;
+    --color-2nd: #bd2131;
+    --color-3rd: #3e3e3e;
+    --color-4th: rgb(25, 25, 25);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+body {
+    background-color: var(--color-1st);
+    max-height: 100vh;
+}
+
+main {
+    margin: 0;
+}
+
+/** RESERVATION FORM **/
+.cards  {
+    text-decoration: none;
+    color: white;
+    width: min-content;
+}
+
+.card {
+    background: #571515;
+    border-radius: 20px;
+    margin: 10px 10em;
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    width: 28em;
+    height: 32em;
+    font-family: 'Inter';
+    font-style: normal;
+}
+
+/** di makita **/
+.cards .card hr {
+    height: 5px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.cards .card input {
+    width: 375px;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 15px;
+    position: relative;
+    box-sizing: border-box;
+    background: #E0E0E0;
+    border: 3px solid #FFFFFF;
+    border-radius: 10px;
+}
+
+.cards .card .date_time {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cards .card .date_time #date {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.cards .card .date_time #time {
+    width: 150px;
+    margin-left: 10px;
+}
+
+.cards .card h6 {
+    margin-top: 20px;
+    margin-right: 11em;
+}
+
+
+/** CANCEL RESERVATION BTN **/
+.container-fluid .btn {
+    display: flex;
+    justify-content: center;
+    margin-left: 12em;
+    width: 20em;
+}
+
+/** TERMS AND SUBMIT BTN **/
+.card2 {
+    position: fixed;
+    width: 400px;
+    height: 200px;
+    box-sizing: border-box;
+    background: #E8E8E8;
+    border: 2px solid #4B4B4B;
+    border-radius: 20px;
+
+    top: 55%;
+    left: 50%;
+}
+
+.card2 h6 {
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 400;
+    align-items: center;
+    padding: 15px;
+}
+
+.card2 p {
+    padding-left: 20px;
+}
+
+.card2 .btn-success {
+    align-items: center;
+    width: 15em;
+    margin-left: 20%;
+    
+}
+
+/** TOOLS **/
+.card3 {
+    position: fixed;
+    width: 400px;
+    height: 200px;
+    box-sizing: border-box;
+    background: #E8E8E8;
+    border: 2px solid #4B4B4B;
+    border-radius: 20px;
+
+    top: 20%;
+    left: 50%;
+}
+
+.card3 h6 {
+    font-family: 'Inter';
+    font-weight: 600;
+    font-size: 20px;
+    align-items: center;
+    padding: 20px;
+}
+
+/* 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.modal {
+    width: 300px;
+    height: 200px;
+    line-height: 200px;
+    position: fixed;
+    top: 50%; 
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -150px;
+    background-color: #f1c40f;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 11;  1px higher than the overlay layer */

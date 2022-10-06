@@ -15,6 +15,10 @@ urlpatterns = [
     
     # Student/Faculty
     path('home/', views.home_sf, name='home_sf'),
+    path('reservation/', views.reservation, name='reservation'),
+    path('profile/', views.profile_sf, name='profile_sf'),
+    path('transactions/', views.transactions_sf, name='transactions_sf'),
+    path('transactions/view/', views.view_transactions, name='view_transactions'),
 
     # Tool Keeper
     path('toolkeeper/home/', views.home_tk, name='home_tk'),
