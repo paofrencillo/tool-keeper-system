@@ -27,6 +27,12 @@ urlpatterns = [
     # note: must include the transaction id of the borrower!!
     path('toolkeeper/transactions/tid', views.borrower_transaction, name='borrower_transaction'),
 
+    # storages tool keeper
+    path('toolkeeper/tools/storages', views.storages_tk, name='storages_tk'),
+
     # add tool toolkeeper
-    path('toolkeeper/managetools/add', views.add_tools_tk, name='add_tools_tk'),
+    path('toolkeeper/tools/add', views.add_tools_tk, name='add_tools_tk'),
+
+    # edit tools toolkeeper
+    path('toolkeeper/tools/edit', views.edit_tools_tk, name='edit_tools_tk'),
 ]

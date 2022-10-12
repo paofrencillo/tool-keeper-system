@@ -2,24 +2,38 @@
 
 {% load static %}
 
-{% block title %}
-    TKS | Add Tool
-{% endblock %}
+{% block title %}TKS | Add Tool{% endblock %}
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/manage_tools/add_tools_tk.css' %}" /> 
 {% endblock %}
 
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
 
-    <main class="container justify-content-center p-0 mx-5 my-3">
+    <main class="px-5 py-4">
         <div class="container">
             <div class="container flex-row">
-                <input type="text">
-                <input type="text">
-                <input type="text">
-                <input type="text">
+                <div>
+
+                </div>
+                <div>
+                    <input type="text">
+                </div>
+                <div>
+                    <input type="text">
+                </div>
+                <div>
+                    <input type="text">
+                </div>
+                <div>
+                    <input type="text">
+                </div>
+                
+                
+                
+                
             </div>
             <div class="container flex-row">
                 <div>
@@ -36,8 +50,6 @@
             <button type="reset" class="btn btn-danger">Clear</button>
         </div>
     </main>
-    
-
 {% endblock %}
 
 {% block js %}

@@ -141,5 +141,11 @@ def borrower_transaction(request):
     # return a reserved status html file
     return render(request, 'tk/borrower_transaction/reserved_scanned.html')
 
+def storages_tk(request):
+    return render(request, 'tk/manage_tools/storages_tk.html')
+
 def add_tools_tk(request):
-    return render(request, 'tk/manage_tools/add_tools.html')
+    return render(request, 'tk/manage_tools/add_tools_tk.html')
+
+def edit_tools_tk(request):
+    return render(request, 'tk/manage_tools/edit_tools_tk.html')

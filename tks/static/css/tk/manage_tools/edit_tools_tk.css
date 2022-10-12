@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.tool-img-wrapper {
+    border: 3px solid #3E3E3E;
+    width: max-content;
+    border-radius: 20px;
+    padding: 0 !important;
+}
+
+#tool-img {
+    width: 200px;
+    border-radius: 20px;
+}
+
+input[type="file"] {
+    font-size: 12px;
+}
+
+input[type="text"] {
+    height: 50px;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+}
+
+input.btn {
+    width: 15%;
+}
+
+input#save, input#cancel {
+    display: none;
+}
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 10px;
+    }
+    
+    .top-container {
+        justify-content: center !important;
+    }
+
+    .top-container button a {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}
