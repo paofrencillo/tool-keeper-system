@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  TKS | Home
+  TKS | Reserve Tool
 {% endblock %}
 
 {% block style %}
@@ -14,43 +14,55 @@
 {% block main_content %}
     {% include 'sf/navbar_sf.html' %}
 
-    <main>
-        <div class="cards form-group justify-content-center mx-5 mt-3 p-0">
-                <div class="card align-items-center">
-                    <h3>RESERVATION FORM</h3>
-                    <hr>
-                    
-                        <input type="text" class="form-control" placeholder="User User">
-                        <input type="text" class="form-control" placeholder="BET-COET-NS-4B">
-                        <input type="text" class="form-control" placeholder="TUPC-XX-XXXX">
-                        <h6> Date and Time of Borrow</h6>
-                        <div class="date_time">                     
-                            <input type="text" id="date" class="form-control"  placeholder="Date">
-                            <input type="text" id="time" class="form-control"  placeholder="Time">
+    <main class="container-fluid justify-content-center align-items-center">
+        <form method="POST" action="{% url 'reservation_sf' %}" class="was-validated">
+            {% csrf_token %}
+            <div class="container-fluid row p-0 m-0">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <div class="card align-items-center">
+                            <h3>RESERVATION FORM</h3>
+                            <hr>
+                            <input type="text" name="fullname" id="fullname" class="form-control" value="{}" readonly required>
+                            <input type="text" name="role" id="role" class="form-control" value="{}" readonly required>
+                            <input type="text" name="tupc-id" id="tupcid" class="form-control" value="{}" readonly required>
+                            <div class="form-group mt-4">
+                                <h6> Date and Time of Borrow</h6>
+                                <div class="date_time">                     
+                                    <input type="date" name="borrow-date" id="date" class="form-control"  placeholder="Date" required>
+                                    <input type="time" name="borrow-time" id="time" class="form-control"  placeholder="Time" required>
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <h6> Date and Time of Return</h6>
+                                <div class="date_time">                        
+                                    <input type="date" name="return-date" id="date" class="form-control" placeholder="Date" required>
+                                    <input type="time" name="return-time" id="time" class="form-control"  placeholder="Time" required>
+                                </div>
+                            </div>
                         </div>
-                        <h6> Date and Time of Return</h6>
-                        <div class="date_time">                        
-                            <input type="text" id="date" class="form-control" placeholder="Date">
-                            <input type="text" id="time" class="form-control"  placeholder="Time">
-                        </div>
+                        <button type="button" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
+                    </div>
                 </div>
-                <div class="container-fluid">
-                    <button class="btn btn-danger p-2"> Cancel Reservation </button>
-                </div>
-        </div>
-        <div class="card2 justify-content-center mx-5 mt-4 p-0">
-            <h6> If tools borrowd were damage, broken, or missing, 
-                the borrower shall be responsible and must report to the tool keeper immediately. </h6>
-            <p><input type="checkbox" id="terms"> I understand </p>
-           
-            <button class="btn btn-success p-2"> SUBMIT </button>
-        </div>
 
-        <div class="card3 justify-content-center mx-5 mt-4">
-            <h6> Long Nose Pliers </h6>
-        </div>
-        <div class="overlay"></div>
-        <div class="modal">I'm the Modal Window!</div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <div class="card3 justify-content-center mx-5 mt-4">
+                        <h6> Long Nose Pliers </h6>
+                    </div>
+                    <div class="card2 justify-content-center mx-5 mt-4 p-0">
+                        <h6>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            If tools borrowed were damage, broken, or missing, 
+                            the borrower shall be held responsible and must report to the tool keeper immediately.
+                        </h6>
+                        <button type="submit" class="btn btn-success p-2"> SUBMIT </button>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay"></div>
+            <div class="modal">I'm the Modal Window!</div>
+        </form>
     </main>
 {% endblock %}
 

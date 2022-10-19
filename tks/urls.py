@@ -15,15 +15,18 @@ urlpatterns = [
     
     # Student/Faculty
     path('home/', views.home_sf, name='home_sf'),
-    path('reservation/', views.reservation, name='reservation'),
+    path('reservation/', views.reservation_sf, name='reservation_sf'),
     path('profile/', views.profile_sf, name='profile_sf'),
     path('transactions/', views.transactions_sf, name='transactions_sf'),
     path('transactions/view/', views.view_transactions, name='view_transactions'),
 
     # Tool Keeper
-    path('toolkeeper/home/', views.home_tk, name='home_tk'),
+    # transactions tool keeper
     path('toolkeeper/transactions/', views.transactions_tk, name='transactions_tk'),
     
+    # scan code toolkeeper
+    path('toolkeeper/scanqr/', views.scanqr_tk, name='scanqr_tk'),
+
     # note: must include the transaction id of the borrower!!
     path('toolkeeper/transactions/tid', views.borrower_transaction, name='borrower_transaction'),
 

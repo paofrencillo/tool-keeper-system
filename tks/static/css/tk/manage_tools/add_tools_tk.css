@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.tool-img-wrapper {
+    border: 3px solid #3E3E3E;
+    width: max-content;
+    border-radius: 20px;
+    padding: 0 !important;
+}
+
+#tool-img {
+    width: 200px;
+    border-radius: 20px;
+}
+
+input[type="file"] {
+    font-size: 12px;
+}
+
+input[type="text"], select {
+    height: 40px;
+    padding-left: 1rem;
+    border-radius: 15px;
+    border: 0;
+    font-weight: 600;
+}
+
+select {
+    cursor: pointer;
+}
+
+select:invalid {
+    color: gray;
+}
+
+option[disabled] {
+    display: none;
+}
+
+option {
+    color: black;  
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+}
+
+.input-text-wrapper {
+    border: 2px solid #303030;
+    border-radius: 15px;
+    padding-right: 1rem;
+}
+
+input#save, input#cancel {
+    display: none;
+}
+
+.green-circle {
+    background-color:#878787;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+#capture-img-wrapper {
+    height: 37vh;
+    width: 100%;
+    border: 2px solid green;
+}
+
+.img-options-btns button {
+    width: 20% !important;
+    height: 50px;
+}
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 10px;
+    }
+    
+    .top-container {
+        justify-content: center !important;
+    }
+
+    .top-container button a {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}

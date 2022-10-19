@@ -103,6 +103,7 @@ def registration_toolkeeper(request):
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
+            # Put something here when form is invalid...
             pass
     else:
         registration_form = ToolKeeperRegistrationForm()
@@ -113,7 +114,34 @@ def registration_toolkeeper(request):
 def home_sf(request):
     return render(request, 'sf/home_sf.html')
 
-def reservation(request):
+def reservation_sf(request):
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect(request, "tk/home_tk.html")
+        elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
+            return redirect(request, "sf/home_sf.html")
+    
+    if request.method == "POST":
+        fullname = request.POST.get('fullname')
+        role = request.POST.get('role')
+        tupc_id = request.POST.get('tupc-id')
+        borrow_date = request.POST.get('borrow-date')
+        borrow_time = request.POST.get('borrow-time')
+        return_date = request.POST.get('return-date')
+        return_time = request.POST.get('return-time')
+ 
+        print(fullname,
+                role,
+                tupc_id,
+                borrow_date,
+                borrow_time,
+                return_date,
+                return_time)
+
+        
+        # else:
+        #     # Put something here when form is invalid...
+        #     pass
     return render(request, 'sf/reservation_sf.html')
 
 def profile_sf(request):
@@ -125,12 +153,9 @@ def transactions_sf(request):
 def view_transactions(request):
     return render(request, 'sf/view_transactions.html')
 
-
-
-
-def home_tk(request):
-    return render(request, 'tk/home_tk.html')
-
+def scanqr_tk(request):
+    return render(request, 'tk/scanqr_tk.html')
+    
 def transactions_tk(request):
     return render(request, 'tk/transactions_tk.html')
 

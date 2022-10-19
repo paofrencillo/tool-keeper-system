@@ -1,4 +1,3 @@
-import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
@@ -51,7 +50,6 @@ class StudentRegistrationForm(UserCreationForm):
         fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
-
 class FacultyRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='', widget=forms.TextInput(
                                 attrs={"placeholder": "First Name", "autofocus": True}),
@@ -98,17 +96,3 @@ class ToolKeeperRegistrationForm(UserCreationForm):
         model = User
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
-class ToolRegistrationForm(forms.ModelForm):
-    tool_id = forms.IntegerField(required=True)
-    tool_name = forms.CharField(required=True)
-    tool_image = forms.ImageField(required=True)
-    storage = forms.CharField(required=True)
-    layer = forms.CharField(required=True)
-    class Meta:
-        model = Tools
-        fields = ["tool_id", "tool_name", "tool_image", "storage", "layer"]
-
-class StudentToolReservationForm:
-    class Meta:
-        model = Transactions
-        fields = ["borrower_id", "fullname", "borrow_datetime", "return_datetime"]

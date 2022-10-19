@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}TKS | Scan QR Code{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/scanqr_tk.css' %}" /> 
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+
+    <main class="px-5 py-5">
+       <div class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</div>
+       <div id="qr-reader"></div>
+       <div id="result"></div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://reeteshghimire.com.np/wp-content/uploads/2021/05/html5-qrcode.min_.js"></script>
+    <script src="{% static 'js/tk/scanqr_tk.js' %}"></script>
+
+{% endblock %}  
