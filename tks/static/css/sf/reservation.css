@@ -59,11 +59,11 @@ hr {
     justify-content: space-between;
 }
 
-.card .date_time #date {
+input[type="date"] {
     width: 53%;
 }
 
-.card .date_time #time {
+input[type="time"] {
     width: 42%;
 }
 
