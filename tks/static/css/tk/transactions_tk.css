@@ -52,11 +52,6 @@ main {
 
 
 /* ========== TABLE ========== */
-table thead tr th {
-    text-align: center;
-    align-items: center;
-}
-
 .dataTables_length, .dataTables_filter {
     margin-bottom: 1rem;
 }
