@@ -11,7 +11,7 @@ def index(request):
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")
         elif request.user.role == "TOOL KEEPER":
-            return redirect("home_tk")
+            return redirect("transactions_tk")
 
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -27,7 +27,7 @@ def index(request):
                 if user.role == "STUDENT" or user.role == "FACULTY":
                     return redirect("home_sf")
                 elif user.role == "TOOL KEEPER":
-                    return redirect("home_tk")
+                    return redirect("transactions_tk")
             else:
                 messages.add_message(request, messages.ERROR, "Username or password incorrect!")
                 return redirect('/')
@@ -36,6 +36,10 @@ def index(request):
 
     context = {"login_form": login_form}
     return render(request, 'index.html', context)
+
+def userlogout(request):
+    logout(request)
+    return redirect("index")
 
 def registration_role(request):
     return render(request, "register_as.html")
@@ -115,11 +119,7 @@ def home_sf(request):
     return render(request, 'sf/home_sf.html')
 
 def reservation_sf(request):
-    if request.user.is_authenticated:
-        if request.user.role == "TOOL KEEPER":
-            return redirect(request, "tk/home_tk.html")
-        elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
-            return redirect(request, "sf/home_sf.html")
+   
     
     if request.method == "POST":
         fullname = request.POST.get('fullname')
