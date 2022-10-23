@@ -9,8 +9,13 @@ function checkDateTime() {
     var endTime = new Date(`${return_date} ${return_time}`);
 
     if ( startTime >= endTime ) {
+        submit_btn.setAttribute("disabled", true);
         alert("start time is lesser");
     } else if ( startTime < endTime ) {
-        alert("YES!")
+        submit_btn.removeAttribute("disabled");
     }
 }
+
+$("#submit-btn").click(function() {
+    $("#modal").modal('show');
+});

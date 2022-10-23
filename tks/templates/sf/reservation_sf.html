@@ -15,7 +15,7 @@
     {% include 'sf/navbar_sf.html' %}
 
     <main class="container-fluid justify-content-center align-items-center">
-        <form method="POST" action="{% url 'reservation_sf' %}" class="was-validated">
+        <form method="POST" action="{% url 'reservation_sf' %}" class="was-validated" id="reservation-form">
             {% csrf_token %}
             <div class="container-fluid row p-0 m-0">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -23,9 +23,9 @@
                         <div class="card align-items-center">
                             <h3>RESERVATION FORM</h3>
                             <hr>
-                            <input type="text" name="fullname" id="fullname" class="form-control" value="{}" readonly required>
-                            <input type="text" name="role" id="role" class="form-control" value="{}" readonly required>
-                            <input type="text" name="tupc-id" id="tupcid" class="form-control" value="{}" readonly required>
+                            <input type="text" name="fullname" id="fullname" class="form-control" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly required>
+                            <input type="text" name="role" id="role" class="form-control" value="{{ request.user.year_course }}" readonly required>
+                            <input type="text" name="tupc-id" id="tupcid" class="form-control" value="{{ request.user.tupc_id }}" readonly required>
                             <div class="form-group mt-4">
                                 <h6> Date and Time of Borrow</h6>
                                 <div class="date_time">                     
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
+                        <button type="reset" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
                     </div>
                 </div>
 
@@ -56,16 +56,32 @@
                             If tools borrowed were damage, broken, or missing, 
                             the borrower shall be held responsible and must report to the tool keeper immediately.
                         </h6>
-                        <button type="submit" id="submit-btn" class="btn btn-success p-2" disabled> SUBMIT </button>
+                        <button type="button" id="submit-btn" class="btn btn-success p-2" disabled>SUBMIT</button>
+                        
                     </div>
                 </div>
             </div>
-            <div class="overlay"></div>
-            <div class="modal">I'm the Modal Window!</div>
+            <div class="modal" id="modal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <p>We have sent an email to your registered account containing
+                        a <strong style="color: #FF0000">QR CODE</strong> 
+                      </p>
+                      <p>We will scan the <strong style="color: #FF0000">QR CODE</strong>
+                        to get your tools and verify your reservation
+                      </p>
+                      <p><strong>MAKE SURE TO SAVE THE <span style="color: #FF0000">QR CODE</span></strong>
+                      </p>
+                      <button type="submit" id="ok-btn" class="btn btn-primary">OK</button>
+                    </div>
+                  </div>
+                </div>
+              </div> 
         </form>
     </main>
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'js/sf/reservation_sf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sf/reservation_sf.js' %}"></script>
 {% endblock %} 

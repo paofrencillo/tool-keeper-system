@@ -27,7 +27,7 @@
             </button>
         </div>
         <div class="table-responsive mt-5 p-0">
-            <table id="transactions-table" class="table table-bordered table-hover align-middle">
+            <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
                 <thead class="table-dark justify-content-center">
                     <tr>
                       <th></th>
@@ -40,32 +40,21 @@
                     </tr>
                   </thead>
                   <tbody id="tabledata">
+                    {% for transaction in transactions %}
                     <tr class="rows">
                         <td>
                             <a href="">
-                                <button class="btn btn-secondary w-100">View</button>
+                                <button class="btn btn-secondary w-100" id="{{ transaction.id }}">View</button>
                             </a>
                         </td>
-                        <td>00001</td>
-                        <td>Paolo</td>
-                        <td>190472</td>
-                        <td>abcd</td>
-                        <td>abcd</td>
-                        <td>RESERVED</td>
+                        <td>{{ transaction.id }}</td>
+                        <td>{{ transaction.fullname }}</td>
+                        <td>{{ transaction.borrower_id_id }}</td>
+                        <td>{{ transaction.borrow_datetime }}</td>
+                        <td>{{ transaction.return_datetime }}</td>
+                        <td class="status">{{ transaction.status }}</td>
                     </tr>
-                    <tr class="rows">
-                        <td>
-                            <a href="">
-                                <button class="btn btn-secondary w-100">View</button>
-                            </a>
-                        </td>
-                        <td>00002</td>
-                        <td>Johnny</td>
-                        <td>696969</td>
-                        <td>abcd</td>
-                        <td>abcd</td>
-                        <td>BORROWED</td>
-                    </tr>
+                    {% endfor %}
                   </tbody>
             </table>
         </div>

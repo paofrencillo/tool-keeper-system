@@ -4,6 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from .models import *
 from .forms import *
+from django.http import JsonResponse
+from datetime import datetime
+
 
 # Create your views here.
 def index(request):
@@ -115,12 +118,12 @@ def home_sf(request):
     return render(request, 'sf/home_sf.html')
 
 def reservation_sf(request):
-    if request.user.is_authenticated:
-        if request.user.role == "TOOL KEEPER":
-            return redirect(request, "tk/home_tk.html")
-        elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
-            return redirect(request, "sf/home_sf.html")
-    
+    # if request.user.is_authenticated:
+    #     if request.user.role == "TOOL KEEPER":
+    #         return redirect("transactions_tk")
+    #     elif request.user.role == "FACULTY" or request.user.role == "STUDENT":
+    #         return redirect("home_sf")
+
     if request.method == "POST":
         fullname = request.POST.get('fullname')
         role = request.POST.get('role')
@@ -129,19 +132,31 @@ def reservation_sf(request):
         borrow_time = request.POST.get('borrow-time')
         return_date = request.POST.get('return-date')
         return_time = request.POST.get('return-time')
- 
-        print(fullname,
-                role,
-                tupc_id,
-                borrow_date,
-                borrow_time,
-                return_date,
-                return_time)
+        'Paolo Frencillo BET-COET-NS-4B 190472 2022-10-23 18:57 2022-10-29 18:03'
 
-        
-        # else:
-        #     # Put something here when form is invalid...
-        #     pass
+        date_format = '%Y-%m-%d'
+        time_format = '%H:%M'
+        borrow_date = datetime.strptime(borrow_date, date_format).date()
+        borrow_time = datetime.strptime(borrow_time, time_format).time()
+        return_date = datetime.strptime(return_date, date_format).date()
+        return_time = datetime.strptime(return_time, time_format).time()
+
+        borrow_datetime = datetime.combine(borrow_date, borrow_time).astimezone()
+        return_datetime = datetime.combine(return_date, return_time).astimezone()
+
+
+        borrower = User.objects.get(id=request.user.id)
+
+        Transactions.objects.create(
+                borrower_id=borrower,
+                fullname=fullname,
+                borrow_datetime=borrow_datetime,
+                return_datetime=return_datetime,
+                status="RESERVED")
+
+        # Create object on tools borrowed
+        # ...
+        # Then return render into the home page
     return render(request, 'sf/reservation_sf.html')
 
 def profile_sf(request):
@@ -157,7 +172,9 @@ def scanqr_tk(request):
     return render(request, 'tk/scanqr_tk.html')
     
 def transactions_tk(request):
-    return render(request, 'tk/transactions_tk.html')
+    transactions = Transactions.objects.all().order_by('-id')
+    context = {'transactions': transactions}
+    return render(request, 'tk/transactions_tk.html', context)
 
 def borrower_transaction(request):
     # This line of code is for having
