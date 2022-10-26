@@ -40,18 +40,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div id="tool-selected">
-                    
-                    </div>
-                    <div class="options d-flex justify-content-evenly mt-3">
-                        <button class="btn btn-success" type="button">RESERVE</button>
-                        <button class="btn btn-danger" type="button">CLEAR</button>
-                    </div>
+                    <form method="POST" action="#">
+                        {% csrf_token %}
+                        <div id="tool-selected">
+                            <!-- SELECTED TOOLS -->
+                        </div>
+                        <div class="options d-flex justify-content-evenly mt-3">
+                            <button class="btn btn-success" type="button">RESERVE</button>
+                            <button class="btn btn-danger" type="button">CLEAR</button>
+                        </div>
+                    </form>
                 </div>
             </div> 
-
-            </div>
-
+        </div>
 
         <div class="cards row justify-content-center mx-5 mt-4 p-0">
             {% for tool in tools %}

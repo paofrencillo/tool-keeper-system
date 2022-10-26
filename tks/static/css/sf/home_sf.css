@@ -69,6 +69,25 @@ button[data-bs-toggle="offcanvas"] {
     width: 30%;
 }
 
+.selected-tools-wrapper {
+    border-bottom: 2px solid #888888;
+}
+
+.selected-tools {
+    height: 30px !important;
+    border: none !important;
+    background-color: #FFFFFF !important;
+    margin: auto 2rem auto auto !important;
+    width: 80% !important;
+}
+
+.remove-btn {
+    cursor: pointer;
+}
+
+.bi-x-circle-fill {
+    color: #b12323;
+}
 
  /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {

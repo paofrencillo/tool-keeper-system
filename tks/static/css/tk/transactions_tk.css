@@ -24,20 +24,29 @@ main {
 }
 
 .top-container button:first-child {
+    background-color: #d3d3d3;
+    border: 2px solid #2d2d2d;  
+}
+
+.top-container button:first-child a {
+    color: #2d2d2d;
+}
+
+.top-container button:nth-child(2) {
     background-color: #DEE5FA;
     border: 2px solid #0000FF;  
 }
 
-.top-container button:first-child a {
+.top-container button:nth-child(2) a {
     color: #0000FF;
 }
 
-.top-container button:nth-child(2) {
+.top-container button:nth-child(3) {
     background-color: #DAFDCD; 
     border: 2px solid #008000;
 }
 
-.top-container button:nth-child(2) a {
+.top-container button:nth-child(3) a {
     color: #008000;
 }
 
