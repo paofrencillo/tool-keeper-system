@@ -119,7 +119,13 @@ def registration_toolkeeper(request):
     return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
-    return render(request, 'sf/home_sf.html')
+
+    tools = Tools.objects.all()
+    context = {'tools': tools}
+    
+
+
+    return render(request, 'sf/home_sf.html', context)
 
 def reservation_sf(request):
    

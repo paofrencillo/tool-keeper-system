@@ -40,8 +40,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div>
-                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                    <div id="tool-selected">
+                    
                     </div>
                     <div class="options d-flex justify-content-evenly mt-3">
                         <button class="btn btn-success" type="button">RESERVE</button>
@@ -54,70 +54,18 @@
 
 
         <div class="cards row justify-content-center mx-5 mt-4 p-0">
-            <a href="#">
+            {% for tool in tools %}
+            <a class="tools" toolid="{{ tool.tool_id }}" href="#" onclick="getTools(this);">
                 <div class="card align-items-center">
-                    <h5>Tool 1</h5>
+                    <h5>{{ tool.tool_name }}</h5>
                     <img src="{% static 'res/image.png' %}" alt="">
                 </div>
             </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 2</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 3</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 4</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 5</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 6</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 7</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 8</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 9</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
-            <a href="#">
-                <div class="card align-items-center">
-                    <h5>Tool 10</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                </div>
-            </a>
+            {% endfor%}
         </div>
     </main>
 {% endblock %}
 
 {% block js %}
-
+    <script src="{% static 'js/sf/home_sf.js' %}"></script>
 {% endblock %} 
