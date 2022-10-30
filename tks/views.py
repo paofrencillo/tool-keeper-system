@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from .models import *
 from .forms import *
-from django.http import JsonResponse
 from datetime import datetime
 
 
@@ -119,21 +118,16 @@ def registration_toolkeeper(request):
     return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
-
     tools = Tools.objects.all()
     context = {'tools': tools}
-    
-
 
     return render(request, 'sf/home_sf.html', context)
 
 def reservation_sf(request):
-   
-    
     if request.method == "POST":
         fullname = request.POST.get('fullname')
-        role = request.POST.get('role')
-        tupc_id = request.POST.get('tupc-id')
+        # role = request.POST.get('role')
+        # tupc_id = request.POST.get('tupc-id')
         borrow_date = request.POST.get('borrow-date')
         borrow_time = request.POST.get('borrow-time')
         return_date = request.POST.get('return-date')
@@ -181,6 +175,35 @@ def transactions_tk(request):
     transactions = Transactions.objects.all().order_by('-id')
     context = {'transactions': transactions}
     return render(request, 'tk/transactions_tk.html', context)
+
+# Filters in Tool Keeper Transactions
+def returned_transaction_tk(request):
+    transactions = Transactions.objects.filter(status='RETURNED')
+    context = {'transactions': transactions}
+    return render(request, 'tk/transactions_tk.html', context)
+       
+def borrowed_transaction_tk(request):
+    transactions = Transactions.objects.filter(status='BORROWED')
+    context = {'transactions': transactions}
+    return render(request, 'tk/transactions_tk.html', context)
+
+def reserved_transaction_tk(request):
+    transactions = Transactions.objects.filter(status='RESERVED')
+    context = {'transactions': transactions}
+    return render(request, 'tk/transactions_tk.html', context)
+
+# View Transaction Details ToolKeeper
+def view_transaction_details_tk(request, transaction_id):
+    transaction_details = Transactions.objects.get(id=transaction_id)
+    borrower = User.objects.get(tupc_id=transaction_details.borrower_id_id)
+
+    # tools_borrowed = ToolsBorrowed.objects.filter(transaction_id_id=transaction_id)
+    context = {
+        "borrower": borrower,
+        "details": transaction_details
+    }
+
+    return render(request, 'tk/transaction_details_tk.html', context)
 
 def borrower_transaction(request):
     # This line of code is for having

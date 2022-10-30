@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  TKS | Tool Keeper Transaction
+  TKS | Transaction {{ details.id }}-{{ borrower.last_name }}
 {% endblock %}
 
 {% block style %}
@@ -26,9 +26,13 @@
                   </div>
               </div>
               <div>
-                  <p class="m-2">Harry Roque</p>
-                  <p class="m-2">Unknown Section</p>
-                  <p class="m-2">190000</p>
+                  <p class="m-2">{{ borrower.first_name }} {{ borrower.last_name }}</p>
+                  {% if borrower.role == 'STUDENT' %}
+                    <p class="m-2">{{ borrower.year_course }}</p>
+                  {% elif borrower.role == 'FACULTY' %}
+                    <p class="m-2">{{ borrower.role }}</p>
+                  {% endif %}
+                  <p class="m-2">{{ borrower.tupc_id }}</p>
               </div>
             </div>
           </div>
@@ -37,10 +41,10 @@
           <div class="top-wrapper p-3">
             <div class="transaction-details-wrapper m-0">
               <div class="flex-row">
-                  <p class="transaction-details m-2">Transaction #:<span class="ms-2">N/A</span></p>
-                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2">N/A</span></p>
-                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2">N/A</span></p>
-                  <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{% block status %} {% endblock %}</span></p>
+                  <p class="transaction-details m-2">Transaction #:<span class="ms-2">{{ details.id }}</span></p>
+                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2">{{ details.borrow_datetime }}</span></p>
+                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2">{{ details.return_datetime }}</span></p>
+                  <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{% block status %}{{ details.status }}{% endblock %}</span></p>
               </div>
             </div>
           </div>   
@@ -49,7 +53,14 @@
     <hr>
     <div class="d-flex justify-content-start align-items-center">
       <h5 class="my-0 me-4">TOOLS BORROWED</h5>
-      {% block options_buttons %} {% endblock %}
+      {% if details.status == 'RESERVED' %}
+        <button class="btn btn-success option-btn me-2">
+          BORROW
+        </button>
+        <button class="btn btn-danger option-btn">
+          VOID
+        </button>
+      {% endif %}
     </div>
     <div class="table-responsive mt-4 p-0">
       <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">

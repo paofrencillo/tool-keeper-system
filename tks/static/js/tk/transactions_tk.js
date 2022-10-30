@@ -10,8 +10,8 @@ $(document).ready(function() {
       s.style.color = '#9C9C06';
     } else if ( s.innerText == 'BORROWED' ) {
       s.style.color = '#008000';
-    } else if ( s.innerText == '0000FF' ) {
-      s.style.color = '#9C9C06';
+    } else if ( s.innerText == 'RETURNED' ) {
+      s.style.color = '#0000FF';
     }
   }
 });

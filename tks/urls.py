@@ -29,10 +29,18 @@ urlpatterns = [
     # scan code toolkeeper
     path('toolkeeper/scanqr/', views.scanqr_tk, name='scanqr_tk'),
 
-    # note: must include the transaction id of the borrower!!
-    path('toolkeeper/transactions/tid', views.borrower_transaction, name='borrower_transaction'),
+    # view transactions toolkeeper
+    path('toolkeeper/transactions/', views.borrower_transaction, name='borrower_transaction'),
 
-    # storages tool keeper
+    # filter transaction toolkeeper
+    path('tk/transactions/filter/returned', views.returned_transaction_tk, name='returned_transaction_tk'),
+    path('tk/transactions/filter/borrowed', views.borrowed_transaction_tk, name='borrowed_transaction_tk'),
+    path('tk/transactions/filter/reserved', views.reserved_transaction_tk, name='reserved_transaction_tk'),
+
+    # view transaction details toolkeeper
+    path('toolkeeper/transactions/<int:transaction_id>', views.view_transaction_details_tk, name='view_transaction_details_tk'),
+   
+    # storages toolkeeper
     path('toolkeeper/tools/storages', views.storages_tk, name='storages_tk'),
 
     # add tool toolkeeper

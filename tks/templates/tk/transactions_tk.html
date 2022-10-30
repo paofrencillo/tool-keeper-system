@@ -17,16 +17,16 @@
     <main class="px-5 py-3">
         <div class="top-container d-flex justify-content-start">
             <button>
-                <a href="#">ALL</a>
+                <a href="{% url 'transactions_tk' %}">ALL</a>
             </button>
             <button>
-                <a href="#">RETURNED</a>
+                <a href="{% url 'returned_transaction_tk' %}">RETURNED</a>
             </button>
             <button>
-                <a href="#">BORROWED</a>
+                <a href="{% url 'borrowed_transaction_tk' %}">BORROWED</a>
             </button>
             <button>
-                <a href="#">RESERVED</a>
+                <a href="{% url 'reserved_transaction_tk' %}">RESERVED</a>
             </button>
         </div>
         <div class="table-responsive mt-5 p-0">
@@ -46,7 +46,7 @@
                     {% for transaction in transactions %}
                     <tr class="rows">
                         <td>
-                            <a href="">
+                            <a href="{% url 'view_transaction_details_tk' transaction.id %}">
                                 <button class="btn btn-secondary w-100" id="{{ transaction.id }}">View</button>
                             </a>
                         </td>
