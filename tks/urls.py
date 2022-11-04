@@ -24,28 +24,30 @@ urlpatterns = [
 
     # Tool Keeper
     # transactions tool keeper
-    path('toolkeeper/transactions/', views.transactions_tk, name='transactions_tk'),
+    path('tk/transactions/', views.transactions_tk, name='transactions_tk'),
     
     # scan code toolkeeper
-    path('toolkeeper/scanqr/', views.scanqr_tk, name='scanqr_tk'),
+    path('tk/scanqr/', views.scanqr_tk, name='scanqr_tk'),
 
     # view transactions toolkeeper
-    path('toolkeeper/transactions/', views.borrower_transaction, name='borrower_transaction'),
+    path('tk/transactions/', views.borrower_transaction, name='borrower_transaction'),
 
     # filter transaction toolkeeper
-    path('tk/transactions/filter/returned', views.returned_transaction_tk, name='returned_transaction_tk'),
-    path('tk/transactions/filter/borrowed', views.borrowed_transaction_tk, name='borrowed_transaction_tk'),
-    path('tk/transactions/filter/reserved', views.reserved_transaction_tk, name='reserved_transaction_tk'),
+    path('tk/transactions/all', views.filter_by_all, name='filter_by_all'),
+    path('tk/transactions/returned', views.filter_by_returned, name='filter_by_returned'),
+    path('tk/transactions/borrowed', views.filter_by_borrowed, name='filter_by_borrowed'),
+    path('tk/transactions/reserved', views.filter_by_reserved, name='filter_by_reserved'),
 
     # view transaction details toolkeeper
-    path('toolkeeper/transactions/<int:transaction_id>', views.view_transaction_details_tk, name='view_transaction_details_tk'),
-   
+    path('tk/transactions/<int:transaction_id>', views.view_transaction_details_tk, name='view_transaction_details_tk'),
+    path('tk/transactions/checkDateTime/<int:transaction_id>', views.check_datetime_tk, name='check_datetime_tk'),
+    
     # storages toolkeeper
-    path('toolkeeper/tools/storages', views.storages_tk, name='storages_tk'),
+    path('tk/tools/storages', views.storages_tk, name='storages_tk'),
 
     # add tool toolkeeper
-    path('toolkeeper/tools/add', views.add_tools_tk, name='add_tools_tk'),
+    path('tk/tools/add', views.add_tools_tk, name='add_tools_tk'),
 
     # edit tools toolkeeper
-    path('toolkeeper/tools/edit', views.edit_tools_tk, name='edit_tools_tk'),
+    path('tk/tools/edit', views.edit_tools_tk, name='edit_tools_tk'),
 ]

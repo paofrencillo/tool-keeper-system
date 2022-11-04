@@ -1,4 +1,9 @@
+from dataclasses import fields
+from time import time
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.utils import timezone
+from django.core import serializers
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
@@ -174,36 +179,100 @@ def scanqr_tk(request):
 def transactions_tk(request):
     transactions = Transactions.objects.all().order_by('-id')
     context = {'transactions': transactions}
+    for i in range(len(transactions)):
+        borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].borrow_datetime = transactions[i].borrow_datetime.strptime(borrow_datetime_str, "%b. %d, %Y, %I:%M %p")
+        return_datetime_str = transactions[i].return_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].return_datetime = transactions[i].return_datetime.strptime(return_datetime_str, "%b. %d, %Y, %I:%M %p")
     return render(request, 'tk/transactions_tk.html', context)
 
 # Filters in Tool Keeper Transactions
-def returned_transaction_tk(request):
-    transactions = Transactions.objects.filter(status='RETURNED')
-    context = {'transactions': transactions}
-    return render(request, 'tk/transactions_tk.html', context)
-       
-def borrowed_transaction_tk(request):
-    transactions = Transactions.objects.filter(status='BORROWED')
-    context = {'transactions': transactions}
-    return render(request, 'tk/transactions_tk.html', context)
+def filter_by_all(request):
+    transactions = Transactions.objects.all().order_by('-id')
+    datetimes = {}
+    for i in range(len(transactions)):
+        borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].borrow_datetime = None
+        return_datetime_str = transactions[i].return_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].return_datetime = None
+        datetimes[f"{i}"] = {"borrow_datetime": borrow_datetime_str,
+                        "return_datetime": return_datetime_str}
 
-def reserved_transaction_tk(request):
-    transactions = Transactions.objects.filter(status='RESERVED')
-    context = {'transactions': transactions}
-    return render(request, 'tk/transactions_tk.html', context)
+    data = serializers.serialize("json", transactions)
+    return JsonResponse({"transactions": data, "datetimes": datetimes})
+    
+def filter_by_returned(request):
+    transactions = Transactions.objects.filter(status="RETURNED").order_by('-id')
+    datetimes = {}
+    for i in range(len(transactions)):
+        borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].borrow_datetime = None
+        return_datetime_str = transactions[i].return_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].return_datetime = None
+        datetimes[f"{i}"] = {"borrow_datetime": borrow_datetime_str,
+                        "return_datetime": return_datetime_str}
+
+    data = serializers.serialize("json", transactions)
+    return JsonResponse({"transactions": data, "datetimes": datetimes})
+
+def filter_by_borrowed(request):
+    transactions = Transactions.objects.filter(status="BORROWED").order_by('-id')
+    datetimes = {}
+    for i in range(len(transactions)):
+        borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].borrow_datetime = None
+        return_datetime_str = transactions[i].return_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].return_datetime = None
+        datetimes[f"{i}"] = {"borrow_datetime": borrow_datetime_str,
+                        "return_datetime": return_datetime_str}
+
+    data = serializers.serialize("json", transactions)
+    return JsonResponse({"transactions": data, "datetimes": datetimes})
+
+def filter_by_reserved(request):
+    transactions = Transactions.objects.filter(status="RESERVED").order_by('-id')
+    datetimes = {}
+    for i in range(len(transactions)):
+        borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].borrow_datetime = None
+        return_datetime_str = transactions[i].return_datetime.strftime("%b. %d, %Y, %I:%M %p")
+        transactions[i].return_datetime = None
+        datetimes[f"{i}"] = {"borrow_datetime": borrow_datetime_str,
+                        "return_datetime": return_datetime_str}
+
+    data = serializers.serialize("json", transactions)
+    return JsonResponse({"transactions": data, "datetimes": datetimes})
 
 # View Transaction Details ToolKeeper
 def view_transaction_details_tk(request, transaction_id):
     transaction_details = Transactions.objects.get(id=transaction_id)
     borrower = User.objects.get(tupc_id=transaction_details.borrower_id_id)
+    current_datetime = timezone.now()
+
+    if transaction_details.borrow_datetime < current_datetime:
+        is_borrow_dt_late = "False"
+    
+    if transaction_details.return_datetime < current_datetime:
+        is_return_dt_late = "False"
+
 
     # tools_borrowed = ToolsBorrowed.objects.filter(transaction_id_id=transaction_id)
     context = {
         "borrower": borrower,
-        "details": transaction_details
+        "details": transaction_details,
+        "is_borrow_dt_late": is_borrow_dt_late,
+        "is_return_dt_late": is_return_dt_late
     }
 
     return render(request, 'tk/transaction_details_tk.html', context)
+
+def check_datetime_tk(request, transaction_id):
+    transaction_details = Transactions.objects.get(id=transaction_id)
+    response = {"borrow_datetime": transaction_details.borrow_datetime,
+                "return_datetime": transaction_details.return_datetime}
+    data = serializers.serialize("json", response)
+    print(data)
+    return JsonResponse({"datetimes": data})
 
 def borrower_transaction(request):
     # This line of code is for having

@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.borrower-img-wrapper {
+    border: 3px solid #000000;
+    border-radius: 50%;
+    width: max-content;
+}
+
+#borrower-img {
+    width: 80px;
+    border-radius: 50%;
+}
+
+.top-wrapper {
+    border: 2px solid #000000;
+    border-radius: 20px;
+    height: 150px;
+}
+
+.borrower-wrapper p {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.transaction-details {
+    font-weight: 800;
+}
+
+.transaction-details span {
+    font-weight: 600;
+}
+
+hr {
+    border: 2px solid #000000;
+}
+
+h5 {
+    font-weight: bolder;
+    width: max-content;
+}
+
+.option-btn {
+    width: 125px;
+    padding: auto 0.5rem;
+}
+
+.table-img {
+    width: 100px;
+    padding: 0.25rem;
+}
+
+.rfid-scanned-indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #005d00;
+    margin: auto;
+}
+
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 10px;
+    }
+
+    .table-img{
+        width: 75px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}
