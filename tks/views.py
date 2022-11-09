@@ -186,7 +186,9 @@ def transactions_tk(request):
         transactions[i].return_datetime = transactions[i].return_datetime.strptime(return_datetime_str, "%b. %d, %Y, %I:%M %p")
     return render(request, 'tk/transactions_tk.html', context)
 
+#####################################
 # Filters in Tool Keeper Transactions
+#####################################
 def filter_by_all(request):
     transactions = Transactions.objects.all().order_by('-id')
     datetimes = {}
@@ -243,23 +245,34 @@ def filter_by_reserved(request):
     data = serializers.serialize("json", transactions)
     return JsonResponse({"transactions": data, "datetimes": datetimes})
 
+#####################################
 # View Transaction Details ToolKeeper
+#####################################
 def view_transaction_details_tk(request, transaction_id):
-    transaction_details = Transactions.objects.get(id=transaction_id)
-    borrower = User.objects.get(tupc_id=transaction_details.borrower_id_id)
-    current_datetime = timezone.now()
+    tr_details = Transactions.objects.get(id=transaction_id)
+    borrower = User.objects.get(tupc_id=tr_details.borrower_id_id)
+    current_dt_in_sec = timezone.now().timestamp()
+    br_dt_in_sec = tr_details.borrow_datetime.timestamp()
+    rt_dt_in_sec = tr_details.return_datetime.timestamp()
+    is_borrow_dt_late = None
+    is_return_dt_late = None
+    to_void = None
 
-    if transaction_details.borrow_datetime < current_datetime:
+    if br_dt_in_sec < current_dt_in_sec:
         is_borrow_dt_late = "False"
-    
-    if transaction_details.return_datetime < current_datetime:
+    if rt_dt_in_sec < current_dt_in_sec:
         is_return_dt_late = "False"
 
+    # Write condition that will void the transaction
+    # if the expected datetime if borrow is exceeded 15 min. (900 sec.)
+    if (current_dt_in_sec - br_dt_in_sec) >= 900:
+        to_void = "Yes"
 
     # tools_borrowed = ToolsBorrowed.objects.filter(transaction_id_id=transaction_id)
     context = {
         "borrower": borrower,
-        "details": transaction_details,
+        "details": tr_details,
+        "to_void": to_void,
         "is_borrow_dt_late": is_borrow_dt_late,
         "is_return_dt_late": is_return_dt_late
     }

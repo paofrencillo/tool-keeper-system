@@ -1,5 +1,5 @@
 $(window).on('load', ()=> {
-    var status = document.getElementById('status');
+    let status = document.getElementById('status');
     status.style.fontWeight = 'bold';
 
     if (status.innerText == 'RESERVED') {
@@ -9,34 +9,19 @@ $(window).on('load', ()=> {
     } else if (status.innerText == 'RETURNED') {
         status.style.color = '#0000FF';
     }  
+
+    
+    let check_br_datetime = document.getElementById('borrow-datetime');
+    let check_rt_datetime = document.getElementById('return-datetime');
+
+    if ( check_br_datetime.getAttribute('data-check-borrow-dt') == "False" ) {
+        check_br_datetime.style.color = "#FF0000";
+    }
+    if ( check_rt_datetime.getAttribute('data-check-return-dt') == "False" ) {
+        check_rt_datetime.style.color = "#FF0000";
+    } 
 });
 
-// $(window).on('load', ()=> {
-//     let borrow_datetime_str = document.getElementById('borrow-datetime').innerText;
-//     let return_datetime_str = document.getElementById('return-datetime').innerText;
-//     let borrow_datetime = new Date(borrow_datetime_str);
-//     let return_datetime = Date.parse(return_datetime_str);
-//     let datetime_now = new Date();
-
-//     let url = decodeURI("{% url 'check_datetime_tk' details.id %}")
-//     $.ajax({
-//       type: "GET",
-//       url: url,
-//       dataType: "json",
-//       success: (response)=> {
-//         let datetimes = JSON.parse(response.datetimes);
-//         console.log(datetimes);
-
-//       },
-//       error: ()=> {
-//           alert("pota");
-//       }
-//     });
-
-
-//     // if ( datetime_now <= borrow_datetime ) {
-//     //     alert("yes");
-//     // } else {
-//     //     alert("supot");
-//     // }
-// });
+function checkIfVoid(datetime) {
+    
+}
