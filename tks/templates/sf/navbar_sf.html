@@ -17,7 +17,7 @@
                     <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">
                 </a>
                 <ul id="user" class="dropdown-menu">         
-                    <li id="name" class="px-3 py-2">Harry Roque</li>
+                    <li id="name" class="px-3 py-2">{{ request.user.first_name }} {{ request.user.last_name }}</li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item" href="#">

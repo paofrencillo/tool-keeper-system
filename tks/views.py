@@ -123,6 +123,33 @@ def registration_toolkeeper(request):
     return render(request, 'register_toolkeeper.html', context)
 
 def home_sf(request):
+    if request.user.is_authenticated:
+        pass
+
+    if request.method == "POST":
+        tool_ids = dict(request.POST.lists())
+        # tool_id = []
+        # tool_name = []
+
+        for value in tool_ids.values():
+            print(tool_ids)
+            # (1) Check the tool id to the db
+            # and find if the tool id is available
+            # tool = Tools.objects.get(tool_id=value[0])
+            # if tool.status != "AVAILABLE":
+            # (2) if tool.status is not available,
+            # propmt error message to home page
+            # if all tools selected are available:
+            # tool_id.append(tool.tool_id)
+            # tool_name.append(tool.tool_name)
+
+        # context = {'length': len(tool_id),
+        #            'tool_id': tool_id,
+        #            'tool_name': tool_name}
+        # render mo yung reservation page na may context
+        
+
+
     tools = Tools.objects.all()
     context = {'tools': tools}
 

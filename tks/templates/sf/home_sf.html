@@ -40,10 +40,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <form method="POST" action="#">
-                        {% csrf_token %}
+                    <form method="POST" id="tool-selected-form" data-url="{% url 'home_sf' %}">
                         <div id="tool-selected">
-                            <!-- SELECTED TOOLS -->
+                            {% csrf_token %}
+                            <!-- SELECTED TOOLS -->             
                         </div>
                         <div class="options d-flex justify-content-evenly mt-3">
                             <button class="btn btn-success" type="submit">RESERVE</button>
