@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     tupc_id = models.BigIntegerField(primary_key=True)
     role = models.CharField(max_length=10)
-    year_course = models.CharField(max_length=20, default=None)
+    year_course = models.CharField(max_length=20, null=True)
 
 class Tools(models.Model):
     tool_id = models.BigIntegerField(primary_key=True)
