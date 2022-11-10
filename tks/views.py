@@ -10,6 +10,7 @@ from django.contrib.auth import login, logout, authenticate, update_session_auth
 from .models import *
 from .forms import *
 from datetime import datetime
+import ast
 
 
 
@@ -134,6 +135,8 @@ def home_sf(request):
 
 def reservation_sf(request):
     if request.method == "POST":
+        selected_tools = ast.literal_eval(request.POST.get('selected-tools-all'))
+
         borrow_date = request.POST.get('borrow-date')
         borrow_time = request.POST.get('borrow-time')
         return_date = request.POST.get('return-date')
@@ -151,31 +154,33 @@ def reservation_sf(request):
 
         borrower = User.objects.get(pk=request.user.pk)
 
-        Transactions.objects.create(
+        new_transaction = Transactions.objects.create(
                 tupc_id_id=borrower.pk,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
                 status="RESERVED")
         
+        for item in selected_tools:
+            print("!!!!!", type((item)))
+            TransactionDetails.objects.create(
+                    transaction_id_id=new_transaction.pk,
+                    tool_id_id=int(item))
+        
+        #### --- Create message like in the figma design
+        #### --- reservation was done
         return redirect('/')
 
-        # Create object on tools borrowed
-        # ...
-        # Then return render into the home page
     if request.method == "GET":
         selected_tools = request.GET.get('selected-tools-all').split(',')
         tools = []
 
         for item in selected_tools:
             tool = Tools.objects.get(pk=int(item))
-            print(tool)
             if tool.status == "AVAILABLE":
-                print(tool.tool_name)
                 tools.append(tool.tool_name)
-                print(tools)
     
-        context = {'tools': tools}
-        print(context)
+        context = {'tools': tools,
+                'selected_tools_all': selected_tools}
         return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):

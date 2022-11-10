@@ -47,8 +47,9 @@
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card3 justify-content-center mx-5 mt-4">
-                        {% for tool in tools %}
-                        <p class="tools">{{ tool }}</p>
+                        <input type="hidden" name="selected-tools-all" value="{{ selected_tools_all }}">
+                        {% for tool in tools %} 
+                            <p class="tools">{{ tool }}</p>
                         {% endfor %}
                     </div>
                     <div class="card2 justify-content-center mx-5 mt-4 p-0">
