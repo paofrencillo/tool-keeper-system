@@ -128,26 +128,29 @@ def home_sf(request):
 
     if request.method == "POST":
         tool_ids = dict(request.POST.lists())
-        # tool_id = []
-        # tool_name = []
+        tool_id = []
+        tool_name = []
 
         for value in tool_ids.values():
-            print(tool_ids)
+            print(value)
             # (1) Check the tool id to the db
             # and find if the tool id is available
-            # tool = Tools.objects.get(tool_id=value[0])
-            # if tool.status != "AVAILABLE":
+            tool = Tools.objects.get(tool_id=value[0])
+            print(tool.tool_id)
+            if tool.status != "AVAILABLE":
             # (2) if tool.status is not available,
             # propmt error message to home page
+                messages.info(request, 'tools not available')
             # if all tools selected are available:
-            # tool_id.append(tool.tool_id)
-            # tool_name.append(tool.tool_name)
+            else:
+                tool_id.append(tool.tool_id)
+                tool_name.append(tool)
 
-        # context = {'length': len(tool_id),
-        #            'tool_id': tool_id,
-        #            'tool_name': tool_name}
+        context = {'tool_id': tool_id,
+                    'tool_name': tool_name}
+        print(context)
         # render mo yung reservation page na may context
-        
+        return render(request, 'sf/reservation_sf.html', context)
 
 
     tools = Tools.objects.all()
