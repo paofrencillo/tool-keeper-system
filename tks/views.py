@@ -1,7 +1,7 @@
-from dataclasses import fields
-from time import time
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core import serializers
 from django.views.decorators.cache import cache_control
@@ -10,6 +10,7 @@ from django.contrib.auth import login, logout, authenticate, update_session_auth
 from .models import *
 from .forms import *
 from datetime import datetime
+
 
 
 # Create your views here.
@@ -126,33 +127,6 @@ def home_sf(request):
     if request.user.is_authenticated:
         pass
 
-    if request.method == "POST":
-        tool_ids = dict(request.POST.lists())
-        tool_id = []
-        tool_name = []
-
-        for value in tool_ids.values():
-            print(value)
-            # (1) Check the tool id to the db
-            # and find if the tool id is available
-            tool = Tools.objects.get(tool_id=value[0])
-            print(tool.tool_id)
-            if tool.status != "AVAILABLE":
-            # (2) if tool.status is not available,
-            # propmt error message to home page
-                messages.info(request, 'tools not available')
-            # if all tools selected are available:
-            else:
-                tool_id.append(tool.tool_id)
-                tool_name.append(tool)
-
-        context = {'tool_id': tool_id,
-                    'tool_name': tool_name}
-        print(context)
-        # render mo yung reservation page na may context
-        return render(request, 'sf/reservation_sf.html', context)
-
-
     tools = Tools.objects.all()
     context = {'tools': tools}
 
@@ -160,39 +134,49 @@ def home_sf(request):
 
 def reservation_sf(request):
     if request.method == "POST":
-        fullname = request.POST.get('fullname')
-        # role = request.POST.get('role')
-        # tupc_id = request.POST.get('tupc-id')
         borrow_date = request.POST.get('borrow-date')
         borrow_time = request.POST.get('borrow-time')
         return_date = request.POST.get('return-date')
         return_time = request.POST.get('return-time')
-        'Paolo Frencillo BET-COET-NS-4B 190472 2022-10-23 18:57 2022-10-29 18:03'
 
         date_format = '%Y-%m-%d'
         time_format = '%H:%M'
-        borrow_date = datetime.strptime(borrow_date, date_format).date()
-        borrow_time = datetime.strptime(borrow_time, time_format).time()
-        return_date = datetime.strptime(return_date, date_format).date()
-        return_time = datetime.strptime(return_time, time_format).time()
+        formatted_borrow_date = datetime.strptime(borrow_date, date_format).date()
+        formatted_borrow_time = datetime.strptime(borrow_time, time_format).time()
+        formatted_return_date = datetime.strptime(return_date, date_format).date()
+        formatted_return_time = datetime.strptime(return_time, time_format).time()
 
-        borrow_datetime = datetime.combine(borrow_date, borrow_time).astimezone()
-        return_datetime = datetime.combine(return_date, return_time).astimezone()
+        borrow_datetime = datetime.combine(formatted_borrow_date, formatted_borrow_time).astimezone()
+        return_datetime = datetime.combine(formatted_return_date, formatted_return_time).astimezone()
 
-
-        borrower = User.objects.get(id=request.user.id)
+        borrower = User.objects.get(pk=request.user.pk)
 
         Transactions.objects.create(
-                borrower_id=borrower,
-                fullname=fullname,
+                tupc_id_id=borrower.pk,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
                 status="RESERVED")
+        
+        return redirect('/')
 
         # Create object on tools borrowed
         # ...
         # Then return render into the home page
-    return render(request, 'sf/reservation_sf.html')
+    if request.method == "GET":
+        selected_tools = request.GET.get('selected-tools-all').split(',')
+        tools = []
+
+        for item in selected_tools:
+            tool = Tools.objects.get(pk=int(item))
+            print(tool)
+            if tool.status == "AVAILABLE":
+                print(tool.tool_name)
+                tools.append(tool.tool_name)
+                print(tools)
+    
+        context = {'tools': tools}
+        print(context)
+        return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):
     return render(request, 'sf/profile_sf.html')

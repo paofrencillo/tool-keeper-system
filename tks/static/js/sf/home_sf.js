@@ -1,6 +1,6 @@
 var toolSelected = document.getElementById('tool-quantity');
 var item_count = 0;
-
+var tools_list = []
 
 function getTools(element) {
     let tool_is_selected = element.childNodes[1].getAttribute("data-is-selected");
@@ -52,29 +52,44 @@ function removeAllSelectedTools() {
 // Submit post on submit
 $('#tool-selected-form').on('submit', function(event){
     event.preventDefault();
-    let url = document.getElementById('tool-selected-form').getAttribute('data-url')
-    let csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-    console.log(csrf_token);
-    let inputs = document.getElementsByClassName('selected-tools')
-    let array = []
-    for ( i=0; i<inputs.length; i++ ) {
-        array.unshift(inputs[i].getAttribute('value'));
+    selected_tools = document.getElementsByClassName('selected-tools');
+    
+    for ( i=0; i<selected_tools.length; i++ ) {
+        tools_list.push(parseInt(selected_tools[i].value));
     }
-    $.ajax({
-        url : url, // the endpoint
-        type : "POST", // http method
-        dataType: "json",
-        headers: {"X-CSRFToken": csrf_token},
-        data : {"form_data": array}, // data sent with the post request
+    document.getElementsByName('selected-tools-all')[0].value = tools_list;
+    console.log(document.getElementsByName('selected-tools-all')[0])
+    $(this).unbind('submit').submit();
+    // let fd = new FormData();
 
-        // handle a successful response
-        success : ()=> {
-            console.log("success"); // another sanity check
-        },
+    // let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    // fd.append('csrfmiddlewaretoken', csrf)
 
-        // handle a non-successful response
-        error : function() {
-            console,log
-        }
-    });
+    // let selected_tools = document.getElementsByClassName('selected-tools');
+    
+    // for ( i=0; i<selected_tools.length; i++ ) {
+    //     fd.append(selected_tools[i].name , selected_tools[i].value);
+    // }
+
+    // let url = document.getElementById('tool-selected-form').getAttribute('data-url')
+    
+    // $.ajax({
+    //     url : url, // the endpoint
+    //     type : "POST", // http method
+    //     data : fd, // data sent with the post request
+
+    //     // handle a successful response
+    //     success : function(response) {
+    //         document.html; // another sanity check
+    //     },
+
+    //     // handle a non-successful response
+    //     error : function(err) {
+    //         console.log(err)
+    //     },
+
+    //     cache: false,
+    //     contentType: false,
+    //     processData: false,
+    // });
 });

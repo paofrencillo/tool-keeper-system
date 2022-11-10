@@ -17,6 +17,7 @@ class Tools(models.Model):
 
 class Transactions(models.Model):
     transaction_id = models.BigAutoField(primary_key=True)
+    tupc_id = models.ForeignKey("User", on_delete=models.CASCADE)
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
     status = models.CharField(max_length=25)
