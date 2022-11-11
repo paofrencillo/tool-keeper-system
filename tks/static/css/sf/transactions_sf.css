@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-:root {
-    --btn-bg-color-table-btns: #3E3E3E;
-    --font-color-white: #FFFFFF;
-}
 
 * {
     margin: 0;
@@ -13,7 +9,7 @@
 }
 
 main {
-    margin: 1.5rem 7.5rem;
+    margin: 1rem 8rem;
 }
 
 
@@ -45,14 +41,13 @@ table thead tr th {
     text-align: center;
 }
 
-.table-btns {
+.view-btns {
     width: 100%;
     padding: 0.5rem 0.5rem;
     border-radius: 10px;
-    color: var(--font-color-white);
-    background-color: var(--btn-bg-color-table-btns);
+    color: #FFFFFF;
+    background-color: #3E3E3E;
     border: none;
-    
 }
 
 /* ========== paging ========== */

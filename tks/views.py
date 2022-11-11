@@ -13,7 +13,6 @@ from datetime import datetime
 import ast
 
 
-
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -135,13 +134,16 @@ def home_sf(request):
 
 def reservation_sf(request):
     if request.method == "POST":
+        ## Get all the tool ids in request.POST
         selected_tools = ast.literal_eval(request.POST.get('selected-tools-all'))
 
+        ## Get the other values in request.POST
         borrow_date = request.POST.get('borrow-date')
         borrow_time = request.POST.get('borrow-time')
         return_date = request.POST.get('return-date')
         return_time = request.POST.get('return-time')
 
+        ## Format date and time from the request.POST
         date_format = '%Y-%m-%d'
         time_format = '%H:%M'
         formatted_borrow_date = datetime.strptime(borrow_date, date_format).date()
@@ -152,6 +154,7 @@ def reservation_sf(request):
         borrow_datetime = datetime.combine(formatted_borrow_date, formatted_borrow_time).astimezone()
         return_datetime = datetime.combine(formatted_return_date, formatted_return_time).astimezone()
 
+        ## Save new transaction
         borrower = User.objects.get(pk=request.user.pk)
 
         new_transaction = Transactions.objects.create(
@@ -159,38 +162,69 @@ def reservation_sf(request):
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
                 status="RESERVED")
-        
+
         for item in selected_tools:
-            print("!!!!!", type((item)))
             TransactionDetails.objects.create(
                     transaction_id_id=new_transaction.pk,
                     tool_id_id=int(item))
+            
         
         #### --- Create message like in the figma design
         #### --- reservation was done
         return redirect('/')
 
     if request.method == "GET":
+        ## Get all the tool ids in request.GET
         selected_tools = request.GET.get('selected-tools-all').split(',')
         tools = []
 
+        ## Verify the tool id status if it is available
+        ## If not, void reservation
         for item in selected_tools:
             tool = Tools.objects.get(pk=int(item))
             if tool.status == "AVAILABLE":
                 tools.append(tool.tool_name)
+            elif tool.status != "AVAILABLE":
+                ### --- Pop up message that the user 
+                ### - tool/s selected were not available
+                ### - for the meantime
+                ### --- Then return redirect to the home page
+                pass
     
         context = {'tools': tools,
                 'selected_tools_all': selected_tools}
+
         return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):
     return render(request, 'sf/profile_sf.html')
 
 def transactions_sf(request):
-    return render(request, 'sf/transactions_sf.html')
+    user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk)
+    context = {
+        'transactions': user_transaction
+    }
 
-def view_transactions(request):
-    return render(request, 'sf/view_transactions.html')
+    return render(request, 'sf/transactions_sf.html', context)
+
+def transaction_details_sf(request, transaction_id):
+    transaction_details = Transactions.objects.get(pk=transaction_id)
+    tools_borrowed = TransactionDetails.objects.filter(transaction_id_id=transaction_id)
+    tools = []
+    tool = None
+
+    for t in tools_borrowed:
+        tool = Tools.objects.get(pk=t.tool_id_id)
+        tools.append(tool)
+    
+    print(tools)
+
+    context = {
+        'transaction_details': transaction_details,
+        'tools': tools
+    }
+
+    return render(request, 'sf/transaction_details_sf.html', context)
 
 def scanqr_tk(request):
     return render(request, 'tk/scanqr_tk.html')

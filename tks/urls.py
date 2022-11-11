@@ -20,7 +20,7 @@ urlpatterns = [
     path('reservation/', views.reservation_sf, name='reservation_sf'),
     path('profile/', views.profile_sf, name='profile_sf'),
     path('transactions/', views.transactions_sf, name='transactions_sf'),
-    path('transactions/view/', views.view_transactions, name='view_transactions'),
+    path('transactions/<int:transaction_id>/', views.transaction_details_sf, name='transaction_details_sf'),
 
     # Tool Keeper
     # transactions tool keeper

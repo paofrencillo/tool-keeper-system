@@ -19,10 +19,6 @@ body {
     max-height: 100vh;
 }
 
-main {
-    margin: 0;
-}
-
 form[role="search"] {
     width: max-content;
 }
