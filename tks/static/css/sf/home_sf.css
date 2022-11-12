@@ -61,6 +61,10 @@ button[data-bs-toggle="offcanvas"] {
     border-radius: 10px;
 }
 
+.card h6 {
+    padding-top: 5px;
+}
+
 .offcanvas-body .options button {
     width: 30%;
 }
@@ -128,3 +132,24 @@ button[data-bs-toggle="offcanvas"] {
 
 }
 
+.modal-content {
+    border: 2px solid #517FD7;
+    border-radius: 20px;
+}
+
+.modal-body {
+    text-align: center;
+    padding: 20px !important;
+}
+
+.modal-body p {
+    width: 90%;
+    margin: 10px;
+}
+
+#ok-btn {
+    width: 40%;
+    padding: 8px auto;
+    margin-bottom: 10px;
+
+}

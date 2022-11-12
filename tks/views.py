@@ -187,9 +187,9 @@ def reservation_sf(request):
             elif tool.status != "AVAILABLE":
                 ### --- Pop up message that the user 
                 ### - tool/s selected were not available
-                ### - for the meantime
                 ### --- Then return redirect to the home page
-                pass
+                messages.add_message(request, messages.INFO, "you selected a tool/s that is currently not available.")
+                return redirect('home_sf')
     
         context = {'tools': tools,
                 'selected_tools_all': selected_tools}
