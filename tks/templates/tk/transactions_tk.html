@@ -15,9 +15,6 @@
     {% include 'tk/navbar_tk.html' %}
     
     <main class="px-5 py-3">
-        <div id="taena">
-            
-        </div>
         <div class="top-container d-flex justify-content-start">
             <button class="filter-btn" type="button" data-filterBy="all" data-url="{% url 'filter_by_all' %}">ALL</button>
             <button class="filter-btn" type="button" data-filterBy="returned" data-url="{% url 'filter_by_returned' %}">RETURNED</button>
@@ -41,8 +38,8 @@
                     {% for transaction in transactions %}
                     <tr class="rows">
                         <td>
-                            <a href="{% url 'view_transaction_details_tk' transaction.id %}">
-                                <button class="btn btn-secondary w-100" id="{{ transaction.id }}">View</button>
+                            <a href="{% url 'view_transaction_details_tk' transaction.pk %}">
+                                <button class="btn btn-secondary w-100" id="{{ transaction.pk }}">View</button>
                             </a>
                         </td>
                         <td>{{ transaction.id }}</td>

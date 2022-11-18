@@ -3,37 +3,21 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  TKS | Home
+  TKS | My Transactions
 {% endblock %}
 
 {% block style %}
   <link rel="stylesheet" href="{% static 'css/sf/transactions_sf.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
 {% endblock %}
 
 {% block main_content %}
     {% include 'sf/navbar_sf.html' %}
 
     <main>
-        <div class="top-container mt-3">
-            <label>
-                show
-                <select id="row-control" class="custom-select form-control form-control-sm">
-                    <option value="10"> 10 </option>
-                    <option value="20"> 20 </option>
-                    <option value="50"> 50 </option>
-                </select>
-                entries
-            </label>
-            <div id="search" class="search_user">
-                <label>
-                    Search:
-                    <input type="search" class="form-control form-control-sm" placeholder="">
-                </label>
-            </div>
-        </div>
-        <div class="container-fluid justify-content-center table-responsive mt-5 p-0">
-            <table id="transactions-table" class="table table-bordered table-hover align-middle">
+        <div class="table-responsive mt-5 p-0">
+            <table id="transactions-table" class="table table-bordered table-hover align-middle pt-4">
                 <thead class="table justify-content-center">
                     <tr>
                         <th></th>
@@ -51,39 +35,19 @@
                                     <button class="view-btns">View</button>
                                 </a>
                             </td>
-                            <td>{{ transaction.transaction_id }}</td>
-                            <td>{{ transaction.borrow_datetime }}</td>
-                            <td>{{ transaction.return_datetime }}</td>
-                            <td>{{ transaction.status }}</td>
+                            <td class="ps-3">{{ transaction.transaction_id }}</td>
+                            <td class="ps-3">{{ transaction.borrow_datetime }}</td>
+                            <td class="ps-3">{{ transaction.return_datetime }}</td>
+                            <td class="status" data-status="{{ transaction.status }}">{{ transaction.status }}</td>
                         </tr>         
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="col-sm12 col-md-7">
-                <div class="foot_paginate paging_simple_numbers">
-                    <ul class="pagination">
-                        <li class="paginate_button page-item previous disabled">
-                            <a href="#" data-dt-idx="0" tabindex="0" class="page-link"> Previous </a>
-                        </li>
-                        <li class="paginate_button page-item active">
-                            <a href="#" data-dt-idx="1"  tabindex="0" class="Page-link"> 1 </a>
-                        </li>
-                        <li class="paginate_button page-item active">
-                            <a href="#" data-dt-idx="2"  tabindex="0" class="Page-link"> 2 </a>
-                        </li>
-                        <li class="paginate_button page-item active">
-                            <a href="#" data-dt-idx="3"  tabindex="0" class="Page-link"> 3 </a>
-                        </li>
-                        <li class="paginate_button page-item next">
-                            <a href="#" data-dt-idx="4" tabindex="0" class="page-link"> Next </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </main>
 {% endblock %}
 
 {% block js %}
-
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script src="{% static 'js/sf/transactions_sf.js' %}"></script>
 {% endblock %} 

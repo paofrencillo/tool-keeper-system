@@ -184,6 +184,7 @@ def reservation_sf(request):
             tool = Tools.objects.get(pk=int(item))
             if tool.status == "AVAILABLE":
                 tools.append(tool.tool_name)
+                ## --- Update tool status to 'RESERVED'
             elif tool.status != "AVAILABLE":
                 ### --- Pop up message that the user 
                 ### - tool/s selected were not available
@@ -208,6 +209,18 @@ def transactions_sf(request):
     return render(request, 'sf/transactions_sf.html', context)
 
 def transaction_details_sf(request, transaction_id):
+    ### --- user authrntication in this block
+
+    if request.method == "POST":
+        void_transaction = request.POST.get('void')
+    ### --- Try catch errors next time. For the meantime...
+        if void_transaction == "Yes, I'm sure":
+            transaction = Transactions.objects.get(pk=transaction_id)
+            transaction.status = 'VOIDED'
+            transaction.save()
+
+            return redirect('transactions_sf')
+
     transaction_details = Transactions.objects.get(pk=transaction_id)
     tools_borrowed = TransactionDetails.objects.filter(transaction_id_id=transaction_id)
     tools = []
@@ -230,7 +243,7 @@ def scanqr_tk(request):
     return render(request, 'tk/scanqr_tk.html')
     
 def transactions_tk(request):
-    transactions = Transactions.objects.all().order_by('-id')
+    transactions = Transactions.objects.all().order_by('-pk')
     context = {'transactions': transactions}
     for i in range(len(transactions)):
         borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
@@ -243,7 +256,7 @@ def transactions_tk(request):
 # Filters in Tool Keeper Transactions
 #####################################
 def filter_by_all(request):
-    transactions = Transactions.objects.all().order_by('-id')
+    transactions = Transactions.objects.all().order_by('-pk')
     datetimes = {}
     for i in range(len(transactions)):
         borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
@@ -257,7 +270,7 @@ def filter_by_all(request):
     return JsonResponse({"transactions": data, "datetimes": datetimes})
     
 def filter_by_returned(request):
-    transactions = Transactions.objects.filter(status="RETURNED").order_by('-id')
+    transactions = Transactions.objects.filter(status="RETURNED").order_by('-pk')
     datetimes = {}
     for i in range(len(transactions)):
         borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
@@ -271,7 +284,7 @@ def filter_by_returned(request):
     return JsonResponse({"transactions": data, "datetimes": datetimes})
 
 def filter_by_borrowed(request):
-    transactions = Transactions.objects.filter(status="BORROWED").order_by('-id')
+    transactions = Transactions.objects.filter(status="BORROWED").order_by('-pk')
     datetimes = {}
     for i in range(len(transactions)):
         borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")
@@ -285,7 +298,7 @@ def filter_by_borrowed(request):
     return JsonResponse({"transactions": data, "datetimes": datetimes})
 
 def filter_by_reserved(request):
-    transactions = Transactions.objects.filter(status="RESERVED").order_by('-id')
+    transactions = Transactions.objects.filter(status="RESERVED").order_by('-pk')
     datetimes = {}
     for i in range(len(transactions)):
         borrow_datetime_str = transactions[i].borrow_datetime.strftime("%b. %d, %Y, %I:%M %p")

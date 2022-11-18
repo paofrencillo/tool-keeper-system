@@ -38,7 +38,7 @@ $('.filter-btn').click((e)=> {
       changeStyleStatus();
     },
     error: (error)=> {
-        
+      console.log(error); 
     }
   });
 });

@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  TKS | Transaction Details
+  TKS | My Transaction Details - {{ transaction_details.pk }}
 {% endblock %}
 
 {% block style %}
@@ -13,7 +13,6 @@
 
 {% block main_content %}
     {% include 'sf/navbar_sf.html' %}
-
     <main class="">
         <div class="row justify-content-center mx-5 px-5 my-3">
             <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12 mb-4 mx-0 px-0">
@@ -33,7 +32,7 @@
                         </div>
                         <div class="details my-3">
                             <div class="subtitle"> Status: </div>
-                            <div class="transaction-info status"> {{ transaction_details.status }} </div>
+                            <div class="transaction-info" id="status" data-status="{{ transaction_details.status }}"> {{ transaction_details.status }} </div>
                         </div>      
                     </div>
                 </div>
@@ -43,20 +42,45 @@
                     <div class="container mx-0 px-0">
                         <div class="d-flex align-items-center mx-0 px-0">
                             <div class="tools-borrowed-text"> TOOLS BORROWED </div>
-                            <button class="void-btn"> VOID </button>
+                            {% if transaction_details.status == 'RESERVED' %}
+                                <button type="button" class="void-btn" data-bs-toggle="modal" data-bs-target="#voidModal"> VOID </button>
+                            {% endif %}
                         </div>
-                        
-                        <hr>
-                        <div class="tools-cards">
-                        {% for tool in tools %}
-                            <div class="p-2">
-                                <div class="tool-info-wrapper">
-                                    <div class="tool-name mb-2"> {{ tool.tool_name }} </div>
-                                    <img src="{% static 'res/image.png' %}" alt="">
+                        {% if transaction_details.status == 'RESERVED' %}
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="modal fade" id="voidModal" tabindex="-1" aria-labelledby="voidModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="voideModalLabel">Void Transaction</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to void this transaction?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" name="void" value="Yes, I'm sure" class="btn btn-primary" />
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                    </div>
                                 </div>
+                            </form>    
+                        {% endif %} 
+                    </div>
+                    
+                    <hr>
+
+                    <div class="tools-cards">
+                    {% for tool in tools %}
+                        <div class="p-2">
+                            <div class="tool-info-wrapper">
+                                <div class="tool-name mb-2"> {{ tool.tool_name }} </div>
+                                <img src="{% static 'res/image.png' %}" alt="">
                             </div>
-                        {% endfor %}
                         </div>
+                    {% endfor %}
                     </div>
                 </div>
             </div>
@@ -65,5 +89,5 @@
 {% endblock %}
 
 {% block js %}
-
+    <script src="{% static 'js/sf/transaction_details_sf.js' %}"></script>
 {% endblock %} 

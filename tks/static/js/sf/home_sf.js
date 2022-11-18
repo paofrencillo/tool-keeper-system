@@ -57,8 +57,7 @@ $('#tool-selected-form').on('submit', function(event){
     for ( i=0; i<selected_tools.length; i++ ) {
         tools_list.push(parseInt(selected_tools[i].value));
     }
-    document.getElementsByName('selected-tools-all')[0].value = tools_list;
-    console.log(document.getElementsByName('selected-tools-all')[0])
+    document.getElementId('selected-tools-all').value = tools_list;
     $(this).unbind('submit').submit();
     // let fd = new FormData();
 

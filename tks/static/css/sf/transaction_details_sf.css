@@ -68,7 +68,7 @@ hr {
     border: 2px solid #9c9c06;
     border-radius: 10px;
     padding: 0.75rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
     width: 225px;
     height: 225px;
 }
@@ -88,8 +88,7 @@ hr {
     border-radius: 10px;
 }
 
-.status {
+#status {
     font-weight: 700;
     font-size: 20px;
-    color: #9c9c06;
 }
