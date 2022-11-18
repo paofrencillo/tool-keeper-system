@@ -46,7 +46,7 @@
                             <input type="hidden" name="selected-tools-all" id="selected-tools-all">       
                         </div>
                         <div class="options d-flex justify-content-evenly mt-3">
-                            <button class="btn btn-success" type="submit">RESERVE</button>
+                            <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
                             <button class="btn btn-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>
                         </div>
                     </form>
@@ -60,10 +60,33 @@
                 <div class="card align-items-center" data-is-selected="no">
                     <h5>{{ tool.tool_name }}</h5>
                     <img src="{% static 'res/image.png' %}" alt="">
+                    <h6 id="tool-status">{{ tool.status }}</h6>
                 </div>
             </a>
             {% endfor%}
         </div>
+        <div class="modal" id="modal2" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <p>COME TO THE STORAGE ROOM ON THE EXPECTED TIME AND DATE OF BORROW
+                  </p>
+                  <p><strong style="color: #FF0000"> IN CASE YOU DIDN'T SHOW UP 
+                    15 MINUTES AFTER THE EXPECTED TIME AND DATE, 
+                    YOUR RESERVATION WILL BE VOID. </strong></p>
+                  <p><strong>THANK YOU!</p>
+                  <button type="submit" id="ok-btn" class="btn btn-primary" action="{% url 'home_sf' %}" data-toggle="modal">OK</button>
+                </div>
+              </div>
+            </div>
+          </div> 
+        {% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+        {% endif %}
     </main>
 {% endblock %}
 

@@ -92,3 +92,14 @@ $('#tool-selected-form').on('submit', function(event){
     //     processData: false,
     // });
 });
+
+var headers = document.getElementsByTagName("h6");
+
+for (let i = 0; i < headers.length; i++) {
+    if (headers[i].textContent == "AVAILABLE") {
+        headers[i].style.color = "green";
+    }
+    else if (headers[i].textContent== "NOT AVAILABLE") {
+        headers[i].style.color = "red";
+    }
+}
