@@ -20,19 +20,41 @@
                 <div class="user_avatar">
                     <img id="avatar" class="rounded-circle" src="{% static 'res/test.png' %}" alt="">   
                 </div>
-                <div class="form-group">                  
-                    <input type="text" id="firstname" class="form-control" placeholder="Firstname">
-                    <input type="text" id="lastname" class="form-control"  placeholder="Lastname">
+                <div class="form-group row mt-2">                  
+                    <div class="col-6">
+                        <label class="labels">Firstname</label>
+                        <input type="text" id="firstname" class="form-control" value="{{ request.user.first_name }}" readonly required>
+                    </div>
+                    <div class="col-6">
+                        <label class="labels">Lastname</label>
+                        <input type="text" id="lastname" class="form-control" value="{{ request.user.last_name }}" readonly required>
+                    </div>
                 </div>
                 <div class="other-info">
-                    <input type="text" class="form-control" placeholder="Student">
-                    <input type="text" class="form-control" placeholder="19-XXXX">
-                    <input type="text" class="form-control" placeholder="email@email.com">
-                    <input type="text" class="form-control" placeholder="Username">
+                    <div class="col-md-12">
+                        <label class="labels">Registered as</label>
+                        <input type="text" class="form-control" value="{{ request.user.role }}" readonly required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">ID Number</label>
+                        <input type="text" class="form-control" value="{{ request.user.tupc_id }}" readonly required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Email Address</label>
+                        <input type="text" class="form-control" value="{{ request.user.email }}" readonly required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Username</label>
+                        <input type="text" class="form-control" value="{{ request.user.username }}" readonly required>
+                    </div>
                 </div>
-                <div class="edit_save">
-                    <a href=""><button class="btn btn-info"> EDIT </button></a>
-                    <a href=""><button class="btn btn-success"> SAVE </button></a>
+                <div class="edit_save d-flex">
+                    <div class="text-center">
+                        <button class="btn btn-primary edit-button" type="button">Edit Profile</button>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-success save-button" type="button">Save Profile</button>
+                    </div>
                 </div>
             </div>
         </div>

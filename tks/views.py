@@ -198,7 +198,13 @@ def reservation_sf(request):
         return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):
-    return render(request, 'sf/profile_sf.html')
+    user_data = User.objects.filter(tupc_id=request.user.pk)
+
+    context = {
+        'user': user_data
+    }
+
+    return render(request, 'sf/profile_sf.html', context)
 
 def transactions_sf(request):
     user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk)
