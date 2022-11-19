@@ -200,6 +200,15 @@ def reservation_sf(request):
 def profile_sf(request):
     user_data = User.objects.filter(tupc_id=request.user.pk)
 
+
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=profile_sf)
+
+        if form.is_valid():
+            form.save()
+
+        return redirect('profile_sf')
+
     context = {
         'user': user_data
     }

@@ -96,3 +96,29 @@ class ToolKeeperRegistrationForm(UserCreationForm):
         model = User
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
+
+class EditUserForm(UserCreationForm):
+    first_name = forms.CharField(label="First Name",
+                                    widget=forms.TextInput(attrs={'placeholder': 'cef',
+                                                            'readonly': ''}),
+                                    max_length=255,
+                                    required=False)
+    last_name = forms.CharField(label="Last Name",
+                                widget=forms.TextInput(attrs={'placeholder': 'donaaps',
+                                                        'readonly': ''}),
+                                max_length=255,
+                                required=False)
+    email = forms.EmailField(label="Email",
+                                widget=forms.EmailInput(attrs={'placeholder': 'rj45@gmail.com',
+                                                        'readonly': ''}),
+                                max_length=255,
+                                required=False)
+
+    username = forms.CharField(label="Username",
+                                widget=forms.TextInput(attrs={'readonly': ''}),
+                                max_length=255,
+                                required=False)
+
+    class Meta:
+                model = User
+                fields = ['first_name', 'last_name', 'tupc_id', 'email', 'username']
