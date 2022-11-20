@@ -205,7 +205,17 @@ def profile_sf(request):
         form = EditUserForm(request.POST, instance=profile_sf)
 
         if form.is_valid():
-            form.save()
+            first_name = request.POST('firstname')
+            last_name = request.POST('lastname')
+            email = request.POST('email')
+            username = request.POST('username')
+
+            user = User.objects.get(tupc_id=request.user.pk)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.username = username
+            user.save()
 
         return redirect('profile_sf')
 

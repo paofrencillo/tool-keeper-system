@@ -35,19 +35,19 @@
                     <div class="other-info">
                         <div class="col-md-12">
                             <label class="labels">Registered as</label>
-                            <input type="text" class="form-control" value="{{ request.user.role }}" readonly required>
+                            <input type="text" id="role" class="form-control" value="{{ request.user.role }}" readonly required>
                         </div>
                         <div class="col-md-12">
                             <label class="labels">ID Number</label>
-                            <input type="text" class="form-control" value="{{ request.user.tupc_id }}" readonly required>
+                            <input type="text" id="tupc_id" class="form-control" value="{{ request.user.tupc_id }}" readonly required>
                         </div>
                         <div class="col-md-12">
                             <label class="labels">Email Address</label>
-                            <input type="text" class="form-control" value="{{ request.user.email }}" readonly required>
+                            <input type="text" id="email" class="form-control" value="{{ request.user.email }}" readonly required>
                         </div>
                         <div class="col-md-12">
                             <label class="labels">Username</label>
-                            <input type="text" class="form-control" value="{{ request.user.username }}" readonly required>
+                            <input type="text" id="username" class="form-control" value="{{ request.user.username }}" readonly required>
                         </div>
                     </div>
                     <div class="edit_save d-flex">

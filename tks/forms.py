@@ -99,18 +99,15 @@ class ToolKeeperRegistrationForm(UserCreationForm):
 
 class EditUserForm(UserCreationForm):
     first_name = forms.CharField(label="First Name",
-                                    widget=forms.TextInput(attrs={'placeholder': 'cef',
-                                                            'readonly': ''}),
+                                    widget=forms.TextInput(attrs={'readonly': ''}),
                                     max_length=255,
                                     required=False)
     last_name = forms.CharField(label="Last Name",
-                                widget=forms.TextInput(attrs={'placeholder': 'donaaps',
-                                                        'readonly': ''}),
+                                widget=forms.TextInput(attrs={'readonly': ''}),
                                 max_length=255,
                                 required=False)
     email = forms.EmailField(label="Email",
-                                widget=forms.EmailInput(attrs={'placeholder': 'rj45@gmail.com',
-                                                        'readonly': ''}),
+                                widget=forms.EmailInput(attrs={'readonly': ''}),
                                 max_length=255,
                                 required=False)
 
