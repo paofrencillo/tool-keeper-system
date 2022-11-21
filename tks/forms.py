@@ -97,7 +97,7 @@ class ToolKeeperRegistrationForm(UserCreationForm):
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
-class EditUserForm(UserCreationForm):
+class EditUserForm(forms.ModelForm):
     first_name = forms.CharField(label="First Name",
                                     widget=forms.TextInput(attrs={'readonly': ''}),
                                     max_length=255,
