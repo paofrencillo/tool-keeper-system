@@ -89,6 +89,36 @@ button[data-bs-toggle="offcanvas"] {
     color: #b12323;
 }
 
+.modal-content {
+    border: 2px solid #517FD7;
+    border-radius: 20px;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px !important;
+}
+
+.modal-body p {
+    width: 90%;
+    margin: 10px;
+}
+
+.modal-body p:nth-child(2) {
+    color: #FF0000;
+}
+
+#ok-btn {
+    width: 40%;
+    padding: 8px auto;
+    margin-bottom: 10px;
+
+}
+
  /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {
     * {

@@ -171,6 +171,7 @@ def reservation_sf(request):
         
         #### --- Create message like in the figma design
         #### --- reservation was done
+        messages.info(request, "POTANGINAAAAAAAAA")
         return redirect('/')
 
     if request.method == "GET":
@@ -189,7 +190,7 @@ def reservation_sf(request):
                 ### --- Pop up message that the user 
                 ### - tool/s selected were not available
                 ### --- Then return redirect to the home page
-                messages.add_message(request, messages.INFO, "you selected a tool/s that is currently not available.")
+                messages.add_message(request, messages.INFO, "You selected a tool/s that is currently not available.")
                 return redirect('home_sf')
     
         context = {'tools': tools,
