@@ -12,14 +12,28 @@ main {
     margin-left: 200px;
 }
 
-#qr-reader  {
-    width: 500px;
+.qr-text  {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-decoration: underline;
+}
+
+.preview {
+    border: 5px solid #000000;
+    border-radius: 20px; 
 }
 
 /* ====== SCREEN REPONSIVENESS ====== */
 @media screen and (max-width: 576px) {
     * {
         font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .preview {
+        width: 90%;  
     }
 }
 

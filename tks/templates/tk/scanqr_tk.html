@@ -13,14 +13,24 @@
     {% include 'tk/navbar_tk.html' %}
 
     <main class="px-5 py-4">
-       <div class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</div>
-       <div id="qr-reader"></div>
-       <div id="result"></div>
+       <h2 class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</h2>
+       <div class="row">
+        <div class="preview-wrapper d-flex justify-content-center">
+            <video class="preview" id="preview" autoplay></video>
+        </div>
+        <div>
+            <input
+                type="hidden"
+                name="text"
+                id="text"
+                placeholder="scan qrcode"
+                readonly />
+        </div>
+       </div>
     </main>
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="https://reeteshghimire.com.np/wp-content/uploads/2021/05/html5-qrcode.min_.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script src="{% static 'js/tk/scanqr_tk.js' %}"></script>
-
 {% endblock %}  

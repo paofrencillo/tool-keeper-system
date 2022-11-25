@@ -12,42 +12,49 @@ main {
     margin-left: 200px;
 }
 
-.top-container button a, .top-container button a:hover {
+.top-container input, .top-container input:hover {
     font-weight: bold;
     text-decoration: none;
 }
 
-.top-container button {
+.top-container input {
     margin: 0;
     padding: 0.25em 0.75em;
     border-radius: 5px;
 }
 
-.top-container button:first-child {
+.top-container input:first-child {
     background-color: #d3d3d3;
     border: 2px solid #2d2d2d;
     color: #2d2d2d;
     font-weight: 700;
 }
 
-.top-container button:nth-child(2) {
+.top-container input:nth-child(2) {
     background-color: #DEE5FA;
     border: 2px solid #0000FF;
     color: #0000FF;
     font-weight: 700;
 }
 
-.top-container button:nth-child(3) {
+.top-container input:nth-child(3) {
     background-color: #DAFDCD; 
     border: 2px solid #008000;
     color: #008000;
     font-weight: 700;
 }
 
-.top-container button:last-child {
+.top-container input:nth-child(4) {
     background-color: #EDEDC9;
     border: 2px solid #9C9C06;
     color: #9C9C06;
+    font-weight: 700;
+}
+
+.top-container input:last-child {
+    background-color: #f2b1b1;
+    border: 2px solid #ff0000;
+    color: #ff0000;
     font-weight: 700;
 }
 

@@ -16,10 +16,12 @@
     
     <main class="px-5 py-3">
         <div class="top-container d-flex justify-content-start">
-            <button class="filter-btn" type="button" data-filterBy="all" data-url="{% url 'filter_by_all' %}">ALL</button>
-            <button class="filter-btn" type="button" data-filterBy="returned" data-url="{% url 'filter_by_returned' %}">RETURNED</button>
-            <button class="filter-btn" type="button" data-filterBy="borrowed" data-url="{% url 'filter_by_borrowed' %}">BORROWED</button>
-            <button class="filter-btn" type="button" data-filterBy="reserved" data-url="{% url 'filter_by_reserved' %}">RESERVED</button>
+            <form action="{% url 'transactions_tk' %}" method="get">
+                <input class="filter-btn" type="submit" name="filter" value="ALL">
+                <input class="filter-btn" type="submit" name="filter" value="RETURNED">
+                <input class="filter-btn" type="submit" name="filter" value="BORROWED">
+                <input class="filter-btn" type="submit" name="filter" value="RESERVED">
+                <input class="filter-btn" type="submit" name="filter" value="VOIDED">
         </div>
         <div class="table-responsive mt-5 p-0">
             <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
@@ -27,7 +29,6 @@
                     <tr>
                       <th></th>
                       <th>Transaction #</th>
-                      <th>Name</th>
                       <th>TUPC-ID</th>
                       <th>DateTime of Borrow</th>
                       <th>DateTime of Return</th>
@@ -38,13 +39,12 @@
                     {% for transaction in transactions %}
                     <tr class="rows">
                         <td>
-                            <a href="{% url 'view_transaction_details_tk' transaction.pk %}">
-                                <button class="btn btn-secondary w-100" id="{{ transaction.pk }}">View</button>
+                            <a href="{% url 'view_transaction_details_tk' transaction.transaction_id %}">
+                                <button class="btn btn-secondary w-100" id="{{ transaction.transaction_id }}">View</button>
                             </a>
                         </td>
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.fullname }}</td>
-                        <td>{{ transaction.borrower_id_id }}</td>
+                        <td>{{ transaction.pk }}</td>
+                        <td>{{ transaction.tupc_id_id }}</td>
                         <td>{{ transaction.borrow_datetime }}</td>
                         <td>{{ transaction.return_datetime }}</td>
                         <td class="status"><strong>{{ transaction.status }}</strong></td>

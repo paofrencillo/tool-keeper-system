@@ -32,12 +32,6 @@ urlpatterns = [
     # view transactions toolkeeper
     path('tk/transactions/', views.borrower_transaction, name='borrower_transaction'),
 
-    # filter transaction toolkeeper
-    path('tk/transactions/all', views.filter_by_all, name='filter_by_all'),
-    path('tk/transactions/returned', views.filter_by_returned, name='filter_by_returned'),
-    path('tk/transactions/borrowed', views.filter_by_borrowed, name='filter_by_borrowed'),
-    path('tk/transactions/reserved', views.filter_by_reserved, name='filter_by_reserved'),
-
     # view transaction details toolkeeper
     path('tk/transactions/<int:transaction_id>', views.view_transaction_details_tk, name='view_transaction_details_tk'),
     path('tk/transactions/checkDateTime/<int:transaction_id>', views.check_datetime_tk, name='check_datetime_tk'),
