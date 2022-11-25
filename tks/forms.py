@@ -97,16 +97,16 @@ class ToolKeeperRegistrationForm(UserCreationForm):
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
 
-class EditUserForm(UserCreationForm):
-    first_name = forms.CharField(label="First Name",
+class EditUserForm(forms.ModelForm):
+    first_name = forms.CharField(label="Firstname",
                                     widget=forms.TextInput(attrs={'readonly': ''}),
                                     max_length=255,
                                     required=False)
-    last_name = forms.CharField(label="Last Name",
+    last_name = forms.CharField(label="Lastname",
                                 widget=forms.TextInput(attrs={'readonly': ''}),
                                 max_length=255,
                                 required=False)
-    email = forms.EmailField(label="Email",
+    email = forms.EmailField(label="Email Address",
                                 widget=forms.EmailInput(attrs={'readonly': ''}),
                                 max_length=255,
                                 required=False)
@@ -118,4 +118,4 @@ class EditUserForm(UserCreationForm):
 
     class Meta:
                 model = User
-                fields = ['first_name', 'last_name', 'tupc_id', 'email', 'username']
+                fields = ['first_name', 'last_name', 'email', 'username']

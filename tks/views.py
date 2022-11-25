@@ -198,29 +198,18 @@ def reservation_sf(request):
         return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):
-    user_data = User.objects.filter(tupc_id=request.user.pk)
-
-
     if request.method == 'POST':
-        form = EditUserForm(request.POST, instance=profile_sf)
+        form = EditUserForm(request.POST, instance=request.user)
 
         if form.is_valid():
-            first_name = request.POST('firstname')
-            last_name = request.POST('lastname')
-            email = request.POST('email')
-            username = request.POST('username')
-
-            user = User.objects.get(tupc_id=request.user.pk)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.email = email
-            user.username = username
-            user.save()
-
-        return redirect('profile_sf')
-
+            form.save()
+            messages.success(request, f'account details has been updated!')
+            return redirect('profile_sf')
+    else:
+        form = EditUserForm(instance=request.user)
+    
     context = {
-        'user': user_data
+        'form': form
     }
 
     return render(request, 'sf/profile_sf.html', context)
