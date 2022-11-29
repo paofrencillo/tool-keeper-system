@@ -18,19 +18,27 @@
                 <div class="row">
                     <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
-                            <input class="w-100" type="text" placeholder="SCAN THE RFID TAG ON THE TOOL">
+                            <input
+                                id="rfid"
+                                class="w-100 tool_details"
+                                type="text"
+                                placeholder="CLICK SCAN THE RFID TAG"
+                                data-bs-toggle="modal"
+                                data-bs-target="#rfid_modal"
+                                readonly
+                                >
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
-                            <input class="w-100" type="text" placeholder="TOOL ID">
+                            <input class="w-100 tool_details" type="text" placeholder="TOOL ID">
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
-                            <input class="w-100" type="text" placeholder="TOOL NAME">
+                            <input class="w-100 tool_details" type="text" placeholder="TOOL NAME">
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4 justify-content-between">
-                            <select class="w-50" id="storage" name="storage" required>
+                            <select class="w-50 tool_details" id="storage" name="storage" required>
                                 <option value="" disabled selected>SELECT STORAGE</option>
                                 <option value="s1">Storage 1</option>
                                 <option value="s2">Storage 2</option>
@@ -39,7 +47,7 @@
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4 justify-content-between">
-                            <select class="w-50" id="layer" name="layer" required>
+                            <select class="w-50 tool_details" id="layer" name="layer" required>
                                 <option value="" disabled selected>SELECT LAYER</option>
                                 <option value="l1">Layer 1</option>
                                 <option value="l2">Layer 2</option>
@@ -48,6 +56,32 @@
                             <div class="green-circle"></div>
                         </div>
                     </div>
+                    <!-- RFID MODAL -->
+                    <div class="modal" id="rfid_modal" tabindex="-1">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="d-flex justify-content-end my-3 me-3">
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                    >
+                                </button>
+                            </div>
+                            <div class="modal-body p-3">    
+                                <p class="rfid_modal_description text-center">
+                                    SCAN THE RFID TAG ON THE TOOL TO VERIFY THE RETURN.
+                                </p>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <img id="rfid_img" src="{% static 'res/rfid.png' %}" alt="rfid_img">
+                                </div>
+                                <input type="text" id="rfid_hidden" name="rfid_hidden" value="">
+                                
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
                         <div class="container flex-row">
                             <div id="capture-img-wrapper">
@@ -60,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="img-options-btns d-flex justify-content-center align-items-center mt-5">
                 <button type="button" class="btn btn-primary me-2">Register Tool</button>
@@ -71,5 +104,6 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'js/tk/manage_tools/add_tools_tk.js' %}"></script>
 
 {% endblock %}  

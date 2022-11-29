@@ -36,6 +36,28 @@ input[type="text"], select {
     font-weight: 600;
 }
 
+#rfid {
+    cursor: pointer;
+}
+
+.modal-content {
+    border: 5px solid #517FD7;
+}
+
+.rfid_modal_description {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+#rfid_hidden {
+    opacity:0;
+    filter:alpha(opacity=0);
+}
+
+#rfid_img {
+    width: 40%;
+}
+
 select {
     cursor: pointer;
 }
