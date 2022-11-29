@@ -1,0 +1,4 @@
+body {
+    background-image: url('../res/gear.jpg');
+    object-fit: cover;
+}

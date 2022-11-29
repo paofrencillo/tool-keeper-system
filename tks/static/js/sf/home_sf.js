@@ -3,6 +3,11 @@ var item_count = 0;
 var tools_list = []
 
 function getTools(element) {
+    if ( element.childNodes[1].lastElementChild.innerText == "NOT AVAILABLE" ) {
+        alert("The tool selected is currently NOT AVAILABLE!");
+        return;
+    }
+
     let tool_is_selected = element.childNodes[1].getAttribute("data-is-selected");
     if ( tool_is_selected == 'yes' ) return;
 

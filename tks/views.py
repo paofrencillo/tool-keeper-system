@@ -7,6 +7,7 @@ from django.core import serializers
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from .models import *
 from .forms import *
 from datetime import datetime
@@ -171,8 +172,8 @@ def reservation_sf(request):
         
         #### --- Create message like in the figma design
         #### --- reservation was done
-        messages.info(request, "POTANGINAAAAAAAAA")
-        return redirect('/')
+        messages.add_message(request, messages.INFO, "YOWOYW")
+        return redirect('home_sf')
 
     if request.method == "GET":
         ## Get all the tool ids in request.GET
@@ -186,11 +187,11 @@ def reservation_sf(request):
             if tool.status == "AVAILABLE":
                 tools.append(tool.tool_name)
                 ## --- Update tool status to 'RESERVED'
-            elif tool.status != "AVAILABLE":
+            elif tool.status != "NOT AVAILABLE":
                 ### --- Pop up message that the user 
                 ### - tool/s selected were not available
                 ### --- Then return redirect to the home page
-                messages.add_message(request, messages.INFO, "You selected a tool/s that is currently not available.")
+                
                 return redirect('home_sf')
     
         context = {'tools': tools,
@@ -201,6 +202,7 @@ def reservation_sf(request):
 def profile_sf(request):
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
+        #password_form = PasswordChangeForm(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
@@ -208,9 +210,11 @@ def profile_sf(request):
             return redirect('profile_sf')
     else:
         form = EditUserForm(instance=request.user)
-    
+        #password_form = PasswordChangeForm(user=request.user)
+        
     context = {
-        'form': form
+        'form': form,
+        #'password_form': password_form
     }
 
     return render(request, 'sf/profile_sf.html', context)

@@ -101,21 +101,25 @@ class EditUserForm(forms.ModelForm):
     first_name = forms.CharField(label="Firstname",
                                     widget=forms.TextInput(attrs={'readonly': ''}),
                                     max_length=255,
-                                    required=False)
+                                    required=True)
     last_name = forms.CharField(label="Lastname",
                                 widget=forms.TextInput(attrs={'readonly': ''}),
                                 max_length=255,
-                                required=False)
+                                required=True)
+    role = forms.CharField(label='Registered as', widget=forms.TextInput(attrs={'readonly': ''}),
+                            required=True)
+    tupc_id = forms.IntegerField(label='TUPC ID', widget=forms.NumberInput(attrs={'readonly': ''}),
+                                required=True)
     email = forms.EmailField(label="Email Address",
                                 widget=forms.EmailInput(attrs={'readonly': ''}),
                                 max_length=255,
-                                required=False)
+                                required=True)
 
     username = forms.CharField(label="Username",
                                 widget=forms.TextInput(attrs={'readonly': ''}),
                                 max_length=255,
-                                required=False)
+                                required=True)
 
     class Meta:
                 model = User
-                fields = ['first_name', 'last_name', 'email', 'username']
+                fields = ['first_name', 'last_name', 'role', 'tupc_id','email', 'username']
