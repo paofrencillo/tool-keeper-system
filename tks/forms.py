@@ -123,3 +123,23 @@ class EditUserForm(forms.ModelForm):
     class Meta:
                 model = User
                 fields = ['first_name', 'last_name', 'role', 'tupc_id','email', 'username']
+
+
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(label="New Password",
+                                widget=forms.PasswordInput(attrs={'readonly': ''}),
+                                max_length=255,
+                                required=True)
+    cpassword = forms.CharField(label="Confirm New Password",
+                                widget=forms.PasswordInput(attrs={'readonly': ''}),
+                                max_length=255,
+                                required=True)
+
+    def clean_cpassword(self):
+        password1 = self.cleaned_data.get("password")
+        password2 = self.cleaned_data.get("cpassword")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )

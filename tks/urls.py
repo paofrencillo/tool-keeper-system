@@ -21,6 +21,8 @@ urlpatterns = [
     path('profile/', views.profile_sf, name='profile_sf'),
     path('transactions/', views.transactions_sf, name='transactions_sf'),
     path('transactions/<int:transaction_id>/', views.transaction_details_sf, name='transaction_details_sf'),
+    path('change_pass/', views.password_change, name='change_pass'),
+   
 
     # Tool Keeper
     # transactions tool keeper

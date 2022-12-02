@@ -219,6 +219,20 @@ def profile_sf(request):
 
     return render(request, 'sf/profile_sf.html', context)
 
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+    else:
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+    
+        context = {
+            'password_change' : password_change
+        }
+    return render(request, 'sf/password_sf.html', context)
+
 def transactions_sf(request):
     user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk)
     context = {
