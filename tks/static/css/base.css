@@ -1,4 +1,6 @@
 body {
     background-image: url('../res/gear.jpg');
-    object-fit: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }

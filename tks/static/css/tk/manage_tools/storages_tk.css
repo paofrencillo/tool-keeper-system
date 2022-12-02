@@ -12,17 +12,14 @@ main {
     margin-left: 200px;
 }
 
-.left-container p {
-    font-weight: bolder;
-    font-size: 20px;
-    margin-bottom: 1.5rem;
-}
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    padding: 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 40px;
+} 
 
-.left-container button {
-    font-weight: 600;
-    margin-bottom: 1rem;
-    width: 160px;
-}
 
 /* ========== TABLE ========== */
 table thead tr th {
@@ -36,6 +33,10 @@ table thead tr th {
 
 .dataTables_info, .dataTables_paginate {
     margin-top: 1rem;
+}
+
+.view_btns {
+    text-align: center;
 }
 
 

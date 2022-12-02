@@ -12,6 +12,14 @@ main {
     margin-left: 200px;
 }
 
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    padding: 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 40px;
+}
+
 .borrower-img-wrapper {
     border: 3px solid #000000;
     border-radius: 50%;

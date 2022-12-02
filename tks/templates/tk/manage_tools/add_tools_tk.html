@@ -13,8 +13,25 @@
     {% include 'tk/navbar_tk.html' %}
 
     <main class="px-5 py-5">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <div class="form-wrapper">
-            <form action="">
+            <form method="POST" action="{% url 'add_tools_tk' %}">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
@@ -22,38 +39,47 @@
                                 id="rfid"
                                 class="w-100 tool_details"
                                 type="text"
+                                name="tool_id"
                                 placeholder="CLICK SCAN THE RFID TAG"
                                 data-bs-toggle="modal"
                                 data-bs-target="#rfid_modal"
                                 readonly
+                                required
                                 >
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
-                            <input class="w-100 tool_details" type="text" placeholder="TOOL ID">
-                            <div class="green-circle"></div>
-                        </div>
-                        <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
-                            <input class="w-100 tool_details" type="text" placeholder="TOOL NAME">
+                            <input class="w-100 tool_details" type="text" name="tool_name" placeholder="TOOL NAME" required>
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4 justify-content-between">
                             <select class="w-50 tool_details" id="storage" name="storage" required>
                                 <option value="" disabled selected>SELECT STORAGE</option>
-                                <option value="s1">Storage 1</option>
-                                <option value="s2">Storage 2</option>
-                                <option value="s3">Storage 3</option>
+                                <option value="1">Storage 1</option>
+                                <option value="2">Storage 2</option>
+                                <option value="3">Storage 3</option>
                               </select>
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4 justify-content-between">
                             <select class="w-50 tool_details" id="layer" name="layer" required>
                                 <option value="" disabled selected>SELECT LAYER</option>
-                                <option value="l1">Layer 1</option>
-                                <option value="l2">Layer 2</option>
-                                <option value="l3">Layer 3</option>
+                                <option value="1">Layer 1</option>
+                                <option value="2">Layer 2</option>
+                                <option value="3">Layer 3</option>
                               </select>
                             <div class="green-circle"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
+                        <div class="container flex-row">
+                            <div id="capture-img-wrapper">
+                                
+                            </div>
+                            <div class="d-flex justify-content-around mt-3">
+                                <button type="button" class="btn btn-outline-success">Capture</button>
+                                <button type="reset" id="img_capture_reset" class="btn btn-outline-danger">Remove</button>
+                            </div>
                         </div>
                     </div>
                     <!-- RFID MODAL -->
@@ -82,22 +108,11 @@
                           </div>
                         </div>
                       </div>
-                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
-                        <div class="container flex-row">
-                            <div id="capture-img-wrapper">
-                                
-                            </div>
-                            <div class="d-flex justify-content-around mt-3">
-                                <button type="button" class="btn btn-outline-success">Capture</button>
-                                <button type="button" class="btn btn-outline-danger">Remove</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="img-options-btns d-flex justify-content-center align-items-center mt-5">
-                <button type="button" class="btn btn-primary me-2">Register Tool</button>
-                <button type="reset" class="btn btn-danger ms-2">Clear</button>
+                <button type="submit" class="btn btn-primary me-2">Register Tool</button>
+                <button type="reset" id="tool_details_reset" class="btn btn-danger ms-2">Clear</button>
             </div>
             </form>
     </main>

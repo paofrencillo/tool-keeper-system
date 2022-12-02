@@ -18,3 +18,11 @@ $('#rfid_hidden').change(()=> {
 $('.tool_details').change(( event )=> {
     event.target.nextElementSibling.style.backgroundColor = '#32a86d';
 });
+
+$('#tool_details_reset').on('click', ()=> {
+    green_circles = document.getElementsByClassName('green-circle');
+
+    for ( i=0; i<green_circles.length; i++ ) {
+        green_circles[i].style.backgroundColor = '#878787'
+    }
+});

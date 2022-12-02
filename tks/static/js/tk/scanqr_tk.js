@@ -19,6 +19,8 @@ Instascan.Camera.getCameras().then(function (cameras){
     console.error(e);
     alert(e);
 });
+
 scanner.addListener('scan', function(content) {
-    document.getElementById('text').value = content;
+    document.getElementById('qrcode').value = content;
+    document.getElementById('qrcode_form').submit();
 });
