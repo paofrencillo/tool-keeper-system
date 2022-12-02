@@ -16,7 +16,7 @@
                 <div class="user-img-wrapper">
                     <img id="user-img" src="{% static 'res/test.png' %}" alt="">
                 </div>
-                <p id="user-fname" class="d-inline mt-1 mb-3">Niño Barzaga</p>
+                <p id="user-fname" class="d-inline mt-1 mb-3">{{ request.user.first_name }} {{ request.user.last_name }}</p>
             </div>
         </a>
         <a class="sidebar-menus d-block" href="{% url 'transactions_tk' %}">
@@ -49,7 +49,7 @@
                 <div class="user-img-wrapper">
                     <img id="user-img" src="{% static 'res/test.png' %}" alt="">
                 </div>
-                <p id="user-fname" class="d-inline mt-1 mb-3">Jane Doe</p>
+                <p id="user-fname" class="d-inline mt-1 mb-3">{{ request.user.first_name }} {{ request.user.last_name }}</p>
             </div>
         </a>
         <a class="sidebar-menus d-block"  href="{% url 'logout' %}">

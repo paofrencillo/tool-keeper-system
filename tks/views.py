@@ -9,13 +9,17 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.db import IntegrityError
+from django.conf import settings
+from django.core.mail import EmailMessage
 from .models import *
 from .forms import *
+
 
 from datetime import datetime
 import ast
 import pyqrcode
 import png
+import imghdr
 from pyqrcode import QRCode
 
 
@@ -186,7 +190,28 @@ def reservation_sf(request):
         qrcode = pyqrcode.create(transaction_code)
         
         # Create and save the png file naming "myqr.png"
-        qrcode.png('myqr.png', scale = 6)
+        qrcode.png(f'{new_transaction.pk}.png', scale = 6)
+        #send email to user
+        
+        subject = "TKS Transaction Code"
+        body = f"""Greetings!\n\n
+                This is your QR Code for your transaction with transaction number 
+                {transaction_code} in TUP-C Tool Keeper System.\n\n
+                This will be used for borrowing and returning the tools you reserved.\n\n
+                Please keep in mind to save the QR Code to your device.\n\n
+                Thank You!"""
+        borrower_email = borrower.email
+        email = EmailMessage(
+            subject,
+            body,
+            settings.EMAIL_HOST_USER,
+            [borrower_email],
+            reply_to=[settings.EMAIL_HOST_USER],
+            headers={'Message-ID': 'QRCODE'},
+        )
+        email.attach_file(f'{new_transaction.pk}.png')
+
+        email.send()
 
         return redirect('home_sf')
 
