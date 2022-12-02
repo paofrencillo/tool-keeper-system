@@ -14,47 +14,48 @@
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
     
-    <main class="px-5 py-3">
-        <div class="top-container d-flex justify-content-start">
-            <form action="{% url 'transactions_tk' %}" method="get">
-                <input class="filter-btn" type="submit" name="filter" value="ALL">
-                <input class="filter-btn" type="submit" name="filter" value="RETURNED">
-                <input class="filter-btn" type="submit" name="filter" value="BORROWED">
-                <input class="filter-btn" type="submit" name="filter" value="RESERVED">
-                <input class="filter-btn" type="submit" name="filter" value="VOIDED">
-        </div>
-        <div class="table-responsive mt-5 p-0">
-            <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
-                <thead class="table-dark justify-content-center">
-                    <tr>
-                      <th></th>
-                      <th>Transaction #</th>
-                      <th>TUPC-ID</th>
-                      <th>DateTime of Borrow</th>
-                      <th>DateTime of Return</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabledata">
-                    {% for transaction in transactions %}
-                    <tr class="rows">
-                        <td>
-                            <a href="{% url 'view_transaction_details_tk' transaction.transaction_id %}">
-                                <button class="btn btn-secondary w-100" id="{{ transaction.transaction_id }}">View</button>
-                            </a>
-                        </td>
-                        <td>{{ transaction.pk }}</td>
-                        <td>{{ transaction.tupc_id_id }}</td>
-                        <td>{{ transaction.borrow_datetime }}</td>
-                        <td>{{ transaction.return_datetime }}</td>
-                        <td class="status"><strong>{{ transaction.status }}</strong></td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-            </table>
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="top-container d-flex justify-content-start">
+                <form action="{% url 'transactions_tk' %}" method="get">
+                    <input class="filter-btn" type="submit" name="filter" value="ALL">
+                    <input class="filter-btn" type="submit" name="filter" value="RETURNED">
+                    <input class="filter-btn" type="submit" name="filter" value="BORROWED">
+                    <input class="filter-btn" type="submit" name="filter" value="RESERVED">
+                    <input class="filter-btn" type="submit" name="filter" value="VOIDED">
+            </div>  
+            <div class="table-responsive mt-5 p-0">
+                <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
+                    <thead class="table-dark justify-content-center">
+                        <tr>
+                        <th></th>
+                        <th>Transaction #</th>
+                        <th>TUPC-ID</th>
+                        <th>DateTime of Borrow</th>
+                        <th>DateTime of Return</th>
+                        <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabledata">
+                        {% for transaction in transactions %}
+                        <tr class="rows">
+                            <td>
+                                <a href="{% url 'view_transaction_details_tk' transaction.transaction_id %}">
+                                    <button class="btn btn-secondary w-100" id="{{ transaction.transaction_id }}">View</button>
+                                </a>
+                            </td>
+                            <td>{{ transaction.pk }}</td>
+                            <td>{{ transaction.tupc_id_id }}</td>
+                            <td>{{ transaction.borrow_datetime }}</td>
+                            <td>{{ transaction.return_datetime }}</td>
+                            <td class="status"><strong>{{ transaction.status }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
-
 {% endblock %}
 
 {% block js %}

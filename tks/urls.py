@@ -45,5 +45,5 @@ urlpatterns = [
     path('tk/tools/add', views.add_tools_tk, name='add_tools_tk'),
 
     # edit tools toolkeeper
-    path('tk/tools/edit', views.edit_tools_tk, name='edit_tools_tk'),
+    path('tk/tools/edit/<int:tool_id>', views.edit_tools_tk, name='edit_tools_tk'),
 ]

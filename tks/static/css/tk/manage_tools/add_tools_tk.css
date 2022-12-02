@@ -102,14 +102,14 @@ input#save, input#cancel {
 }
 
 .img-options-btns button {
-    width: 20% !important;
+    width: 30% !important;
     height: 50px;
 }
 
 /* ====== SCREEN REPONSIVENESS ====== */
 @media screen and (max-width: 576px) {
     * {
-        font-size: 10px;
+        font-size: 14px;
     }
     
     .top-container {

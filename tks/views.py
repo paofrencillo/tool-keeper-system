@@ -8,10 +8,15 @@ from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.db import IntegrityError
 from .models import *
 from .forms import *
+
 from datetime import datetime
 import ast
+import pyqrcode
+import png
+from pyqrcode import QRCode
 
 
 # Create your views here.
@@ -168,11 +173,21 @@ def reservation_sf(request):
             TransactionDetails.objects.create(
                     transaction_id_id=new_transaction.pk,
                     tool_id_id=int(item))
-            
         
         #### --- Create message like in the figma design
         #### --- reservation was done
         messages.add_message(request, messages.INFO, "YOWOYW")
+
+        ## Generate QR Code
+        # String which represents the QR code
+        transaction_code = str(new_transaction.pk)
+
+        # Generate QR code
+        qrcode = pyqrcode.create(transaction_code)
+        
+        # Create and save the png file naming "myqr.png"
+        qrcode.png('myqr.png', scale = 6)
+
         return redirect('home_sf')
 
     if request.method == "GET":
@@ -206,7 +221,7 @@ def profile_sf(request):
 
         if form.is_valid():
             form.save()
-            messages.success(request, f'account details has been updated!')
+            messages.success(request, f'Account details has been updated!')
             return redirect('profile_sf')
     else:
         form = EditUserForm(instance=request.user)
@@ -273,6 +288,13 @@ def transaction_details_sf(request, transaction_id):
     return render(request, 'sf/transaction_details_sf.html', context)
 
 def scanqr_tk(request):
+    if request.method == "POST" and request.POST.get('qrcode'):
+        qrcode = request.POST.get('qrcode')
+        transaction = Transactions.objects.get(pk=int(qrcode))
+        transaction_code = transaction.pk
+
+        return redirect("view_transaction_details_tk", transaction_id=transaction_code)
+
     return render(request, 'tk/scanqr_tk.html')
     
 def transactions_tk(request):
@@ -354,10 +376,39 @@ def borrower_transaction(request):
     return render(request, 'tk/borrower_transaction/reserved_scanned.html')
 
 def storages_tk(request):
-    return render(request, 'tk/manage_tools/storages_tk.html')
+    tools = Tools.objects.all()
+    context =  {
+        'tools': tools
+    }
+
+    return render(request, 'tk/manage_tools/storages_tk.html', context)
 
 def add_tools_tk(request):
+    if request.method == "POST":
+        try:
+            tool_id = request.POST['tool_id']
+            tool_name = request.POST['tool_name']
+            storage = int(request.POST['storage'])
+            layer = int(request.POST['layer'])
+
+            new_tool = Tools.objects.create(
+                    tool_id = tool_id,
+                    tool_name = tool_name,
+                    tool_image = "",
+                    storage = storage,
+                    layer = layer,
+                    status = "AVAILABLE"
+            )
+
+            new_tool.save()
+            messages.add_message(request, messages.SUCCESS, "TOOL REGISTERED SUCCESSFULLY!")
+            return redirect("add_tools_tk")
+
+        except IntegrityError:
+            messages.add_message(request, messages.ERROR, "TOOL WAS ALREADY REGISTERED!")
+            return redirect("add_tools_tk")
+
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
-def edit_tools_tk(request):
+def edit_tools_tk(request, tool_id):
     return render(request, 'tk/manage_tools/edit_tools_tk.html')

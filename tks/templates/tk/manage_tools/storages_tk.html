@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+    TKS | Tool Keeper Storages
+{% endblock %}
+
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/tk/manage_tools/storages_tk.css' %}" />
     <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />   
@@ -11,74 +15,74 @@
     {% include 'tk/navbar_tk.html' %}
 
     <main class="px-5 py-4">
-        <div class="row">
-            <div class="left-container col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <p>STORAGES</p>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      STORAGES
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Storage 1</a></li>
-                      <li><a class="dropdown-item" href="#">Storage 2</a></li>
-                    </ul>
+        <div class="main_wrapper">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="btn btn-primary" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
+                        <form action="" method="GET">
+                            <div class="dropdowns d-flex">
+                                <select name="cars" id="cars">
+                                    <option value="">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                                                            <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      STORAGES
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="#">Storage 1</a></li>
+                                      <li><a class="dropdown-item" href="#">Storage 2</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown ps-2">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        LAYER
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Layer 1</a></li>
+                                        <li><a class="dropdown-item" href="#">Layer 2</a></li>
+                                        <li><a class="dropdown-item" href="#">Layer 3</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    LAYER
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Layer 1</a></li>
-                    <li><a class="dropdown-item" href="#">Layer 2</a></li>
-                    <li><a class="dropdown-item" href="#">Layer 3</a></li>
-                </ul>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-responsive mt-4 p-0">
+                        <table id="storages-table" class="table table-bordered table-hover table-striped align-middle">
+                            <thead class="table-dark justify-content-center">
+                                <tr>
+                                  <th></th>
+                                  <th>Tool ID</th>
+                                  <th>Tool Name</th>
+                                  <th>Image</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tabledata">
+                                {% for tool in tools %}
+                                    <tr class="rows">
+                                        <td class="view_btns">
+                                            <a href="{% url 'edit_tools_tk' tool.pk %}">
+                                                <button class="btn btn-secondary w-100">View</button>
+                                            </a>
+                                        </td>
+                                        <td>{{ tool.pk }}</td>
+                                        <td>{{ tool.tool_name }}</td>
+                                        <td>{{ tool.tool_image }}</td>
+                                        <td>{{ tool.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="right-container col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                <div class="d-flex">
-                    <a class="btn btn-primary" href="#" role="button">+ Add Tool</a>
-                </div>
-                <div class="table-responsive mt-4 p-0">
-                    <table id="storages-table" class="table table-bordered table-hover align-middle">
-                        <thead class="table-dark justify-content-center">
-                            <tr>
-                              <th></th>
-                              <th>Tool ID</th>
-                              <th>Tool Name</th>
-                              <th>Image</th>
-                              <th>Status</th>
-                            </tr>
-                          </thead>
-                          <tbody id="tabledata">
-                            <tr class="rows">
-                                <td>
-                                    <a href="">
-                                        <button class="btn btn-secondary w-100">View</button>
-                                    </a>
-                                </td>
-                                <td>ABC123</td>
-                                <td>Tool 1</td>
-                                <td>IMAGE</td>
-                                <td>AVAILABLE</td>
-                            </tr>
-                            <tr class="rows">
-                                <td>
-                                    <a href="">
-                                        <button class="btn btn-secondary w-100">View</button>
-                                    </a>
-                                </td>
-                                <td>DEF456</td>
-                                <td>Tool 2</td>
-                                <td>IMAGE</td>
-                                <td>DAMAGED</td>
-                            </tr>
-                          </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-        
+        </div>     
     </main>
 {% endblock %}
 

@@ -13,20 +13,25 @@
     {% include 'tk/navbar_tk.html' %}
 
     <main class="px-5 py-4">
-       <h2 class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</h2>
-       <div class="row">
-        <div class="preview-wrapper d-flex justify-content-center">
-            <video class="preview" id="preview" autoplay></video>
+        <div class="main_wrapper">
+            <h2 class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</h2>
+            <div class="row">
+                <div class="preview-wrapper d-flex justify-content-center">
+                    <video class="preview" id="preview" autoplay></video>
+                </div>
+                <div>
+                    <form id="qrcode_form" action="{% url 'scanqr_tk' %}" method="POST">
+                        {% csrf_token %}
+                        <input
+                        type="text"
+                        name="qrcode"
+                        id="qrcode"
+                        placeholder="scan qrcode"
+                        readonly />
+                    </form>
+                </div>
+            </div>
         </div>
-        <div>
-            <input
-                type="hidden"
-                name="text"
-                id="text"
-                placeholder="scan qrcode"
-                readonly />
-        </div>
-       </div>
     </main>
 {% endblock %}
 

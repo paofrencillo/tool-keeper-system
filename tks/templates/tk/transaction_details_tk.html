@@ -15,7 +15,8 @@
   {% include 'tk/navbar_tk.html' %}
     
   <main class="px-5 py-4">
-    <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
+    <div class="main_wrapper">
+      <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
         <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
           <div class="top-wrapper p-3">
             <h5>Borrower's Information</h5>
@@ -49,46 +50,47 @@
             </div>
           </div>   
         </div>
-    </div>
-    <hr>
-    <div class="d-flex justify-content-start align-items-center">
-      <h5 class="my-0 me-4">TOOLS BORROWED</h5>
-      {% if details.status == 'RESERVED' %}
-        <button class="btn btn-success option-btn me-2">
-          BORROW
-        </button>
-        <button class="btn btn-danger option-btn">
-          VOID
-        </button>
-      {% endif %}
-    </div>
-    <div class="table-responsive mt-4 p-0">
-      <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">
-        <thead class="table-dark justify-content-center">
+      </div>
+      <hr>
+      <div class="d-flex justify-content-start align-items-center">
+        <h5 class="my-0 me-4">TOOLS BORROWED</h5>
+        {% if details.status == 'RESERVED' %}
+          <button class="btn btn-success option-btn me-2">
+            BORROW
+          </button>
+          <button class="btn btn-danger option-btn">
+            VOID
+          </button>
+        {% endif %}
+      </div>
+      <div class="table-responsive mt-4 p-0">
+        <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">
+          <thead class="table-dark justify-content-center">
+              <tr class="text-center">
+                <th>Tool ID</th>
+                <th>Tool Name</th>
+                <th>Tool Image</th>
+                <th>Storage</th>
+                <th>Layer</th>
+                {% block additional_col %}
+                {% endblock %}
+              </tr>
+          </thead>
+          <tbody id="tabledata">
             <tr class="text-center">
-              <th>Tool ID</th>
-              <th>Tool Name</th>
-              <th>Tool Image</th>
-              <th>Storage</th>
-              <th>Layer</th>
-              {% block additional_col %}
-              {% endblock %}
+                <td>ABCD1234</td>
+                <td>TOOL 1</td>
+                <td class="table-img">
+                  <img src="{% static 'res/test.png' %}" alt="" class="table-img">
+                </td>
+                <td>1</td>
+                <td>1</td>
+                {% block additional_data %}
+                {% endblock %}
             </tr>
-        </thead>
-        <tbody id="tabledata">
-          <tr class="text-center">
-              <td>ABCD1234</td>
-              <td>TOOL 1</td>
-              <td class="table-img">
-                <img src="{% static 'res/test.png' %}" alt="" class="table-img">
-              </td>
-              <td>1</td>
-              <td>1</td>
-              {% block additional_data %}
-              {% endblock %}
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 {% endblock %}
