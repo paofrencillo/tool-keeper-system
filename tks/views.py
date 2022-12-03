@@ -1,7 +1,6 @@
 
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.template.loader import render_to_string
+from django.http import JsonResponse, HttpResponseNotFound
 from django.utils import timezone
 from django.core import serializers
 from django.views.decorators.cache import cache_control
@@ -17,10 +16,7 @@ from .forms import *
 
 from datetime import datetime
 import ast
-import pyqrcode
-import png
-import imghdr
-from pyqrcode import QRCode
+import qrcode
 
 
 # Create your views here.
@@ -178,28 +174,28 @@ def reservation_sf(request):
                     transaction_id_id=new_transaction.pk,
                     tool_id_id=int(item))
         
-        #### --- Create message like in the figma design
-        #### --- reservation was done
-        messages.add_message(request, messages.INFO, "YOWOYW")
-
-        ## Generate QR Code
-        # String which represents the QR code
+        # Generate QR code
         transaction_code = str(new_transaction.pk)
 
-        # Generate QR code
-        qrcode = pyqrcode.create(transaction_code)
-        
-        # Create and save the png file naming "myqr.png"
-        qrcode.png(f'{new_transaction.pk}.png', scale = 6)
-        #send email to user
-        
+        # Creating an instance of qrcode
+        qr = qrcode.QRCode(
+                version=1,
+                box_size=10,
+                border=5)
+        qr.add_data(transaction_code)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+        img_file = f'qrcodes\{transaction_code}.png'
+        img.save(settings.MEDIA_ROOT + img_file)
+
+        # Send email to user
         subject = "TKS Transaction Code"
-        body = f"""Greetings!\n\n
-                This is your QR Code for your transaction with transaction number 
-                {transaction_code} in TUP-C Tool Keeper System.\n\n
-                This will be used for borrowing and returning the tools you reserved.\n\n
-                Please keep in mind to save the QR Code to your device.\n\n
-                Thank You!"""
+        body = f"Greetings!\n\
+                This is your QR Code for your transaction with transaction number {transaction_code} in TUP-C Tool Keeper System.\n\
+                This will be used for borrowing and returning the tools you reserved.\n\
+                Please keep in mind to save the QR Code to your device.\n\n\
+                Thank You!"
+
         borrower_email = borrower.email
         email = EmailMessage(
             subject,
@@ -209,8 +205,8 @@ def reservation_sf(request):
             reply_to=[settings.EMAIL_HOST_USER],
             headers={'Message-ID': 'QRCODE'},
         )
-        email.attach_file(f'{new_transaction.pk}.png')
 
+        email.attach_file(settings.MEDIA_ROOT + img_file)
         email.send()
 
         return redirect('home_sf')
@@ -246,32 +242,34 @@ def profile_sf(request):
 
         if form.is_valid():
             form.save()
-            messages.success(request, f'Account details has been updated!')
+            messages.add_message(request, messages.SUCCESS, "Account details has been updated!", extra_tags="details_change_success")
             return redirect('profile_sf')
-    else:
-        form = EditUserForm(instance=request.user)
-        #password_form = PasswordChangeForm(user=request.user)
+    
+    form = EditUserForm(instance=request.user)
         
     context = {
         'form': form,
-        #'password_form': password_form
     }
 
     return render(request, 'sf/profile_sf.html', context)
 
-def password_change(request):
+def change_password_sf(request, pk):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-    else:
-        form = PasswordChangeForm(user=request.user, data=request.POST)
+            messages.add_message(request, messages.SUCCESS, "Password changed successfully!", extra_tags="pass_change_success")
+            return redirect("profile_sf")
     
-        context = {
-            'password_change' : password_change
-        }
-    return render(request, 'sf/password_sf.html', context)
+    else:
+        form = PasswordChangeForm(user=request.user)
+    
+    context = {
+        'form': form
+    }
+    
+    return render(request, 'sf/change_password_sf.html', context)
 
 def transactions_sf(request):
     user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk)

@@ -41,18 +41,23 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="reset" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
+                        <button type="button" id="reset-btn" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
                     </div>
                 </div>
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                    <div class="card3 justify-content-center mx-5 mt-4">
-                        <input type="hidden" name="selected-tools-all" value="{{ selected_tools_all }}">
-                        {% for tool in tools %} 
-                            <p class="tools">{{ tool }}</p>
-                        {% endfor %}
+                    <div class="selected_tools_wrapper">
+                        <div class="card3 justify-content-center align-items-center mx-3 my-2">
+                            <input type="hidden" name="selected-tools-all" value="{{ selected_tools_all }}">
+                            <h4>Selected Tools:</h4>
+                            <ul>
+                                {% for tool in tools %} 
+                                    <li class="tools">{{ tool }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card2 justify-content-center mx-5 mt-4 p-0">
+                    <div class="card2 mx-5 mt-4 p-0">
                         <h6>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <i class="bi bi-exclamation-circle-fill"></i>
@@ -64,24 +69,42 @@
                     </div>
                 </div>
             </div>
-            <div class="modal" id="modal" tabindex="-1">
+            <div class="modal" id="modal1" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-body">
-                      <p>We have sent an email to your registered account containing
-                        a <strong style="color: #FF0000">QR CODE</strong> 
-                      </p>
-                      <p>We will scan the <strong style="color: #FF0000">QR CODE</strong>
-                        to get your tools and verify your reservation
-                      </p>
-                      <p><strong>MAKE SURE TO SAVE THE <span style="color: #FF0000">QR CODE</span></strong>
-                      </p>
-                      <button type="submit" id="ok-btn" class="btn btn-primary" 
-                      action="{% url 'home_sf' %}" data-toggle="modal" data-target="#modal2">OK</button>
+                  <div class="modal-content modal1-content">
+                    <div class="modal-body modal1-body">
+                        <p>We have sent an email to your registered account containing
+                            a <strong style="color: #FF0000">QR CODE</strong> 
+                        </p>
+                        <p>We will scan the <strong style="color: #FF0000">QR CODE</strong>
+                            to get your tools and verify your reservation
+                        </p>
+                        <p><strong>MAKE SURE TO SAVE THE <span style="color: #FF0000">QR CODE</span></strong>
+                        </p>
+                        <button type="submit" id="ok-btn" class="btn btn-primary" action="{% url 'home_sf' %}">
+                            OK
+                        </button>
                     </div>
                   </div>
                 </div>
-            </div> 
+            </div>
+            <div class="modal" id="modal2" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Cancel Reservation</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure to cancel the tool reservation?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" action="{% url 'home_sf' %}">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
         </form>
     </main>
 {% endblock %}

@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
+body {
+    overflow-x: hidden;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +14,14 @@
 
 main {
     margin: 1rem 8rem;
+}
+
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    padding: 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 40px;
 }
 
 /* ========== TABLE BUTTONS ========== */

@@ -74,7 +74,30 @@ input[type="time"] {
     color: #FFFFFF;
 }
 
+.selected_tools_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    padding: 0.5rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 20px;
+}
+
+.selected_tools_wrapper h4 {
+    font-weight: 700;
+}
+
+.selected_tools_wrapper li {
+    font-size: 20;
+}
+
 /** TERMS AND SUBMIT BTN **/
+.card2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .card2 h6 {
     font-style: italic;
     font-weight: 400;
@@ -86,10 +109,9 @@ input[type="time"] {
     padding-left: 20px;
 }
 
-.card2 .btn-success {
-    align-items: center;
-    width: 15em;
-    margin-left: 20%;
+#submit-btn {
+    width: 200px;
+
 }
 
 /** TOOLS **/
@@ -106,17 +128,17 @@ input[type="time"] {
     
 }
 
-.modal-content {
+.modal1-content {
     border: 2px solid #517FD7;
     border-radius: 20px;
 }
 
-.modal-body {
+.modal1-body {
     text-align: center;
     padding: 20px !important;
 }
 
-.modal-body p {
+.modal1-body p {
     width: 90%;
     margin: 10px;
 }
@@ -125,5 +147,4 @@ input[type="time"] {
     width: 40%;
     padding: 8px auto;
     margin-bottom: 10px;
-
 }

@@ -71,14 +71,20 @@ button[data-bs-toggle="offcanvas"] {
 
 .selected-tools-wrapper {
     border-bottom: 2px solid #888888;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .selected-tools {
     height: 30px !important;
     border: none !important;
     background-color: #FFFFFF !important;
-    margin: auto 2rem auto auto !important;
-    width: 80% !important;
+    width: 125px;
+}
+
+.tool_name {
+    margin: 0;
 }
 
 .remove-btn {

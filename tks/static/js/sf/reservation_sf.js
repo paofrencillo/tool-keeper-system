@@ -17,5 +17,9 @@ function checkDateTime() {
 }
 
 $("#submit-btn").click(function() {
-    $("#modal").modal('show');
+    $("#modal1").modal('show');
+});
+
+$("#reset-btn").click(function() {
+    $("#modal2").modal('show');
 });
