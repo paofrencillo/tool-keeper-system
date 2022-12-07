@@ -7,41 +7,9 @@ $(document).ready(function() {
   changeStyleStatus();
 });
 
-// $('.filter-btn').click((e)=> {
-//   let url = e.target.getAttribute('data-url');
-//   $.ajax({
-//     type: "GET",
-//     url: url,
-//     dataType: "json",
-//     success: (response)=> {
-//       let transactions = JSON.parse(response.transactions);
-//       let datetimes = response.datetimes;
-//       let container = document.getElementById('tabledata');
-//       container.innerHTML = "";
-//       for ( let i in transactions ) {
-//         let transaction = transactions[i];
-//         let url =
-//         container.innerHTML += 
-//           `<tr class="rows">
-//               <td>
-//                   <a href="{% url 'view_transaction_details_tk' ${transaction['pk']} %}">
-//                       <button class="btn btn-secondary w-100" id="${transaction['pk']}">View</button>
-//                   </a>
-//               </td>
-//               <td>${transaction['pk']}</td>
-//               <td>${transaction['fields']['tupc_id']}</td>
-//               <td>${datetimes[i]['borrow_datetime']}</td>
-//               <td>${datetimes[i]['return_datetime']}</td>
-//               <td class="status"><strong>${transaction['fields']['status']}</strong></td>
-//           </tr>`;
-//       }
-//       changeStyleStatus();
-//     },
-//     error: (error)=> {
-//       console.log(error); 
-//     }
-//   });
-// });
+$('#transactions-table_paginate').on('click', function() {
+  changeStyleStatus();
+});
 
 function changeStyleStatus() {
   var status = document.getElementsByClassName('status');

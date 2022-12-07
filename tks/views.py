@@ -281,7 +281,7 @@ def change_password_sf(request, pk):
     return render(request, 'sf/change_password_sf.html', context)
 
 def transactions_sf(request):
-    user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk)
+    user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk).order_by('-pk')
     context = {
         'transactions': user_transaction
     }
