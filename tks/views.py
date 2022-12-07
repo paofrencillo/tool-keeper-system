@@ -10,12 +10,21 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.db import IntegrityError
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.core.mail import send_mail, BadHeaderError
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.http import HttpResponse
 from .models import *
 from .forms import *
 
 
 from datetime import datetime
 import ast
+import requests
 import qrcode
 
 
@@ -435,3 +444,58 @@ def add_tools_tk(request):
 
 def edit_tools_tk(request, tool_id):
     return render(request, 'tk/manage_tools/edit_tools_tk.html')
+
+
+
+# Reset Password
+def reset_password(request):
+    if request.method == 'POST':
+        password_form = PasswordResetForm(request.POST)
+        
+        if password_form.is_valid():
+            data = password_form.cleaned_data['email']
+            user_email = User.objects.filter(Q(email=data))
+            if user_email.exists():
+                for user in user_email:
+                    subject = 'Password Reset Request'
+                    email_temp_name = 'password_reset/email_pass_message.txt'
+                    current_site = get_current_site(request)
+                    parameters = {
+                        'email' : user.email,
+                        'first_name' : user.first_name,
+                        'username' : user.username,
+                        'domain' : current_site.domain,
+                        'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token' : default_token_generator.make_token(user),
+                        'protocol' : 'http', 
+                    }
+
+                    message = render_to_string(email_temp_name, parameters)
+
+                    try:
+                        send_mail(auth_user=settings.EMAIL_HOST_USER,
+                                subject=subject,
+                                message=message,
+                                from_email='Tool Keeper TUPC',
+                                recipient_list=[user.email],
+                                fail_silently=False)
+
+                        return redirect('reset_password_sent')
+            
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+       
+            else:
+                messages.add_message(request, messages.ERROR, "Use the registered email of your account.")
+                return redirect('reset_password')
+
+    
+    else:
+        password_form = PasswordResetForm()
+        context = {'pf' : password_form}
+
+    return render(request, 'password_reset/reset_password.html', context)
+
+def led(request):
+    requests.get("http://192.168.18.110:5000/a")
+    return HttpResponse("Connected")
