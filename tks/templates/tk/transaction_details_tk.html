@@ -55,12 +55,13 @@
       <div class="d-flex justify-content-start align-items-center">
         <h5 class="my-0 me-4">TOOLS BORROWED</h5>
         {% if details.status == 'RESERVED' %}
-          <button class="btn btn-success option-btn me-2">
-            BORROW
-          </button>
-          <button class="btn btn-danger option-btn">
-            VOID
-          </button>
+        <form action="{% url 'led' %}" method="get">
+          <input type="hidden" name="transaction_id" value="{{ details.pk }}">
+          <input type="submit" name="option_btn" class="btn btn-success option-btn me-2" value="BORROW" />
+          <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
+
+        </form>
+
         {% endif %}
       </div>
       <div class="table-responsive mt-4 p-0">

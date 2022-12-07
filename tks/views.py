@@ -26,6 +26,7 @@ from datetime import datetime
 import ast
 import requests
 import qrcode
+import time
 
 
 # Create your views here.
@@ -497,5 +498,16 @@ def reset_password(request):
     return render(request, 'password_reset/reset_password.html', context)
 
 def led(request):
-    requests.get("http://192.168.18.110:5000/a")
-    return HttpResponse("Connected")
+    if request.method == "GET" and request.GET.get("option_btn") == "BORROW":
+        requests.get("http://192.168.18.110:5000/S1")
+        requests.get("http://192.168.18.110:5000/S2")
+        requests.get("http://192.168.18.110:5000/S3")
+        requests.get("http://192.168.18.110:5000/S4")
+        requests.get("http://192.168.18.110:5000/S5")
+        requests.get("http://192.168.18.110:5000/S6")
+        requests.get("http://192.168.18.110:5000/S7")
+        requests.get("http://192.168.18.110:5000/S8")
+        
+        transaction_id = request.GET.get("transaction_id")
+        
+    return redirect("view_transaction_details_tk", int(transaction_id))
