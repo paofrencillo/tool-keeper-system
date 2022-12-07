@@ -15,8 +15,29 @@
     {% include 'sf/navbar_sf.html' %}
 
     <main>
-        <div class="row m-0 px-5 py-3 justify-content-between">
-            <form class="col-sm-12 col-md-6 col-lg-6" role="search">
+        <div class="m-0 p-0">
+            <div class="tools_wrapper p-5">
+                <div class="container m-0 p-0">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        Tools Selected
+                        <span id="tool-quantity" class="badge text-bg-secondary">
+                            0
+                        </span>
+                    </button>
+                </div>
+                <div class="cards row justify-content-around mt-4 p-0">
+                    {% for tool in tools %}
+                    <a class="tools" id="{{ tool.tool_id }}" data-tool-name="{{ tool.tool_name }}" href="#" onclick="getTools(this);">
+                        <div class="card align-items-center" data-is-selected="no">
+                            <h5>{{ tool.tool_name }}</h5>
+                            <img src="{% static 'res/image.png' %}" alt="">
+                            <h6 id="tool-status">{{ tool.status }}</h6>
+                        </div>
+                    </a>
+                    {% endfor%}
+                </div>
+            </div>
+            <!-- <form class="col-sm-12 col-md-6 col-lg-6" role="search">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
             </form>
             <div class="two-btns d-flex justify-content-end col-sm-12 col-md-6 col-lg-6">
@@ -33,7 +54,7 @@
                         0
                     </span>
                 </button>
-            </div>  
+            </div>   -->
             <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasExampleLabel">Tools Selected</h5>
@@ -51,20 +72,32 @@
                         </div>
                     </form>
                 </div>
-            </div> 
+            </div>
+            <div class="filter_wrapper">
+                <div class="filter_header container align-items-center justify-content-between m-0 px-3 py-4">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <i class="bi bi-funnel-fill"></i>
+                        <h3 class="ms-3">Filter Results</h3>
+                    </div>
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </div>
+                <div class="filter_search">
+    
+                </div>
+                <div class="filter_options">
+    
+                </div>
+                <div class="filter_footer">
+    
+                </div>
+    
+            </div>
+
+
         </div>
 
-        <div class="cards row justify-content-center mx-5 mt-4 p-0">
-            {% for tool in tools %}
-            <a class="tools" id="{{ tool.tool_id }}" data-tool-name="{{ tool.tool_name }}" href="#" onclick="getTools(this);">
-                <div class="card align-items-center" data-is-selected="no">
-                    <h5>{{ tool.tool_name }}</h5>
-                    <img src="{% static 'res/image.png' %}" alt="">
-                    <h6 id="tool-status">{{ tool.status }}</h6>
-                </div>
-            </a>
-            {% endfor%}
-        </div>
+
       
           <div id="show_modal" data-show-modal="true"></div>
           {% if messages %}

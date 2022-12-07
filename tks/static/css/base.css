@@ -1,4 +1,5 @@
 body {
+    overflow-x: hidden;
     background-image: url('../res/gear.jpg');
     background-position: center;
     background-repeat: no-repeat;

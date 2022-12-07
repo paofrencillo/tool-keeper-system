@@ -1,4 +1,17 @@
+$('#transactions-table').DataTable( {
+    "paging": true,
+    "searching": true
+});
+
+$('#transactions-table_paginate').on('click', function() {
+    changeStyleStatus();
+});
+
 $(document).ready(()=> {
+    changeStyleStatus();
+});
+
+function changeStyleStatus() {
     let status = document.getElementsByClassName('status');
 
     for ( let i=0; i<status.length; i++ ) {
@@ -16,9 +29,4 @@ $(document).ready(()=> {
 
         status[i].style.fontWeight = '600';
     } 
-});
-
-$('#transactions-table').DataTable( {
-    "paging": true,
-    "searching": true
-  });
+}
