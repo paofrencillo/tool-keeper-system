@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.db import IntegrityError
+from django.db.models import Q
 from django.conf import settings
 from django.core.mail import EmailMessage
 from .models import *
@@ -132,8 +133,30 @@ def registration_toolkeeper(request):
 def home_sf(request):
     if request.user.is_authenticated:
         pass
+    
+    if request.method == "GET" and request.GET.get('storage') != None and request.GET.get('layer') != None:
+        storage_num = int(request.GET.get('storage'))
+        layer_num = int(request.GET.get('layer'))
 
-    tools = Tools.objects.all()
+        if storage_num != None:
+            if layer_num != None:
+                print(storage_num, layer_num)
+                tools = Tools.objects.filter(storage=storage_num).filter(layer=layer_num).filter(status="AVAILABLE")
+                context = {'tools': tools,
+                            'storage': storage_num,
+                            'layer': layer_num}
+                return render(request, 'sf/home_sf.html', context)
+             
+            elif layer_num == None:
+                tools = Tools.objects.filter(storage=storage_num).filter(status="AVAILABLE")
+                context = {'tools': tools,
+                            'storage': storage_num}
+                return render(request, 'sf/home_sf.html', context)
+        
+        # if storage_num == None and layer_num != None:
+        #     messages.add_message(request, messages.ERROR, "")
+
+    tools = Tools.objects.filter(status="AVAILABLE")
     context = {'tools': tools}
 
     return render(request, 'sf/home_sf.html', context)
@@ -409,10 +432,10 @@ def storages_tk(request):
 def add_tools_tk(request):
     if request.method == "POST":
         try:
-            tool_id = request.POST['tool_id']
-            tool_name = request.POST['tool_name']
-            storage = int(request.POST['storage'])
-            layer = int(request.POST['layer'])
+            tool_id = request.POST.get('tool_id')
+            tool_name = request.POST.get('tool_name')
+            storage = int(request.POST.get('storage'))
+            layer = int(request.POST.get('layer'))
 
             new_tool = Tools.objects.create(
                     tool_id = tool_id,

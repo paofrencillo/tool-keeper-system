@@ -9,33 +9,86 @@
 }
 
 body {
-    background-color: #f5f5f5;
-    max-height: 100vh;
+    min-height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.filter_wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex: column;
+    top: 0;
+    position: fixed;
+    margin-top: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 100vw;
+    height: 60px;
+    z-index: 10;
+    padding-right: 30vw;
+    padding-left: 3rem;
+}
+
+.filter_header h3 {
+    font-size: 24px;
+}
+
+.filter_search {
+    width: 225px
+}
+
+.filter_search input[type="search"] {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.filter_search .input-group {
+    flex-wrap: nowrap;
+}
+
+.filter_options {
+    display: flex;
+}
+
+.filter_options .form-select {
+    width: 175px;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: none;
+}
+
+.bi-arrow-counterclockwise {
+    font-size: 24px;
 }
 
 .tools_wrapper {
-    margin-right: 400px;
+    width: 75vw;
+}
+
+.selected_tools_wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 25vw;
+    z-index: 11;
+    height: 100vh;
+    padding: 1rem;
 }
 
 form[role="search"] {
     width: max-content;
 }
 
-.availability-btn {
-    padding: 0.3em 1em;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 2px solid #207A29;
-    
-}
-
-#availability {
-    width: max-content;
-    color: #207A29;
-}
-
-button[data-bs-toggle="offcanvas"] {
-    width: max-content;
+.cards {
+    padding: 2rem;
+    margin-top: 60px;
 }
 
 .cards a {
@@ -51,7 +104,8 @@ button[data-bs-toggle="offcanvas"] {
     margin: 10px;
     padding: 5px;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    width: 200px;
+    width: 175px;
+    cursor: pointer;
 }
 
 .card img {
@@ -63,23 +117,14 @@ button[data-bs-toggle="offcanvas"] {
     padding-top: 5px;
 }
 
-.filter_wrapper {
-    top: 0;
-    right: 0;
-    position: fixed;
-    margin-top: 60px;
-    background-color: rgba(255, 198, 204, 0.6);
-    border-left: 3px solid #BD2131;
-    width: 400px;
-    height: 100vh;
+#options {
+    display: none;
+    margin: 3rem auto;
 }
 
-.filter_header h3 {
-    font-size: 24px;
-}
-
-.offcanvas-body .options button {
-    width: 30%;
+#options button {
+    width: 100%;
+    margin: 0.25rem auto;
 }
 
 .selected-tools-wrapper {

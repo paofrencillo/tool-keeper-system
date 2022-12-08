@@ -14,91 +14,86 @@
 {% block main_content %}
     {% include 'sf/navbar_sf.html' %}
 
-    <main>
-        <div class="m-0 p-0">
-            <div class="tools_wrapper p-5">
-                <div class="container m-0 p-0">
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        Tools Selected
-                        <span id="tool-quantity" class="badge text-bg-secondary">
-                            0
-                        </span>
+        <div class="filter_wrapper">
+            <div class="filter_search me-4">
+                <div class="input-group">
+                    <div class="form-outline">
+                      <input type="search" id="form1" class="form-control" placeholder="Search tool" />
+                    </div>
+                    <button type="button" class="btn btn-secondary">
+                        <i class="bi bi-search"></i>
                     </button>
+                  </div>
+            </div>
+            <div class="filter_header d-flex justify-content-start align-items-center m-0 px-3">
+                <i class="bi bi-funnel-fill"></i>
+                <h5 class="mx-1 mb-0">Filter</h5>
+            </div>
+                <div class="filter_options">
+                    <div>
+                        <select class="form-select me-3" id="storage" name="storage">
+                            <option selected disabled value="0">Choose Storage</option>
+                            <option value="1">Storage 1</option>
+                            <option value="2">Storage 2</option>
+                            <option value="3">Storage 3</option>
+                            <option value="4">Storage 4</option>
+                            <option value="5">Storage 5</option>
+                            <option value="6">Storage 6</option>
+                            <option value="7">Storage 7</option>
+                            <option value="8">Storage 8</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select class="form-select" id="layer" name="layer">
+                            <option selected disabled value="0">Choose Layer</option>
+                            <option value="1">Layer 1</option>
+                            <option value="2">Layer 2</option>
+                            <option value="3">Layer 3</option>
+                            <option value="4">Layer 4</option>
+                            <option value="5">Layer 5</option>
+                        </select>
+                    </div>
+                    <div class="ms-3">
+                        <button type="button" class="btn btn-primary me-2" onclick="filter()">Apply</button>
+                    </div>
                 </div>
-                <div class="cards row justify-content-around mt-4 p-0">
+                <button type="submit" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>  
+        </div>
+
+        <main>
+            <div class="tools_wrapper">
+                <div class="cards row justify-content-center">
                     {% for tool in tools %}
-                    <a class="tools" id="{{ tool.tool_id }}" data-tool-name="{{ tool.tool_name }}" href="#" onclick="getTools(this);">
-                        <div class="card align-items-center" data-is-selected="no">
+                        <div class="tools card align-items-center"
+                            data-is-selected="no"
+                            id="{{ tool.tool_id }}"
+                            data-tool-name="{{ tool.tool_name }}"
+                            data-storage="{{ tool.storage }}"
+                            data-layer="{{ tool.layer }}"
+                            onclick="getTools(this);">
                             <h5>{{ tool.tool_name }}</h5>
                             <img src="{% static 'res/image.png' %}" alt="">
                             <h6 id="tool-status">{{ tool.status }}</h6>
                         </div>
-                    </a>
                     {% endfor%}
                 </div>
             </div>
-            <!-- <form class="col-sm-12 col-md-6 col-lg-6" role="search">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            </form>
-            <div class="two-btns d-flex justify-content-end col-sm-12 col-md-6 col-lg-6">
-                <button id="#availability" class="availability-btn dropdown-toggle me-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    AVAILABLE
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Available</a></li>
-                    <li><a class="dropdown-item" href="#">Not Available</a></li>
-                </ul> 
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    Tools Selected
-                    <span id="tool-quantity" class="badge text-bg-secondary">
-                        0
-                    </span>
-                </button>
-            </div>   -->
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Tools Selected</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <form method="GET" id="tool-selected-form" action="{% url 'reservation_sf' %}">
-                        <div id="tool-selected">
-                            <!-- SELECTED TOOLS -->      
-                            <input type="hidden" name="selected-tools-all" id="selected-tools-all">       
-                        </div>
-                        <div class="options d-flex justify-content-evenly mt-3">
-                            <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
-                            <button class="btn btn-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="filter_wrapper">
-                <div class="filter_header container align-items-center justify-content-between m-0 px-3 py-4">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <i class="bi bi-funnel-fill"></i>
-                        <h3 class="ms-3">Filter Results</h3>
+            <div class="selected_tools_wrapper">
+                <form method="GET" id="tool-selected-form" action="">
+                    <h5 class="mb-4">Tools Selected</h5>
+                    <div id="tool-selected">
+                        <!-- SELECTED TOOLS -->      
+                        <input type="hidden" name="selected-tools-all" id="selected-tools-all">       
                     </div>
-
-                    <i class="bi bi-arrow-counterclockwise"></i>
-                </div>
-                <div class="filter_search">
-    
-                </div>
-                <div class="filter_options">
-    
-                </div>
-                <div class="filter_footer">
-    
-                </div>
-    
+                    <div id="options">
+                        <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
+                        <button class="btn btn-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>
+                    </div>
+                </form>
             </div>
-
-
-        </div>
-
-
-      
+ 
           <div id="show_modal" data-show-modal="true"></div>
           {% if messages %}
             {% for message in messages %}

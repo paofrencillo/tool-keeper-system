@@ -1,20 +1,14 @@
-var toolSelected = document.getElementById('tool-quantity');
 var item_count = 0;
 var tools_list = []
 
 function getTools(element) {
-    if ( element.childNodes[1].lastElementChild.innerText == "NOT AVAILABLE" ) {
-        alert("The tool selected is currently NOT AVAILABLE!");
-        return;
-    }
-
-    let tool_is_selected = element.childNodes[1].getAttribute("data-is-selected");
+    let tool_is_selected = element.getAttribute("data-is-selected");
     if ( tool_is_selected == 'yes' ) return;
 
     let tool_id = element.id;
     let tool_name = element.getAttribute('data-tool-name');
-    element.childNodes[1].setAttribute("data-is-selected", "yes");
-    element.childNodes[1].style.border = "2px solid #a74049"
+    element.setAttribute("data-is-selected", "yes");
+    element.style.border = "2px solid #a74049"
     let canvas = document.getElementById('tool-selected');
     canvas.innerHTML += `<div data-toolid="${tool_id}" class="selected-tools-wrapper mb-3 py-1">
                         <div class="d-flex">
@@ -28,16 +22,22 @@ function getTools(element) {
                         </div>
                         </div>`;
     item_count += 1;
-    toolSelected.innerHTML = item_count;
+    
+    if ( item_count != 0 ) {
+        document.getElementById('options').style.display = "block";
+    }
 }
 
 function removeSelectedTool(element) {
     let tool_id = element.parentNode.getAttribute('data-toolid');
     element.parentNode.remove();
-    document.getElementById(tool_id).childNodes[1].style.border= "2px solid #207A29";
-    document.getElementById(tool_id).childNodes[1].setAttribute("data-is-selected", "no");
+    document.getElementById(tool_id).style.border= "2px solid #207A29";
+    document.getElementById(tool_id).setAttribute("data-is-selected", "no");
     item_count -= 1;
-    toolSelected.innerHTML = item_count;
+
+    if ( item_count == 0 ) {
+        document.getElementById('options').style.display = "none";
+    }
 }
 
 function removeAllSelectedTools() {
@@ -55,7 +55,39 @@ function removeAllSelectedTools() {
     }
 
     item_count = 0;
-    toolSelected.innerHTML = item_count;
+
+    if ( item_count == 0 ) {
+        document.getElementById('options').style.display = "none";
+    }
+}
+
+// Filter Tools
+function filter() {
+    let storage = document.getElementById('storage').value;
+    let layer = document.getElementById('layer').value;
+    let tools = document.getElementsByClassName('card');
+
+    for ( i=0; i<tools.length; i++ ) {
+        tools[i].style.display = 'flex';
+    }
+
+    if ( storage != '0' ) {
+        if ( layer != '0' ) {
+            
+            for ( i=0; i<tools.length; i++ ) {
+                console.log(tools[i]);
+                
+                if ( tools[i].getAttribute('data-storage') != storage ) {
+                    tools[i].style.display = 'none';
+                    continue
+                }
+
+                if ( tools[i].getAttribute('data-layer') != layer ) {
+                    tools[i].style.display = 'none';
+                }         
+            }
+        }
+    }
 }
 
 // Submit post on submit
@@ -68,38 +100,6 @@ $('#tool-selected-form').on('submit', function(event){
     }
     document.getElementById('selected-tools-all').value = tools_list;
     $(this).unbind('submit').submit();
-    // let fd = new FormData();
-
-    // let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    // fd.append('csrfmiddlewaretoken', csrf)
-
-    // let selected_tools = document.getElementsByClassName('selected-tools');
-    
-    // for ( i=0; i<selected_tools.length; i++ ) {
-    //     fd.append(selected_tools[i].name , selected_tools[i].value);
-    // }
-
-    // let url = document.getElementById('tool-selected-form').getAttribute('data-url')
-    
-    // $.ajax({
-    //     url : url, // the endpoint
-    //     type : "POST", // http method
-    //     data : fd, // data sent with the post request
-
-    //     // handle a successful response
-    //     success : function(response) {
-    //         document.html; // another sanity check
-    //     },
-
-    //     // handle a non-successful response
-    //     error : function(err) {
-    //         console.log(err)
-    //     },
-
-    //     cache: false,
-    //     contentType: false,
-    //     processData: false,
-    // });
 });
 
 // show modal when reservation success
