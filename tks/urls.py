@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.contrib.auth import views as auth_views
 from . import views
 
 
@@ -46,4 +46,20 @@ urlpatterns = [
 
     # edit tools toolkeeper
     path('tk/tools/edit/<int:tool_id>', views.edit_tools_tk, name='edit_tools_tk'),
+    path('led', views.led, name="led"),
+
+
+    # Reset Password urls
+    path("password_reset/", views.reset_password, name="reset_password"),
+    path("password_reset/sent/",
+            auth_views.PasswordResetDoneView.as_view(template_name='password_reset/reset_password_sent.html'),
+            name="reset_password_sent"),
+    path("password_reset/<uidb64>/<token>/",
+            auth_views.PasswordResetConfirmView.as_view(template_name='password_reset/reset_password_confirm.html'),
+            name="reset_password_confirm"),
+    path("password_reset_complete/",
+            auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/reset_password_complete.html'),
+            name="password_reset_complete"),
+
+
 ]
