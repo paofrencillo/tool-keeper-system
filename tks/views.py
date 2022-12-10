@@ -6,6 +6,7 @@ from django.core import serializers
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.db import IntegrityError
 from django.db.models import Q
@@ -143,10 +144,14 @@ def registration_toolkeeper(request):
     context = {"registration_form": registration_form}
     return render(request, 'register_toolkeeper.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def home_sf(request):
     if request.user.is_authenticated:
-        pass
-    
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
+        
+
     if request.method == "GET" and request.GET.get('storage') != None and request.GET.get('layer') != None:
         storage_num = int(request.GET.get('storage'))
         layer_num = int(request.GET.get('layer'))
@@ -174,7 +179,13 @@ def home_sf(request):
 
     return render(request, 'sf/home_sf.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def reservation_sf(request):
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
+
     if request.method == "POST":
         ## Get all the tool ids in request.POST
         selected_tools = ast.literal_eval(request.POST.get('selected-tools-all'))
@@ -276,7 +287,14 @@ def reservation_sf(request):
 
         return render(request, 'sf/reservation_sf.html', context)
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def profile_sf(request):
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
+
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
         #password_form = PasswordChangeForm(request.POST, instance=request.user)
@@ -294,7 +312,14 @@ def profile_sf(request):
 
     return render(request, 'sf/profile_sf.html', context)
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def change_password_sf(request, pk):
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
+
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
@@ -312,7 +337,14 @@ def change_password_sf(request, pk):
     
     return render(request, 'sf/change_password_sf.html', context)
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def transactions_sf(request):
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
+
     user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk).order_by('-pk')
     context = {
         'transactions': user_transaction
@@ -320,8 +352,13 @@ def transactions_sf(request):
 
     return render(request, 'sf/transactions_sf.html', context)
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def transaction_details_sf(request, transaction_id):
-    ### --- user authrntication in this block
+    if request.user.is_authenticated:
+        if request.user.role == "TOOL KEEPER":
+            return redirect("transactions_tk")
 
     if request.method == "POST":
         void_transaction = request.POST.get('void')
@@ -351,7 +388,14 @@ def transaction_details_sf(request, transaction_id):
 
     return render(request, 'sf/transaction_details_sf.html', context)
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def scanqr_tk(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+
     if request.method == "POST" and request.POST.get('qrcode'):
         qrcode = request.POST.get('qrcode')
         transaction = Transactions.objects.get(pk=int(qrcode))
@@ -360,8 +404,15 @@ def scanqr_tk(request):
         return redirect("view_transaction_details_tk", transaction_id=transaction_code)
 
     return render(request, 'tk/scanqr_tk.html')
-    
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index') 
 def transactions_tk(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+
     if request.method == "GET" and request.GET.get('filter') == "ALL":
         transactions = Transactions.objects.all().order_by('-pk')
 
@@ -393,7 +444,14 @@ def transactions_tk(request):
 #####################################
 # View Transaction Details ToolKeeper
 #####################################
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def transaction_details_tk(request, transaction_id):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+                return redirect("home_sf")
+            
     if request.method == "POST":
         print(request.POST)
     transaction = Transactions.objects.get(pk=transaction_id)
@@ -436,7 +494,13 @@ def storages_tk(request):
 
     return render(request, 'tk/manage_tools/storages_tk.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def add_tools_tk(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+                return redirect("home_sf")
+
     if request.method == "POST":
         try:
             tool_id = request.POST.get('tool_id')
@@ -463,7 +527,14 @@ def add_tools_tk(request):
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
 def edit_tools_tk(request, tool_id):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+
+            
     return render(request, 'tk/manage_tools/edit_tools_tk.html')
 
 # Reset Password
