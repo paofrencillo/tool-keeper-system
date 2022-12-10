@@ -19,6 +19,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode
 from django.http import HttpResponse
+from django.templatetags.static import static
 from .models import *
 from .forms import *
 
@@ -27,6 +28,7 @@ from datetime import datetime
 import ast
 import requests
 import qrcode
+import os
 import time
 
 
@@ -80,7 +82,8 @@ def registration_student(request):
         registration_form = StudentRegistrationForm(request.POST)
 
         if registration_form.is_valid():
-            registration_form.save()
+            new_user = registration_form
+            new_user.save()
             messages.add_message(request, messages.SUCCESS, "Account created successfully!")
             return redirect('/')
         else:
@@ -200,13 +203,13 @@ def reservation_sf(request):
                 tupc_id_id=borrower.pk,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
-                status="RESERVED")
+                status="RESERVED").save(commit=False)
 
         for item in selected_tools:
-            TransactionDetails.objects.create(
-                    transaction_id_id=new_transaction.pk,
-                    tool_id_id=int(item))
-        
+            tools = Tools.object.get(pk=int(item))
+            tools.current_user = borrower.pk
+            tools.save()
+
         # Generate QR code
         transaction_code = str(new_transaction.pk)
 
@@ -217,10 +220,12 @@ def reservation_sf(request):
                 border=5)
         qr.add_data(transaction_code)
         qr.make(fit=True)
-        img = qr.make_image(fill='black', back_color='white')
-        img_file = f'qrcodes\{transaction_code}.png'
-        img.save(settings.MEDIA_ROOT + img_file)
-
+        qrcode_img = qr.make_image(fill='black', back_color='white')
+        qrcode_img_file = f'{transaction_code}.png'
+        qrcode_img.save(qrcode_img_file)
+        new_transaction.qrcode = qrcode_img_file
+        new_transaction.save()
+       
         # Send email to user
         subject = "TKS Transaction Code"
         body = f"Greetings!\n\
@@ -239,8 +244,11 @@ def reservation_sf(request):
             headers={'Message-ID': 'QRCODE'},
         )
 
-        email.attach_file(settings.MEDIA_ROOT + img_file)
+        email.attach_file(qrcode_img_file)
         email.send()
+
+        # Delete generated qrcode in the root directory
+        os.remove(qrcode_img_file)
 
         return redirect('home_sf')
 
@@ -385,33 +393,29 @@ def transactions_tk(request):
 #####################################
 # View Transaction Details ToolKeeper
 #####################################
-def view_transaction_details_tk(request, transaction_id):
-    tr_details = Transactions.objects.get(pk=transaction_id)
-    borrower = User.objects.get(tupc_id=tr_details.tupc_id_id)
+def transaction_details_tk(request, transaction_id):
+    if request.method == "POST":
+        print(request.POST)
+    transaction = Transactions.objects.get(pk=transaction_id)
+    borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
+    tools_details = TransactionDetails.objects.filter(transaction_id_id=transaction.pk)
+    tools_borrowed = Tools.objects.filter()
     current_dt_in_sec = timezone.now().timestamp()
-    br_dt_in_sec = tr_details.borrow_datetime.timestamp()
-    rt_dt_in_sec = tr_details.return_datetime.timestamp()
-    is_borrow_dt_late = None
-    is_return_dt_late = None
+    br_dt_in_sec = transaction.borrow_datetime.timestamp()
     to_void = None
-
-    if br_dt_in_sec < current_dt_in_sec:
-        is_borrow_dt_late = "False"
-    if rt_dt_in_sec < current_dt_in_sec:
-        is_return_dt_late = "False"
 
     # Write condition that will void the transaction
     # if the expected datetime if borrow is exceeded 15 min. (900 sec.)
     if (current_dt_in_sec - br_dt_in_sec) >= 900:
         to_void = "Yes"
+    elif (current_dt_in_sec - br_dt_in_sec) < 900:
+        to_void = "No"
 
-    # tools_borrowed = ToolsBorrowed.objects.filter(transaction_id_id=transaction_id)
     context = {
         "borrower": borrower,
-        "details": tr_details,
+        "transaction": transaction,
+        "tools_borrowed": tools_borrowed,   
         "to_void": to_void,
-        "is_borrow_dt_late": is_borrow_dt_late,
-        "is_return_dt_late": is_return_dt_late
     }
 
     return render(request, 'tk/transaction_details_tk.html', context)
@@ -423,13 +427,6 @@ def check_datetime_tk(request, transaction_id):
     data = serializers.serialize("json", response)
     print(data)
     return JsonResponse({"datetimes": data})
-
-def borrower_transaction(request):
-    # This line of code is for having
-    # a database with borrower transaction.
-    # For the meantime, this function will
-    # return a reserved status html file
-    return render(request, 'tk/borrower_transaction/reserved_scanned.html')
 
 def storages_tk(request):
     tools = Tools.objects.all()
@@ -468,8 +465,6 @@ def add_tools_tk(request):
 
 def edit_tools_tk(request, tool_id):
     return render(request, 'tk/manage_tools/edit_tools_tk.html')
-
-
 
 # Reset Password
 def reset_password(request):
@@ -534,3 +529,7 @@ def led(request):
         transaction_id = request.GET.get("transaction_id")
         
     return redirect("view_transaction_details_tk", int(transaction_id))
+
+def onled(request):
+    requests.get("http://192.168.0.107:5000/S1")
+    return HttpResponse("!!!!!!")

@@ -21,7 +21,3 @@ $(window).on('load', ()=> {
         check_rt_datetime.style.color = "#FF0000";
     } 
 });
-
-function checkIfVoid(datetime) {
-    
-}

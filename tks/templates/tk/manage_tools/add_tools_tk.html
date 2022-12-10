@@ -11,8 +11,6 @@
 
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
-
-    <main class="px-5 py-5">
         {% if messages %}
             {% for message in messages %}
                 {% if message.tags == 'success' %}
@@ -29,11 +27,14 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        <div class="form-wrapper">
+
+    <main class="px-5 py-5">
+        <div class="main_wrapper">
             <form method="POST" action="{% url 'add_tools_tk' %}">
                 {% csrf_token %}
-                <div class="row">
-                    <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
+                <div class="tool_details">
+                    <h5>Tool Details</h5>
+                    <div class="tool_details_body">
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
                             <input
                                 id="rfid"
@@ -58,7 +59,7 @@
                                 <option value="1">Storage 1</option>
                                 <option value="2">Storage 2</option>
                                 <option value="3">Storage 3</option>
-                              </select>
+                                </select>
                             <div class="green-circle"></div>
                         </div>
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4 justify-content-between">
@@ -67,58 +68,76 @@
                                 <option value="1">Layer 1</option>
                                 <option value="2">Layer 2</option>
                                 <option value="3">Layer 3</option>
-                              </select>
+                                </select>
                             <div class="green-circle"></div>
                         </div>
                     </div>
-                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
-                        <div class="container flex-row">
-                            <div id="capture-img-wrapper">
+                </div>
+                <div class="tool_image">
+                    <h5>Tool Image</h5>
+                    <div class="tool_image_body">
+                        <div id="capture_img_wrapper">
+                            <video id="vid">
                                 
-                            </div>
-                            <div class="d-flex justify-content-around mt-3">
-                                <button type="button" class="btn btn-outline-success">Capture</button>
-                                <button type="reset" id="img_capture_reset" class="btn btn-outline-danger">Remove</button>
-                            </div>
+                            </video>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-secondary" id="open_cam_btn" onclick="openCam()">
+                                Open Camera
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="button"
+                                    class="cam_option_btns btn btn-outline-success me-4"
+                                    >
+                                Capture
+                            </button>
+                            <button type="reset"
+                                    id="img_capture_reset"
+                                    class="cam_option_btns btn btn-outline-danger"
+                                    >
+                                Remove
+                            </button>
                         </div>
                     </div>
                     <!-- RFID MODAL -->
                     <div class="modal" id="rfid_modal" tabindex="-1">
                         <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="d-flex justify-content-end my-3 me-3">
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                    >
-                                </button>
-                            </div>
-                            <div class="modal-body p-3">    
-                                <p class="rfid_modal_description text-center">
-                                    SCAN THE RFID TAG ON THE TOOL TO VERIFY THE RETURN.
-                                </p>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <img id="rfid_img" src="{% static 'res/rfid.png' %}" alt="rfid_img">
+                            <div class="modal-content">
+                                <div class="d-flex justify-content-end my-3 me-3">
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                        >
+                                    </button>
                                 </div>
-                                <input type="text" id="rfid_hidden" name="rfid_hidden" value="">
-                                
+                                <div class="modal-body p-3">    
+                                    <p class="rfid_modal_description text-center">
+                                        SCAN THE RFID TAG ON THE TOOL TO VERIFY THE RETURN.
+                                    </p>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img id="rfid_img" src="{% static 'res/rfid.png' %}" alt="rfid_img">
+                                    </div>
+                                    <input type="text" id="rfid_hidden" name="rfid_hidden" value="">
+                                    
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
+                    </div>
                 </div>
-            </div>
-            <div class="img-options-btns d-flex justify-content-center align-items-center mt-5">
-                <button type="submit" class="btn btn-primary me-2">Register Tool</button>
-                <button type="reset" id="tool_details_reset" class="btn btn-danger ms-2">Clear</button>
-            </div>
+                    <div class="options_btns d-flex justify-content-center align-items-center mt-5">
+                        <button type="submit" class="btn btn-primary me-2">Register Tool</button>
+                        <button type="reset" id="tool_details_reset" class="btn btn-danger ms-2">Clear</button>
+                    </div>
             </form>
+        </div>
     </main>
 {% endblock %}
 
 {% block js %}
     <script src="{% static 'js/tk/manage_tools/add_tools_tk.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
 
 {% endblock %}  

@@ -31,12 +31,8 @@ urlpatterns = [
     # scan code toolkeeper
     path('tk/scanqr/', views.scanqr_tk, name='scanqr_tk'),
 
-    # view transactions toolkeeper
-    path('tk/transactions/', views.borrower_transaction, name='borrower_transaction'),
-
     # view transaction details toolkeeper
-    path('tk/transactions/<int:transaction_id>', views.view_transaction_details_tk, name='view_transaction_details_tk'),
-    path('tk/transactions/checkDateTime/<int:transaction_id>', views.check_datetime_tk, name='check_datetime_tk'),
+    path('tk/transactions/<int:transaction_id>', views.transaction_details_tk, name='transaction_details_tk'),
     
     # storages toolkeeper
     path('tk/tools/storages', views.storages_tk, name='storages_tk'),
@@ -47,6 +43,7 @@ urlpatterns = [
     # edit tools toolkeeper
     path('tk/tools/edit/<int:tool_id>', views.edit_tools_tk, name='edit_tools_tk'),
     path('led', views.led, name="led"),
+    path('onled', views.onled, name="onled"),
 
 
     # Reset Password urls
@@ -60,6 +57,5 @@ urlpatterns = [
     path("password_reset_complete/",
             auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/reset_password_complete.html'),
             name="password_reset_complete"),
-
 
 ]

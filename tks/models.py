@@ -6,13 +6,15 @@ class User(AbstractUser):
     tupc_id = models.BigIntegerField(primary_key=True)
     role = models.CharField(max_length=10)
     year_course = models.CharField(max_length=20, null=True)
+    user_img = models.ImageField(upload_to='profile_pics/', null=True)
 
 class Tools(models.Model):
     tool_id = models.BigIntegerField(primary_key=True)
     tool_name = models.CharField(max_length=25, unique=True)
-    tool_image = models.ImageField(upload_to='imgs/', null=False, blank=False)
+    tool_image = models.ImageField(upload_to='tool_images/', null=False, blank=False)
     storage = models.IntegerField()
     layer = models.IntegerField()
+    current_user = models.ForeignKey("User", on_delete=models.CASCADE, null=True, default=None)
     status = models.CharField(max_length=25, default="AVAILABLE")
 
 class Transactions(models.Model):
@@ -21,8 +23,4 @@ class Transactions(models.Model):
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
     status = models.CharField(max_length=25)
-
-
-class TransactionDetails(models.Model):
-    transaction_id = models.ForeignKey("Transactions", on_delete=models.CASCADE)
-    tool_id = models.ForeignKey("Tools", on_delete=models.CASCADE)
+    qrcode = models.ImageField(upload_to='qrcodes/', null=False, blank=False)

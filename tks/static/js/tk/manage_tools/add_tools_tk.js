@@ -26,3 +26,50 @@ $('#tool_details_reset').on('click', ()=> {
         green_circles[i].style.backgroundColor = '#878787'
     }
 });
+
+// function openCam(){
+//     
+//     document.getElementById('open_cam_btn').style.display = 'none';
+//     document.getElementsByClassName('cam_option_btns')[0].style.display = 'block';
+//     document.getElementsByClassName('cam_option_btns')[1].style.display = 'block';
+
+//     let All_mediaDevices=navigator.mediaDevices
+//     if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+//        alert("getUserMedia() not supported.");
+//        return;
+//     }
+//     All_mediaDevices.getUserMedia({
+//        audio: false,
+//        video: true
+//     })
+//     .then(function(vidStream) {
+//        var video = document.getElementById('vid');
+//        if ("srcObject" in video) {
+//           video.srcObject = vidStream;
+//        } else {
+//           video.src = window.URL.createObjectURL(vidStream);
+//        }
+//        video.onloadedmetadata = function(e) {
+//           video.play();
+//        };
+//        video.scrollIntoView({behavior: 'smooth'});
+//     })
+//     .catch(function(e) {
+//        alert(e.name + ": " + e.message);
+//     });
+//  }
+
+// function openCam() {
+    Webcam.set({
+    width: 350,
+    height: 350,
+    image_format: 'jpeg',
+    jpeg_quality: 90
+});
+
+// document.getElementById('capture_img_wrapper').style.display = 'block';
+Webcam.attach('#vid')
+// }
+    
+
+

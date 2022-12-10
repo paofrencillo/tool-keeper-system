@@ -12,11 +12,50 @@ main {
     margin-left: 200px;
 }
 
-.tool-img-wrapper {
-    border: 3px solid #3E3E3E;
-    width: max-content;
-    border-radius: 20px;
-    padding: 0 !important;
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 25px;
+}
+
+.tool_details h5 {
+    margin: 0;
+    padding: 1rem 2.5rem;
+    border-radius: 20px 20px 0 0;
+    background-color: #3e3e3e;
+    color: #FFFFFF;
+}
+
+.tool_details_body, .tool_image_body {
+    padding: 1rem 10rem;
+}
+
+.input-text-wrapper {
+    border: 2px solid #303030;
+    border-radius: 15px;
+    padding-right: 1rem;
+}
+
+.tool_image h5 {
+    margin: 0;
+    padding: 1rem 2.5rem;
+    background-color: #3e3e3e;
+    color: #FFFFFF;
+}
+
+#capture_img_wrapper {
+    /* display: none; */
+    width: 100%;
+    border: 2px solid #1F1F1F;
+}
+
+.cam_option_btns {
+    display: none;
+}
+
+#vid {
+    width: 100%;
 }
 
 #tool-img {
@@ -78,12 +117,6 @@ input[type="text"]:focus, select:focus {
     outline: none;
 }
 
-.input-text-wrapper {
-    border: 2px solid #303030;
-    border-radius: 15px;
-    padding-right: 1rem;
-}
-
 input#save, input#cancel {
     display: none;
 }
@@ -95,11 +128,7 @@ input#save, input#cancel {
     border-radius: 50%;
 }
 
-#capture-img-wrapper {
-    height: 37vh;
-    width: 100%;
-    border: 2px solid green;
-}
+
 
 .img-options-btns button {
     width: 30% !important;

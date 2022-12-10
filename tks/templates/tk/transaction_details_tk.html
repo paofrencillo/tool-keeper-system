@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  TKS | Transaction {{ details.pk }}
+  TKS | Transaction {{ transaction.pk }}
 {% endblock %}
 
 {% block style %}
@@ -42,10 +42,10 @@
           <div class="top-wrapper p-3">
             <div class="transaction-details-wrapper m-0">
               <div class="flex-row">
-                  <p class="transaction-details m-2 mt-0">Transaction #:<span class="ms-2">{{ details.pk }}</span></p>
-                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2" id="borrow-datetime" data-check-borrow-dt="{{ is_borrow_dt_late }}">{{ details.borrow_datetime }}</span></p>
-                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2" id="return-datetime" data-check-return-dt="{{ is_return_dt_late }}">{{ details.return_datetime }}</span></p>
-                  <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{{ details.status }}</span></p>
+                  <p class="transaction-details m-2 mt-0">Transaction #:<span class="ms-2">{{ transaction.pk }}</span></p>
+                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2" id="borrow-datetime">{{ transaction.borrow_datetime }}</span></p>
+                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2" id="return-datetime">{{ transaction.return_datetime }}</span></p>
+                  <p class="transaction-details m-2">Status:<span class="ms-2" id="status" data-to-void="{{ to_void }}">{{ transaction.status }}</span></p>
               </div>
             </div>
           </div>   
@@ -54,9 +54,10 @@
       <hr>
       <div class="d-flex justify-content-start align-items-center">
         <h5 class="my-0 me-4">TOOLS BORROWED</h5>
-        {% if details.status == 'RESERVED' %}
-        <form action="{% url 'led' %}" method="get">
-          <input type="hidden" name="transaction_id" value="{{ details.pk }}">
+        {% if transaction.status == 'RESERVED' %}
+        <form action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="transaction_id" value="{{ transaction.pk }}">
           <input type="submit" name="option_btn" class="btn btn-success option-btn me-2" value="BORROW" />
           <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
 
@@ -78,8 +79,9 @@
               </tr>
           </thead>
           <tbody id="tabledata">
-            <tr class="text-center">
-                <td>ABCD1234</td>
+            {% for tools in tools_borrowed %}
+              <tr class="text-center">
+                <td>{{ tools.tool_id_id }}</td>
                 <td>TOOL 1</td>
                 <td class="table-img">
                   <img src="{% static 'res/test.png' %}" alt="" class="table-img">
@@ -88,7 +90,8 @@
                 <td>1</td>
                 {% block additional_data %}
                 {% endblock %}
-            </tr>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -97,5 +100,5 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{% static 'js/tk/borrower_transaction_tk.js' %}"></script>   
+  <script src="{% static 'js/tk/transaction_details_tk.js' %}"></script>   
 {% endblock %}
