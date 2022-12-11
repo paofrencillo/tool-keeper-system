@@ -32,16 +32,16 @@ urlpatterns = [
     path('tk/scanqr/', views.scanqr_tk, name='scanqr_tk'),
 
     # view transaction details toolkeeper
-    path('tk/transactions/<int:transaction_id>', views.transaction_details_tk, name='transaction_details_tk'),
+    path('tk/transactions/<str:transaction_id>', views.transaction_details_tk, name='transaction_details_tk'),
     
     # storages toolkeeper
-    path('tk/tools/storages', views.storages_tk, name='storages_tk'),
+    path('tk/manage_tools/storages', views.storages_tk, name='storages_tk'),
 
     # add tool toolkeeper
-    path('tk/tools/add', views.add_tools_tk, name='add_tools_tk'),
+    path('tk/manage_tools/add', views.add_tools_tk, name='add_tools_tk'),
 
     # edit tools toolkeeper
-    path('tk/tools/edit/<int:tool_id>', views.edit_tools_tk, name='edit_tools_tk'),
+    path('tk/manage_tools/edit/<int:tool_id>', views.edit_tools_tk, name='edit_tools_tk'),
     path('led', views.led, name="led"),
     path('onled', views.onled, name="onled"),
 
@@ -57,5 +57,6 @@ urlpatterns = [
     path("password_reset_complete/",
             auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/reset_password_complete.html'),
             name="password_reset_complete"),
+
 
 ]

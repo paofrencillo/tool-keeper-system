@@ -15,21 +15,26 @@
 .rounded-circle {
     border-radius: 50% !important;  
 }
+
 .card {
     box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
+
 .card .card-header {
     font-weight: 500;
 }
+
 .card-header:first-child {
     border-radius: 0.35rem 0.35rem 0 0;
 }
+
 .card-header {
     padding: 1rem 1.35rem;
     margin-bottom: 0;
     background-color: rgba(33, 40, 50, 0.03);
     border-bottom: 1px solid rgba(33, 40, 50, 0.125);
 }
+
 .form-control {
     display: block;
     width: 100%;
@@ -47,6 +52,105 @@
     border-radius: 0.35rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+.alert-success {
+    z-index: 500;
+    position: fixed;
+    width: 100vw;
+    padding: 0.5rem 3rem;
+    animation: fadeOut 1s forwards;
+    animation-delay: 5s;
+    border-radius: 0 !important;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+.avatar-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    position: relative;
+    max-width: 205px;
+    margin: 50px auto;
+}
+
+#submit_img_btn {
+    display: none;
+}
+
+.avatar-edit {
+    position: absolute;
+    right: 12px;
+    z-index: 1;
+    top: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#imageUploadLabel {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all .2s ease-in-out;
+}
+
+#imageUploadLabel:hover {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+}
+
+#imageUploadLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(123, 123, 123);
+}
+
+#imageUploadLabel:after {
+    color: #757575;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto;
+}
+
+.avatar-preview {
+    width: 192px;
+    height: 192px;
+    position: relative;
+    border-radius: 100%;
+    border: 6px solid #F8F8F8;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-preview > div {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-preview > div > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 
 input[readonly] {
     background-color: #d5d5d5;

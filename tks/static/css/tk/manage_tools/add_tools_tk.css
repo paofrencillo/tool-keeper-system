@@ -31,6 +31,10 @@ main {
     padding: 1rem 10rem;
 }
 
+.tool_image_body {
+    border-bottom: 1px solid #3E3E3E;
+}
+
 .input-text-wrapper {
     border: 2px solid #303030;
     border-radius: 15px;
@@ -45,16 +49,24 @@ main {
 }
 
 #capture_img_wrapper {
-    /* display: none; */
+    display: none;
     width: 100%;
     border: 2px solid #1F1F1F;
+}
+
+#canvas {
+    display: none;
+}
+
+.output img {
+    display: none;
 }
 
 .cam_option_btns {
     display: none;
 }
 
-#vid {
+#video {
     width: 100%;
 }
 
@@ -128,12 +140,31 @@ input#save, input#cancel {
     border-radius: 50%;
 }
 
-
-
 .img-options-btns button {
     width: 30% !important;
     height: 50px;
 }
+
+.alert {
+    padding: 0.5rem 1rem;
+    animation: fadeOut 1s forwards;
+    animation-delay: 5s;
+    align-items: center !important
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+.btn-close {
+    height: 0
+}
+
+.options_btns {
+    width: 150px;
+}
+
 
 /* ====== SCREEN REPONSIVENESS ====== */
 @media screen and (max-width: 576px) {

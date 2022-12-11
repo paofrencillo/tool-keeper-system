@@ -74,7 +74,7 @@
                             data-layer="{{ tool.layer }}"
                             onclick="getTools(this);">
                             <h5>{{ tool.tool_name }}</h5>
-                            <img src="{% static 'res/image.png' %}" alt="">
+                            <img src="{{ tool.tool_image.url }}" alt="">
                             <h6 id="tool-status">{{ tool.status }}</h6>
                         </div>
                     {% endfor%}

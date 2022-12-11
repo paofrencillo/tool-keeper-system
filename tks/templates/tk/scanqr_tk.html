@@ -20,10 +20,10 @@
                     <video class="preview" id="preview" autoplay></video>
                 </div>
                 <div>
-                    <form id="qrcode_form" action="{% url 'scanqr_tk' %}" method="POST">
+                    <form id="qrcode_form" action="{% url 'scanqr_tk' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input
-                        type="text"
+                        type="hidden"
                         name="qrcode"
                         id="qrcode"
                         placeholder="scan qrcode"

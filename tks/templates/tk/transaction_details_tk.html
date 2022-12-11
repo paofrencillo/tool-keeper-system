@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  TKS | Transaction {{ transaction.pk }}
+  TKS | View Transaction
 {% endblock %}
 
 {% block style %}
@@ -23,7 +23,11 @@
             <div class="borrower-info-wrapper d-flex justify-content-center align-items-center m-0">
               <div>
                   <div class="borrower-img-wrapper">
-                      <img id="borrower-img" src="{% static 'res/test.png' %}" alt="">
+                    {% if borrower.user_img == None or borrower.user_img == '' %}
+                      <img id="borrower-img" src="{% static 'res/free-avatar.png' %}" alt="">
+                    {% elif borrower.user_img != None or borrower.user_img != '' %}
+                      <img id="borrower-img" src="{{ borrower.user_img.url }}" alt="">
+                    {% endif %}
                   </div>
               </div>
               <div class="borrower-wrapper ms-2">
@@ -42,7 +46,6 @@
           <div class="top-wrapper p-3">
             <div class="transaction-details-wrapper m-0">
               <div class="flex-row">
-                  <p class="transaction-details m-2 mt-0">Transaction #:<span class="ms-2">{{ transaction.pk }}</span></p>
                   <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2" id="borrow-datetime">{{ transaction.borrow_datetime }}</span></p>
                   <p class="transaction-details m-2">DateTime of Return:<span class="ms-2" id="return-datetime">{{ transaction.return_datetime }}</span></p>
                   <p class="transaction-details m-2">Status:<span class="ms-2" id="status" data-to-void="{{ to_void }}">{{ transaction.status }}</span></p>
@@ -81,13 +84,13 @@
           <tbody id="tabledata">
             {% for tools in tools_borrowed %}
               <tr class="text-center">
-                <td>{{ tools.tool_id_id }}</td>
-                <td>TOOL 1</td>
+                <td>{{ tools.pk }}</td>
+                <td>{{ tools.tool_name }}</td>
                 <td class="table-img">
-                  <img src="{% static 'res/test.png' %}" alt="" class="table-img">
+                  <img src="{{ tools.tool_image.url }}" alt="" class="table-img">
                 </td>
-                <td>1</td>
-                <td>1</td>
+                <td>{{ tools.storage }}</td>
+                <td>{{ tools.layer }}</td>
                 {% block additional_data %}
                 {% endblock %}
               </tr>

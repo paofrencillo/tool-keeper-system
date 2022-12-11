@@ -20,7 +20,14 @@
                 {% if message.extra_tags == 'pass_change_success' %}
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.extra_tags == 'img_change_success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% elif message.extra_tags == 'details_change_success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
                     </div>
                 {% endif %}
             {% endfor %}
@@ -30,14 +37,26 @@
                 <!-- Profile picture card-->
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
-                    <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" src="{% static 'res/test.png' %}" alt="">
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">Set your profile image</div>
-                        <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button">Upload new image</button>
-                    </div>
+                    <form action="{% url 'profile_sf' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input type='file' name="imageUpload" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                <label for="imageUpload" id="imageUploadLabel" class="bi bi-pen">
+                                </label>
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview">
+                                    {% if request.user.user_img == None or request.user.user_img == '' %}
+                                        <img id="image" src="{% static 'res/free-avatar.png' %}" alt="">
+                                    {% elif request.user.user_img != None or request.user.user_img != '' %}
+                                        <img id="image" src="{{ request.user.user_img.url }}" alt="">
+                                    {% endif %}     
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-primary mt-4" id="submit_img_btn" value="Save New Image" />
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="col-xl-8">

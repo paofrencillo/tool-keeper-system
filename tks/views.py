@@ -17,19 +17,19 @@ from django.db.models.query_utils import Q
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.base import ContentFile
 from django.utils.http import urlsafe_base64_encode
 from django.http import HttpResponse
 from django.templatetags.static import static
 from .models import *
 from .forms import *
-
-
 from datetime import datetime
+import base64
 import ast
 import requests
 import qrcode
 import os
-import time
+
 
 
 # Create your views here.
@@ -203,11 +203,13 @@ def reservation_sf(request):
                 tupc_id_id=borrower.pk,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
-                status="RESERVED").save(commit=False)
+                status="RESERVED")
 
         for item in selected_tools:
-            tools = Tools.object.get(pk=int(item))
-            tools.current_user = borrower.pk
+            tools = Tools.objects.get(pk=int(item))
+            tools.current_user = borrower
+            tools.current_transaction = new_transaction
+            tools.status = "RESERVED"
             tools.save()
 
         # Generate QR code
@@ -221,7 +223,7 @@ def reservation_sf(request):
         qr.add_data(transaction_code)
         qr.make(fit=True)
         qrcode_img = qr.make_image(fill='black', back_color='white')
-        qrcode_img_file = f'{transaction_code}.png'
+        qrcode_img_file = f'{borrower.last_name+transaction_code[:2]+transaction_code[5:10]+transaction_code[-5:]}.png'
         qrcode_img.save(qrcode_img_file)
         new_transaction.qrcode = qrcode_img_file
         new_transaction.save()
@@ -229,7 +231,7 @@ def reservation_sf(request):
         # Send email to user
         subject = "TKS Transaction Code"
         body = f"Greetings!\n\
-                This is your QR Code for your transaction with transaction number {transaction_code} in TUP-C Tool Keeper System.\n\
+                This is your QR Code for your transaction in TUP-C Tool Keeper System.\n\
                 This will be used for borrowing and returning the tools you reserved.\n\
                 Please keep in mind to save the QR Code to your device.\n\n\
                 Thank You!"
@@ -277,14 +279,22 @@ def reservation_sf(request):
         return render(request, 'sf/reservation_sf.html', context)
 
 def profile_sf(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES.get('imageUpload') == None:
         form = EditUserForm(request.POST, instance=request.user)
-        #password_form = PasswordChangeForm(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
-            messages.add_message(request, messages.SUCCESS, "Account details has been updated!", extra_tags="details_change_success")
+            messages.add_message(request, messages.SUCCESS, "Account details updated successfully!", extra_tags="details_change_success")
             return redirect('profile_sf')
+    
+    if request.method == "POST" and request.FILES.get('imageUpload'):
+        img = request.FILES.get('imageUpload')
+        _user = User.objects.get(pk=request.user.pk)
+        _user.user_img = img
+        _user.save()
+        messages.add_message(request, messages.SUCCESS, "Profile picture updated successfully!", extra_tags="img_change_success")
+
+        return redirect('profile_sf')
     
     form = EditUserForm(instance=request.user)
         
@@ -334,14 +344,14 @@ def transaction_details_sf(request, transaction_id):
             return redirect('transactions_sf')
 
     transaction_details = Transactions.objects.get(pk=transaction_id)
-    tools_borrowed = TransactionDetails.objects.filter(transaction_id_id=transaction_id)
+    tools_borrowed = Tools.objects.filter(current_transaction=transaction_id)
     tools = []
     tool = None
 
     for t in tools_borrowed:
-        tool = Tools.objects.get(pk=t.tool_id_id)
+        tool = Tools.objects.get(pk=t.pk)
         tools.append(tool)
-    
+     
     print(tools)
 
     context = {
@@ -354,10 +364,11 @@ def transaction_details_sf(request, transaction_id):
 def scanqr_tk(request):
     if request.method == "POST" and request.POST.get('qrcode'):
         qrcode = request.POST.get('qrcode')
-        transaction = Transactions.objects.get(pk=int(qrcode))
+        print(qrcode)
+        transaction = Transactions.objects.get(pk=qrcode)
         transaction_code = transaction.pk
 
-        return redirect("view_transaction_details_tk", transaction_id=transaction_code)
+        return redirect("transaction_details_tk", transaction_id=transaction_code)
 
     return render(request, 'tk/scanqr_tk.html')
     
@@ -398,8 +409,7 @@ def transaction_details_tk(request, transaction_id):
         print(request.POST)
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
-    tools_details = TransactionDetails.objects.filter(transaction_id_id=transaction.pk)
-    tools_borrowed = Tools.objects.filter()
+    tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
     current_dt_in_sec = timezone.now().timestamp()
     br_dt_in_sec = transaction.borrow_datetime.timestamp()
     to_void = None
@@ -441,25 +451,32 @@ def add_tools_tk(request):
         try:
             tool_id = request.POST.get('tool_id')
             tool_name = request.POST.get('tool_name')
+            tool_image = request.POST.get('tool_img')
             storage = int(request.POST.get('storage'))
             layer = int(request.POST.get('layer'))
+
+            # Modify base 64 image format to save in database
+            format, imgstr = tool_image.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr))  
+            file_name = tool_id + '.' + ext
 
             new_tool = Tools.objects.create(
                     tool_id = tool_id,
                     tool_name = tool_name,
-                    tool_image = "",
                     storage = storage,
                     layer = layer,
                     status = "AVAILABLE"
             )
 
+            new_tool.tool_image.save(file_name, data, save=True)
             new_tool.save()
+
             messages.add_message(request, messages.SUCCESS, "TOOL REGISTERED SUCCESSFULLY!")
             return redirect("add_tools_tk")
-
-        except IntegrityError:
-            messages.add_message(request, messages.ERROR, "TOOL WAS ALREADY REGISTERED!")
-            return redirect("add_tools_tk")
+        
+        except ValueError:
+            messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!")
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
@@ -508,7 +525,6 @@ def reset_password(request):
                 messages.add_message(request, messages.ERROR, "Use the registered email of your account.")
                 return redirect('reset_password')
 
-    
     else:
         password_form = PasswordResetForm()
         context = {'pf' : password_form}

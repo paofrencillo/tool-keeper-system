@@ -110,6 +110,7 @@ form[role="search"] {
 
 .card img {
     width: 95%;
+    height: 150px;
     border-radius: 10px;
 }
 
