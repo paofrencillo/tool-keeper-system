@@ -537,6 +537,55 @@ def edit_tools_tk(request, tool_id):
             
     return render(request, 'tk/manage_tools/edit_tools_tk.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
+def profile_tk(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=request.user)
+        #password_form = PasswordChangeForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, "Account details has been updated!", extra_tags="details_change_success")
+            return redirect('profile_tk')
+    
+    form = EditUserForm(instance=request.user)
+        
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'tk/profile_tk.html', context)
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='index')
+def change_password_tk(request, pk):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.add_message(request, messages.SUCCESS, "Password changed successfully!", extra_tags="pass_change_success")
+            return redirect("profile_tk")
+    
+    else:
+        form = PasswordChangeForm(user=request.user)
+    
+    context = {
+        'form': form
+    }
+    
+    return render(request, 'tk/change_password_tk.html', context)
+
 # Reset Password
 def reset_password(request):
     if request.method == 'POST':

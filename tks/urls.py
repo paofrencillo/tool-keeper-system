@@ -31,6 +31,10 @@ urlpatterns = [
     # scan code toolkeeper
     path('tk/scanqr/', views.scanqr_tk, name='scanqr_tk'),
 
+    # profile toolkeeper
+    path('tk/profile/', views.profile_tk, name='profile_tk'),
+    path('tk/change_password/<int:pk>', views.change_password_tk, name='change_password_tk'),
+
     # view transaction details toolkeeper
     path('tk/transactions/<int:transaction_id>', views.transaction_details_tk, name='transaction_details_tk'),
     
