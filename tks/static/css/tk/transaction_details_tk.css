@@ -68,6 +68,10 @@ h5 {
     padding: auto 0.5rem;
 }
 
+.btn-info {
+    color: #FFFFFF !important;
+}
+
 .table-img {
     width: 100px;
     padding: 0.25rem;

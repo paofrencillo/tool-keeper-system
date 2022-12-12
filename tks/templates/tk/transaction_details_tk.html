@@ -57,16 +57,17 @@
       <hr>
       <div class="d-flex justify-content-start align-items-center">
         <h5 class="my-0 me-4">TOOLS BORROWED</h5>
-        {% if transaction.status == 'RESERVED' %}
+        
         <form action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
           {% csrf_token %}
-          <input type="hidden" name="transaction_id" value="{{ transaction.pk }}">
-          <input type="submit" name="option_btn" class="btn btn-success option-btn me-2" value="BORROW" />
-          <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
-
+          {% if transaction.status == 'RESERVED' %}
+              <input type="hidden" name="transaction_id" value="{{ transaction.pk }}">
+              <input type="submit" name="option_btn" class="btn btn-success option-btn me-2" value="BORROW" />
+              <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
+          {% elif transaction.status == 'BORROWED' %}
+              <input type="submit" name="option_btn" class="btn btn-info option-btn" value="RETURN" />     
+          {% endif %}
         </form>
-
-        {% endif %}
       </div>
       <div class="table-responsive mt-4 p-0">
         <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">

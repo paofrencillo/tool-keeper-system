@@ -369,10 +369,11 @@ def transactions_sf(request):
 def transaction_details_sf(request, transaction_id):
     if request.user.is_authenticated:
         transaction = Transactions.objects.get(pk=transaction_id)
-        get_transaction_id = transaction.pk
+        get_borrower = transaction.tupc_id_id
+        print(get_borrower, request.user.pk)
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
-        if get_transaction_id != transaction_id:
+        if get_borrower != request.user.pk:
             return redirect("home_sf")
 
     if request.method == "POST":
@@ -464,18 +465,29 @@ def transactions_tk(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
 def transaction_details_tk(request, transaction_id):
-    if request.user.is_authenticated:
-        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
-                return redirect("home_sf")
-            
-    if request.method == "POST":
-        print(request.POST)
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
     tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
     current_dt_in_sec = timezone.now().timestamp()
     br_dt_in_sec = transaction.borrow_datetime.timestamp()
     to_void = None
+
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+                return redirect("home_sf")
+            
+    if request.method == "POST":
+        if request.POST.get('option_btn') == "BORROW":
+            transaction.status = "BORROWED"
+            for tools in tools_borrowed:
+                tools.status = "BORROWED"
+                tools.save()
+            transaction.save()
+            
+            # Open storage according where tools are located (send request.get in RPI)
+            # Put rfid column in transaction table and scan rfid in tools
+            # 
+            return redirect ("transaction_details_tk", transaction_id)
 
     # Write condition that will void the transaction
     # if the expected datetime if borrow is exceeded 15 min. (900 sec.)

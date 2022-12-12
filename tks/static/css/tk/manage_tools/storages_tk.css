@@ -20,6 +20,11 @@ main {
     border-radius: 40px;
 } 
 
+.table-img {
+    width: 100px;
+    padding: 0.25rem;
+}
+
 
 /* ========== TABLE ========== */
 table thead tr th {
