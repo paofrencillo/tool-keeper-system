@@ -73,7 +73,9 @@
                                         </td>
                                         <td>{{ tool.pk }}</td>
                                         <td>{{ tool.tool_name }}</td>
-                                        <td>{{ tool.tool_image }}</td>
+                                        <td class="table-img">
+                                            <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
+                                        </td>
                                         <td>{{ tool.status }}</td>
                                     </tr>
                                 {% endfor %}

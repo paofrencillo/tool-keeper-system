@@ -40,7 +40,7 @@
                         {% for transaction in transactions %}
                         <tr class="rows">
                             <td>
-                                <a href="{% url ''}">
+                                <a href="{% url 'transaction_details_tk' transaction.transaction_id %}">
                                     <button class="btn btn-secondary w-100" id="{{ transaction.transaction_id }}">View</button>
                                 </a>
                             </td>
