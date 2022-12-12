@@ -8,6 +8,10 @@
     font-family: 'Inter';
 }
 
+main {
+    margin-left: 200px;
+}
+
 .img-account-profile {
     height: 10rem;
 }
@@ -54,4 +58,12 @@ input[readonly] {
 
 input[readonly]:focus {
     background-color: #d5d5d5;
+}
+
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
 }

@@ -293,15 +293,11 @@ def reservation_sf(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
 def profile_sf(request):
-<<<<<<< HEAD
-    if request.method == 'POST' and request.FILES.get('imageUpload') == None:
-=======
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
 
-    if request.method == 'POST':
->>>>>>> 8c590258ad353e1d6d492b05c244a47f79b9d925
+    if request.method == 'POST' and request.FILES.get('imageUpload') == None:
         form = EditUserForm(request.POST, instance=request.user)
 
         if form.is_valid():
@@ -358,6 +354,7 @@ def transactions_sf(request):
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
+        
 
     user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk).order_by('-pk')
     context = {
@@ -371,8 +368,12 @@ def transactions_sf(request):
 @login_required(login_url='index')
 def transaction_details_sf(request, transaction_id):
     if request.user.is_authenticated:
+        transaction = Transactions.objects.get(pk=transaction_id)
+        get_transaction_id = transaction.pk
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
+        if get_transaction_id != transaction_id:
+            return redirect("home_sf")
 
     if request.method == "POST":
         void_transaction = request.POST.get('void')

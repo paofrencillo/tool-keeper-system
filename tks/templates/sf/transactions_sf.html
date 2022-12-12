@@ -22,7 +22,6 @@
                     <thead class="table p-0 m-0 justify-content-center">
                         <tr>
                             <th></th>
-                            <th>Transaction #</th>
                             <th>DateTime of Borrow</th>
                             <th>DateTime of Return</th>
                             <th>Status</th>
@@ -33,10 +32,9 @@
                             <tr>
                                 <td>
                                     <a href="{% url 'transaction_details_sf' transaction.transaction_id %}">
-                                        <button class="view-btns">View</button>
+                                        <button class="view-btns">View Details</button>
                                     </a>
                                 </td>
-                                <td class="ps-3">{{ transaction.transaction_id }}</td>
                                 <td class="ps-3">{{ transaction.borrow_datetime }}</td>
                                 <td class="ps-3">{{ transaction.return_datetime }}</td>
                                 <td class="status" data-status="{{ transaction.status }}">{{ transaction.status }}</td>

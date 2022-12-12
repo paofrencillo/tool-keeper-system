@@ -32,7 +32,11 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" src="{% static 'res/test.png' %}" alt="">
+                        {% if request.user.user_img == None or request.user.user_img == '' %}
+                            <img class="img-account-profile rounded-circle" src="{% static 'res/free-avatar.png' %}" alt="">
+                        {% elif request.user.user_img != None or request.user.user_img != '' %}
+                            <img class="img-account-profile rounded-circle" src="{{ request.user.user_img.url }}" alt="">
+                        {% endif %}  
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">Set your profile image</div>
                         <!-- Profile picture upload button-->
