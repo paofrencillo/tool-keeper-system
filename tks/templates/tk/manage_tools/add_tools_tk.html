@@ -28,6 +28,16 @@
                 <div class="tool_details">
                     <h5>Tool Details</h5>
                     <div class="tool_details_body">
+                        {% if messages %}
+                        {% for message in messages %}
+                            {% if message.extra_tags == 'duplicate_entry_error' %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% endif %}
                         <div class="input-text-wrapper form-group d-flex align-items-center mb-4">
                             <input
                                 id="rfid"
@@ -107,7 +117,7 @@
                         </div>
                         {% if messages %}
                             {% for message in messages %}
-                                {% if message.tags == 'error' %}
+                                {% if message.extra_tags == 'no_image_error' %}
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         {{ message }}
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -146,7 +156,7 @@
                 </div>
                 <div class="d-flex justify-content-center align-items-center my-4">
                     <input type="submit" form="add_tools_form" class="options_btns btn btn-primary me-2" value="Register Tool" />
-                    <button type="reset" id="tool_details_reset" class="options_btns btn btn-danger ms-2">Clear</button>
+                    <button type="reset" id="tool_form_reset" class="options_btns btn btn-danger ms-2">Clear</button>
                 </div>
             </form>
         </div>

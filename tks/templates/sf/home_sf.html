@@ -13,17 +13,27 @@
 
 {% block main_content %}
     {% include 'sf/navbar_sf.html' %}
-
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.extra_tags == "has_ongoing_transaction" %}
+                <div class="block_tool_reservation">
+                    <div class="block_messsage">                    
+                        <h2>{{ message }}</h2>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
         <div class="filter_wrapper">
             <div class="filter_search me-4">
                 <div class="input-group">
                     <div class="form-outline">
-                      <input type="search" id="form1" class="form-control" placeholder="Search tool" />
+                    <input type="search" id="form1" class="form-control" placeholder="Search tool" />
                     </div>
                     <button type="button" class="btn btn-secondary">
                         <i class="bi bi-search"></i>
                     </button>
-                  </div>
+                </div>
             </div>
             <div class="filter_header d-flex justify-content-start align-items-center m-0 px-3">
                 <i class="bi bi-funnel-fill"></i>
@@ -93,9 +103,8 @@
                     </div>
                 </form>
             </div>
- 
-          <div id="show_modal" data-show-modal="true"></div>
-          {% if messages %}
+        <!-- <div id="show_modal" data-show-modal="true"></div>
+        {% if messages %}
             {% for message in messages %}
                 {% if message.tags == 'info' %}
                     <div class="modal show" id="modal" tabindex="-1">
@@ -131,8 +140,10 @@
                     </div> 
                 {% endif %}
             {% endfor %}
-          {% endif %}
-    </main>
+        {% endif %} -->
+        </main>
+                
+    {% endif %}  
 {% endblock %}
 
 {% block js %}
