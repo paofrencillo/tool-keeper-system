@@ -110,6 +110,8 @@ $(document).ready(function(){
     }
 });
 
+
+// show colored label for availability of tools
 var headers = document.getElementsByTagName("h6");
 
 for (let i = 0; i < headers.length; i++) {
@@ -118,5 +120,22 @@ for (let i = 0; i < headers.length; i++) {
     }
     else if (headers[i].textContent== "NOT AVAILABLE") {
         headers[i].style.color = "red";
+    }
+}
+
+// search tools
+function search_tools() {
+    let search = document.getElementById('search_tool').value
+    search = search.toLowerCase();
+    let tools = document.getElementsByClassName('tools');
+      
+    for (i = 0; i < tools.length; i++) { 
+        console.log(tools[i]);
+        if (tools[i].innerHTML.toLowerCase().includes(search)) {
+            tools[i].style.display="flex";
+        }
+        else {
+            tools[i].style.display="none";           
+        }
     }
 }
