@@ -12,6 +12,65 @@
 {% endblock %}
 
 {% block main_content %}
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.extra_tags == 'scan_rfid_borrow' %}
+        <div id="message_modal" class="message_modal">
+          <div class="message_modal_content">
+            <h5>{{ message }}</h5>
+            <img src="{% static 'res/rfid.png' %}" alt="">
+            <button type="button" id="message_modal_btn" class="btn btn-primary px-5 py-2">OK</button>
+          </div>         
+        </div>
+        <div id="scan_rfid_tools" class="scan_rfid_tools">
+          <form id="borrow_form" action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="number" id="rfid_tag">
+            <input type="hidden" id="rfid_tag" name="rfid_scanned" value="DONE">
+            
+              <div class="table-responsive p-3 w-100">
+                <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle">
+                  <thead class="table-dark justify-content-center">
+                      <tr class="text-center">
+                        <th>Tool ID</th>
+                        <th>Tool Name</th>
+                        <th>Tool Image</th>
+                        <th>Storage</th>
+                        <th>Layer</th>
+                        <th>RFID</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tabledata">
+                    {% for tools in tools_borrowed %}
+                      <tr class="tools_to_scan text-center" data-tool-id="{{ tools.pk }}" data-scanned="">
+                        <td>{{ tools.pk }}</td>
+                        <td>{{ tools.tool_name }}</td>
+                        <td class="table-img">
+                          <img src="{{ tools.tool_image.url }}" alt="" class="table-img">
+                        </td>
+                        <td>{{ tools.storage }}</td>
+                        <td>{{ tools.layer }}</td>
+                        <td>
+                          <div class="green-circle"></div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>     
+          </form>
+        </div>
+        {% elif message.extra_tags == 'scan_rfid_borrow' %}
+          <div id="message_modal" class="message_modal">
+            <div class="message_modal_content">
+              <h5>{{ message }}</h5>
+              <img src="{% static 'res/rfid.png' %}" alt="">
+              <button type="button" id="message_modal_btn" class="btn btn-primary px-5 py-2">OK</button>
+            </div>         
+          </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   {% include 'tk/navbar_tk.html' %}
     
   <main class="px-5 py-4">
@@ -56,12 +115,10 @@
       </div>
       <hr>
       <div class="d-flex justify-content-start align-items-center">
-        <h5 class="my-0 me-4">TOOLS BORROWED</h5>
-        
+        <h5 class="my-0 me-4">TOOLS BORROWED</h5>      
         <form action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
           {% csrf_token %}
           {% if transaction.status == 'RESERVED' %}
-              <input type="hidden" name="transaction_id" value="{{ transaction.pk }}">
               <input type="submit" name="option_btn" class="btn btn-success option-btn me-2" value="BORROW" />
               <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
           {% elif transaction.status == 'BORROWED' %}
@@ -78,8 +135,6 @@
                 <th>Tool Image</th>
                 <th>Storage</th>
                 <th>Layer</th>
-                {% block additional_col %}
-                {% endblock %}
               </tr>
           </thead>
           <tbody id="tabledata">
@@ -92,8 +147,6 @@
                 </td>
                 <td>{{ tools.storage }}</td>
                 <td>{{ tools.layer }}</td>
-                {% block additional_data %}
-                {% endblock %}
               </tr>
             {% endfor %}
           </tbody>

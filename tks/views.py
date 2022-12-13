@@ -151,7 +151,6 @@ def home_sf(request):
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
         
-
     if request.method == "GET" and request.GET.get('storage') != None and request.GET.get('layer') != None:
         storage_num = int(request.GET.get('storage'))
         layer_num = int(request.GET.get('layer'))
@@ -173,6 +172,12 @@ def home_sf(request):
         
         # if storage_num == None and layer_num != None:
         #     messages.add_message(request, messages.ERROR, "")
+    if request.user.has_ongoing_transaction == True:
+        messages.add_message(request,
+                messages.WARNING,
+                "You have ongoing transaction. Void your reservation or return the tool/s you borrowed.",
+                extra_tags="has_ongoing_transaction")
+        return redirect("home_sf")
 
     tools = Tools.objects.filter(status="AVAILABLE")
     context = {'tools': tools}
@@ -209,6 +214,7 @@ def reservation_sf(request):
 
         ## Save new transaction
         borrower = User.objects.get(pk=request.user.pk)
+        borrower.has_ongoing_transaction = True
 
         new_transaction = Transactions.objects.create(
                 tupc_id_id=borrower.pk,
@@ -461,7 +467,6 @@ def transactions_tk(request):
 #####################################
 # View Transaction Details ToolKeeper
 #####################################
-
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
 def transaction_details_tk(request, transaction_id):
@@ -471,24 +476,7 @@ def transaction_details_tk(request, transaction_id):
     current_dt_in_sec = timezone.now().timestamp()
     br_dt_in_sec = transaction.borrow_datetime.timestamp()
     to_void = None
-
-    if request.user.is_authenticated:
-        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
-                return redirect("home_sf")
-            
-    if request.method == "POST":
-        if request.POST.get('option_btn') == "BORROW":
-            transaction.status = "BORROWED"
-            for tools in tools_borrowed:
-                tools.status = "BORROWED"
-                tools.save()
-            transaction.save()
-            
-            # Open storage according where tools are located (send request.get in RPI)
-            # Put rfid column in transaction table and scan rfid in tools
-            # 
-            return redirect ("transaction_details_tk", transaction_id)
-
+    
     # Write condition that will void the transaction
     # if the expected datetime if borrow is exceeded 15 min. (900 sec.)
     if (current_dt_in_sec - br_dt_in_sec) >= 900:
@@ -502,6 +490,40 @@ def transaction_details_tk(request, transaction_id):
         "tools_borrowed": tools_borrowed,   
         "to_void": to_void,
     }
+
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT" or request.user.role == "FACULTY":
+            return redirect("home_sf")
+            
+    if request.method == "POST":
+        if request.POST.get('option_btn') == "BORROW":
+            # Open storage according where tools are located (send request.get in RPI)
+            # Put rfid column in transaction table and scan rfid in tools
+            #
+            messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL", extra_tags="scan_rfid_borrow")
+            return render(request, 'tk/transaction_details_tk.html', context)
+
+        if request.POST.get('option_btn') == "VOID":
+            transaction.status = "VOIDED"
+            transaction.save()
+            for tool in tools_borrowed:
+                tool.current_transaction = None
+                tool.current_user = None
+                tool.status = "AVAILABLE"
+                tool.save()
+
+            return render(request, 'tk/transaction_details_tk.html', context)
+   
+        if request.POST.get('rfid_scanned') == "DONE":
+            transaction.status = "BORROWED"
+            for tools in tools_borrowed:
+                tools.status = "BORROWED"
+                tools.save()
+            transaction.save()  
+            return redirect ("transaction_details_tk", transaction_id)
+        
+        if request.POST.get('option_btn') == "RETURN":
+            messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL", extra_tags="scan_rfid_return")
 
     return render(request, 'tk/transaction_details_tk.html', context)
 
@@ -557,7 +579,10 @@ def add_tools_tk(request):
             return redirect("add_tools_tk")
         
         except ValueError:
-            messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!")
+            messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!", extra_tags="no_image_error")
+
+        except IntegrityError:
+            messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 

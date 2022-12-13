@@ -30,6 +30,10 @@ $('#tool_details_reset').on('click', ()=> {
     }
 });
 
+$('#tool_form_reset').on('click', ()=> {
+    location.reload();
+});
+
 function openCam() {
     $('#capture_img_wrapper').show();
     $('.cam_option_btns').first().show();

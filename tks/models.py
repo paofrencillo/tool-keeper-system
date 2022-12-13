@@ -8,6 +8,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=225)
     year_course = models.CharField(max_length=20, null=True)
     user_img = models.ImageField(upload_to='profile_pics/', null=True)
+    has_ongoing_transaction = models.BooleanField(default=False)
 
 class Tools(models.Model):
     tool_id = models.BigIntegerField(primary_key=True)

@@ -17,6 +17,33 @@ main {
     flex-wrap: nowrap;
 }
 
+.block_tool_reservation {
+    position: fixed;
+    z-index: 1;
+    background-color: rgba(180, 180, 180, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;;
+}
+
+.block_message {
+    background-color: #FFFFFF;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #0000FF;
+    border-radius: 20px;
+    width: 60vw;
+    min-height: max-content;
+}
+
+.block_message > h3 {
+      
+}
+
 .filter_wrapper {
     display: flex;
     align-items: center;
