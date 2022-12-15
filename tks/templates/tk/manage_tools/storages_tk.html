@@ -20,15 +20,27 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-primary" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
-                        <form action="" method="GET">
+                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rfid_modal">
+                            Scan RFID
+                          </button>  
+                          <div class="modal fade" id="rfid_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rfid_modalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="staticBackdropLabel">Scan RFID</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="{% url 'tools_tk' %}" method="GET">
+                                    <input type="hidden" name="tool_id_rfid" />
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div> -->
+                        <!-- <form action="" method="GET">
                             <div class="dropdowns d-flex">
-                                <select name="cars" id="cars">
-                                    <option value="">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                                                            <div class="dropdown">
+                                <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                       STORAGES
                                     </button>
@@ -48,7 +60,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </form>
+                        </form> -->
                     </div>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -63,13 +75,23 @@
                                   <th>Status</th>
                                 </tr>
                               </thead>
-                              <tbody id="tabledata">
-                                {% for tool in tools %}
+                              <form action="{% url 'tools_tk' %}"
+                                    method="GET"
+                                    id="get_tool_form"
+                                    name="get_tool_form">
+                                    <input type="hidden" id="tool_id" name="tool_id" value="">
+                                </form>
+                                <tbody id="tabledata">  
+   
+                                    {% for tool in tools %}
                                     <tr class="rows">
                                         <td class="view_btns">
-                                            <a href="{% url 'edit_tools_tk' tool.pk %}">
-                                                <button class="btn btn-secondary w-100">View</button>
-                                            </a>
+                                            <button type="button"
+                                                    value="{{ tool.pk }}"
+                                                    class="get_tool btn btn-secondary w-100"
+                                                    >
+                                                    View
+                                            </button>
                                         </td>
                                         <td>{{ tool.pk }}</td>
                                         <td>{{ tool.tool_name }}</td>
@@ -79,6 +101,7 @@
                                         <td>{{ tool.status }}</td>
                                     </tr>
                                 {% endfor %}
+                                
                               </tbody>
                         </table>
                     </div>

@@ -35,8 +35,28 @@ $('#message_modal_btn').on('click', ()=> {
     $('#rfid_tag').focus();
 });
 
+$('#message_modal_btn_return').on('click', ()=> {
+    $('#message_modal_return').hide();
+    $('#scan_rfid_tools_return').css('display', 'flex');
+    $('#rfid_tag_return').focus();
+});
+
+$('#show_rfid_modal').on('click', ()=> {
+    $('#message_modal').css('display', 'flex');
+    $('#storages_modal').hide();
+    
+});
+
+$('#hide_storages_modal').on('click', ()=> {
+    $('#storages_modal').hide();
+});
+
 $('#rfid_tag').focusout(()=> {
     $('#rfid_tag').focus();
+});
+
+$('#rfid_tag_return').focusout(()=> {
+    $('#rfid_tag_return').focus();
 });
 
 $('#rfid_tag').on('change', ()=> {
@@ -49,6 +69,7 @@ $('#rfid_tag').on('change', ()=> {
 
         if ( rfid_tag == parseInt(get_tool_id) ) {
             if ( tools_id_data[i].getAttribute('data-scanned') == "" ) {
+                console.log(tools_id_data[i])
                 tools_id_data[i].lastElementChild.firstElementChild.style.backgroundColor = "green";
                 tools_id_data[i].setAttribute('data-scanned', 'YES');
                 count -= 1;
@@ -62,4 +83,64 @@ $('#rfid_tag').on('change', ()=> {
         }
     } 
     $('#rfid_tag').val('');
+});
+
+$('#rfid_tag_return').on('change', ()=> {
+    console.log(tools_id_data.length);
+    document.getElementById('return_form').addEventListener('submit', (event)=>{
+        event.preventDefault();
+    });
+    for ( var i=0; i<tools_id_data.length; i++ ) {
+        console.log(tools_id_data[i]);
+        let get_tool_id = parseInt(tools_id_data[i].getAttribute('data-tool-id'));
+        let rfid_tag = $('#rfid_tag_return').val();
+
+        if ( rfid_tag == parseInt(get_tool_id) ) {
+            if ( tools_id_data[i].getAttribute('data-scanned') == "" ) {
+                tools_id_data[i].lastElementChild.firstElementChild.style.backgroundColor = "green";
+                tools_id_data[i].setAttribute('data-scanned', 'YES');
+                
+                get_tool_id = get_tool_id.toString();
+                console.log(get_tool_id);
+                let card = '#card'+get_tool_id;
+                console.log(card);
+                $(`.tool_cards`).css('display', 'flex');
+                $(card).css('display', 'flex');
+                // let card = 
+                // $(`#card{}`)
+                count -= 1;
+            }
+
+            if ( count == 0 ) {
+                setTimeout(()=> {
+                    $('#return_form').submit();
+                }, 2000);   
+            } 
+        }
+    } 
+    $('#rfid_tag_return').val('');
+});
+
+$('.storage_btn').click(function(){
+    var storage = $(this).attr("data-storage");
+    $.ajax(
+    {
+        type:"GET",
+        url: "/openStorage",
+        data:{
+                "storage": storage
+        },
+        success: function( response ) {
+            // my_interval = setInterval(()=>{
+            //     console.log(response);
+            // }, 5500);
+            // console.log(response['message']);
+            // // clearInterval(my_interval);
+            console.log(response["message"])
+            
+        },
+        error: function(err) {
+            console.log(err);
+        }
+     });
 });

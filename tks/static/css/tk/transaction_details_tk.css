@@ -12,7 +12,15 @@ main {
     margin-left: 200px;
 }
 
-.message_modal, .scan_rfid_tools {
+#rfid_tag {
+    opacity: 0;
+}
+
+.message_modal,
+.scan_rfid_tools,
+.scan_rfid_tools_return,
+.storages_modal,
+.tool_cards {
     position: fixed;
     z-index: 1;
     background-color: rgba(180, 180, 180, 0.6);
@@ -23,24 +31,28 @@ main {
     min-height: 100vh;;
 }
 
-/* #rfid_tag {
-    display: none;
-} */
-
-.scan_rfid_tools {
+.scan_rfid_tools,
+.scan_rfid_tools_return,
+.tool_cards {
     display: none;
 }
 
-.scan_rfid_tools > form {
+.scan_rfid_tools > form,
+.scan_rfid_tools_return > form  {
     background-color: #FFFFFF;
     padding: 1rem;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 2px solid #0000FF;
     border-radius: 20px;
     width: 75vw;
     min-height: max-content;
+}
+
+.card {
+    display: none;
 }
 
 .green-circle {
@@ -80,6 +92,19 @@ main {
 .message_modal_content > button {
     margin-top: 2rem;
     color: #FFFFFF;
+}
+
+.storages_modal_content {
+    background-color: #FFFFFF;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: max-content;
+    height: max-content;
+    border: 2px solid #0000FF;
+    border-radius: 20px;
 }
 
 .main_wrapper {

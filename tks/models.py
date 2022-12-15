@@ -27,3 +27,7 @@ class Transactions(models.Model):
     return_datetime = models.DateTimeField()
     status = models.CharField(max_length=25)
     qrcode = models.ImageField(upload_to='qrcodes/', null=False, blank=False)
+
+class TransactionDumps(models.Model):
+    transaction_id = models.CharField(max_length=255)
+    tool_borrowed = models.ForeignKey("Tools", on_delete=models.CASCADE)

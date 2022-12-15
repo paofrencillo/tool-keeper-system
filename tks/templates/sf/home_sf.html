@@ -17,8 +17,11 @@
         {% for message in messages %}
             {% if message.extra_tags == "has_ongoing_transaction" %}
                 <div class="block_tool_reservation">
-                    <div class="block_messsage">                    
+                    <div class="block_message">                    
                         <h2>{{ message }}</h2>
+                        <form action="{% url 'transactions_sf' %}" method="GET">
+                            <input type="submit" class="btn btn-primary" value="Go to my transactions">
+                        </form>
                     </div>
                 </div>
             {% endif %}
@@ -103,46 +106,7 @@
                     </div>
                 </form>
             </div>
-        <!-- <div id="show_modal" data-show-modal="true"></div>
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'info' %}
-                    <div class="modal show" id="modal" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <p>
-                                    <strong>
-                                        COME TO THE STORAGE ROOM ON THE EXPECTED TIME AND DATE OF BORROW.
-                                    </strong>
-                                </p>                      
-                            <p>
-                                <strong>
-                                    IN CASE YOU DIDN’T SHOW UP 15 MINS.  AFTER THE EXPECTED TIME AND DATE,
-                                    THE RESERVATION WILL BE VOID.
-                                </strong>                    
-                            </p>
-                            <p>
-                                <strong>
-                                    THANK YOU!
-                                </strong>
-                            </p>
-                            <button
-                                type="button"
-                                id="ok-btn"
-                                class="btn btn-primary" 
-                                data-bs-dismiss="modal"
-                                >OK
-                            </button>
-                            </div>
-                        </div>
-                        </div>
-                    </div> 
-                {% endif %}
-            {% endfor %}
-        {% endif %} -->
-        </main>
-                
+        </main>           
     {% endif %}  
 {% endblock %}
 

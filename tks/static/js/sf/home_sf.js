@@ -102,6 +102,8 @@ $('#tool-selected-form').on('submit', function(event){
     $(this).unbind('submit').submit();
 });
 
+<<<<<<< HEAD
+=======
 // show modal when reservation success
 $(document).ready(function(){
     let show_modal = document.getElementById('show_modal').getAttribute('data-show-modal');
@@ -112,6 +114,7 @@ $(document).ready(function(){
 
 
 // show colored label for availability of tools
+>>>>>>> 0ded92d4622e086c51b8c47729e1a5ab6869f005
 var headers = document.getElementsByTagName("h6");
 
 for (let i = 0; i < headers.length; i++) {
