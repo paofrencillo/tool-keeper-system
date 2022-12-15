@@ -25,6 +25,10 @@ main {
     padding: 0.25rem;
 }
 
+#get_tool_form {
+    display: none;
+}
+
 
 /* ========== TABLE ========== */
 table thead tr th {

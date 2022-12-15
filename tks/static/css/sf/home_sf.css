@@ -34,15 +34,25 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
     border: 2px solid #0000FF;
     border-radius: 20px;
     width: 60vw;
     min-height: max-content;
 }
 
-.block_message > h3 {
-      
+.block_message > h2 {
+      text-align: center;
+      margin-bottom: 2rem;
 }
+
+.block_message > form > input {
+    font-size: 25px;
+    font-weight: 600;
+    padding: 1rem 2rem;
+}
+
 
 .filter_wrapper {
     display: flex;

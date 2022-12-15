@@ -102,14 +102,6 @@ $('#tool-selected-form').on('submit', function(event){
     $(this).unbind('submit').submit();
 });
 
-// show modal when reservation success
-$(document).ready(function(){
-    let show_modal = document.getElementById('show_modal').getAttribute('data-show-modal');
-    if ( show_modal == 'true' ) {
-        $("#modal").modal('show');
-    }
-});
-
 var headers = document.getElementsByTagName("h6");
 
 for (let i = 0; i < headers.length; i++) {

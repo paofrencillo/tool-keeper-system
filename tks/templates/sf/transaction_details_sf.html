@@ -69,14 +69,26 @@
                     <hr>
 
                     <div class="tools-cards">
-                    {% for tool in tools %}
-                        <div class="p-2">
-                            <div class="tool-info-wrapper">
-                                <div class="tool-name mb-2"> {{ tool.tool_name }} </div>
-                                <img src="{% static 'res/image.png' %}" alt="">
-                            </div>
-                        </div>
-                    {% endfor %}
+                        {% if transaction_details.status == 'VOIDED' or transaction_details.status == 'RETURNED' %}
+                            {% for tool in dumps %}
+                                <div class="p-2">
+                                    <div class="tool-info-wrapper">
+                                        <div class="tool-name mb-2"> {{ tool.tool_borrowed.tool_name }} </div>
+                                        <img src="{{ tool.tool_borrowed.tool_image.url }}" alt="">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                    
+                        {% elif transaction_details.status != "VOIDED" or transaction_details.status != "RETURNED" %}
+                            {% for tool in tools %}
+                                <div class="p-2">
+                                    <div class="tool-info-wrapper">
+                                        <div class="tool-name mb-2"> {{ tool.tool_name }} </div>
+                                        <img src="{{ tool.tool_image.url }}" alt="">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

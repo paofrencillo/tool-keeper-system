@@ -133,6 +133,11 @@ input#save, input#cancel {
     display: none;
 }
 
+video {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+
 .green-circle {
     background-color:#878787;
     width: 30px;

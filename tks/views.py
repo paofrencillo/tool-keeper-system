@@ -147,9 +147,19 @@ def registration_toolkeeper(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
 def home_sf(request):
+    tools = Tools.objects.filter(status="AVAILABLE")
+    context = {'tools': tools}
+
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
+    
+    if request.user.has_ongoing_transaction == True:
+        messages.add_message(request,
+                messages.WARNING,
+                "You have ongoing transaction. Void your reservation or return the tool/s you borrowed.",
+                extra_tags="has_ongoing_transaction")
+        return render(request, 'sf/home_sf.html', context)
         
     if request.method == "GET" and request.GET.get('storage') != None and request.GET.get('layer') != None:
         storage_num = int(request.GET.get('storage'))
@@ -157,7 +167,6 @@ def home_sf(request):
 
         if storage_num != None:
             if layer_num != None:
-                print(storage_num, layer_num)
                 tools = Tools.objects.filter(storage=storage_num).filter(layer=layer_num).filter(status="AVAILABLE")
                 context = {'tools': tools,
                             'storage': storage_num,
@@ -170,18 +179,6 @@ def home_sf(request):
                             'storage': storage_num}
                 return render(request, 'sf/home_sf.html', context)
         
-        # if storage_num == None and layer_num != None:
-        #     messages.add_message(request, messages.ERROR, "")
-    if request.user.has_ongoing_transaction == True:
-        messages.add_message(request,
-                messages.WARNING,
-                "You have ongoing transaction. Void your reservation or return the tool/s you borrowed.",
-                extra_tags="has_ongoing_transaction")
-        return redirect("home_sf")
-
-    tools = Tools.objects.filter(status="AVAILABLE")
-    context = {'tools': tools}
-
     return render(request, 'sf/home_sf.html', context)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -215,6 +212,7 @@ def reservation_sf(request):
         ## Save new transaction
         borrower = User.objects.get(pk=request.user.pk)
         borrower.has_ongoing_transaction = True
+        borrower.save()
 
         new_transaction = Transactions.objects.create(
                 tupc_id_id=borrower.pk,
@@ -294,7 +292,6 @@ def reservation_sf(request):
                 'selected_tools_all': selected_tools}
 
         return render(request, 'sf/reservation_sf.html', context)
-
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
@@ -376,7 +373,6 @@ def transaction_details_sf(request, transaction_id):
     if request.user.is_authenticated:
         transaction = Transactions.objects.get(pk=transaction_id)
         get_borrower = transaction.tupc_id_id
-        print(get_borrower, request.user.pk)
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
         if get_borrower != request.user.pk:
@@ -387,25 +383,33 @@ def transaction_details_sf(request, transaction_id):
     ### --- Try catch errors next time. For the meantime...
         if void_transaction == "Yes, I'm sure":
             transaction = Transactions.objects.get(pk=transaction_id)
+            borrower = User.objects.get(pk=request.user.pk)
             transaction.status = 'VOIDED'
+            borrower.has_ongoing_transaction = False
             transaction.save()
+            borrower.save()
+
+            tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
+            for tool in tools_borrowed:
+                tool.current_transaction = None
+                tool.current_user = None
+                tool.status = "AVAILABLE"
+                TransactionDumps.objects.create(
+                    transaction_id = transaction.pk,
+                    tool_borrowed_id = tool.pk
+                )
+                tool.save()
 
             return redirect('transactions_sf')
 
     transaction_details = Transactions.objects.get(pk=transaction_id)
     tools_borrowed = Tools.objects.filter(current_transaction=transaction_id)
-    tools = []
-    tool = None
-
-    for t in tools_borrowed:
-        tool = Tools.objects.get(pk=t.pk)
-        tools.append(tool)
-     
-    print(tools)
+    dumps = TransactionDumps.objects.filter(transaction_id=str(transaction.pk))
 
     context = {
         'transaction_details': transaction_details,
-        'tools': tools
+        'tools': tools_borrowed,
+        'dumps': dumps
     }
 
     return render(request, 'sf/transaction_details_sf.html', context)
@@ -420,7 +424,6 @@ def scanqr_tk(request):
 
     if request.method == "POST" and request.POST.get('qrcode'):
         qrcode = request.POST.get('qrcode')
-        print(qrcode)
         transaction = Transactions.objects.get(pk=qrcode)
         transaction_code = transaction.pk
 
@@ -473,22 +476,12 @@ def transaction_details_tk(request, transaction_id):
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
     tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
-    current_dt_in_sec = timezone.now().timestamp()
-    br_dt_in_sec = transaction.borrow_datetime.timestamp()
-    to_void = None
-    
-    # Write condition that will void the transaction
-    # if the expected datetime if borrow is exceeded 15 min. (900 sec.)
-    if (current_dt_in_sec - br_dt_in_sec) >= 900:
-        to_void = "Yes"
-    elif (current_dt_in_sec - br_dt_in_sec) < 900:
-        to_void = "No"
-
+    dumps = TransactionDumps.objects.filter(transaction_id=str(transaction.pk))
     context = {
         "borrower": borrower,
         "transaction": transaction,
-        "tools_borrowed": tools_borrowed,   
-        "to_void": to_void,
+        "tools_borrowed": tools_borrowed,
+        "dumps": dumps
     }
 
     if request.user.is_authenticated:
@@ -497,19 +490,33 @@ def transaction_details_tk(request, transaction_id):
             
     if request.method == "POST":
         if request.POST.get('option_btn') == "BORROW":
+            storages = []
             # Open storage according where tools are located (send request.get in RPI)
             # Put rfid column in transaction table and scan rfid in tools
-            #
+            for tool in tools_borrowed:
+                storages.append(tool.storage)
+                storages = list(dict.fromkeys(storages))
+            
+            context["storages"] = storages
+            
             messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL", extra_tags="scan_rfid_borrow")
             return render(request, 'tk/transaction_details_tk.html', context)
 
         if request.POST.get('option_btn') == "VOID":
             transaction.status = "VOIDED"
+            borrower.has_ongoing_transaction = False
             transaction.save()
+            borrower.save()
+
             for tool in tools_borrowed:
                 tool.current_transaction = None
                 tool.current_user = None
                 tool.status = "AVAILABLE"
+                TransactionDumps.objects.create(
+                    transaction_id = transaction.pk,
+                    tool_borrowed_id = tool.pk
+                )
+
                 tool.save()
 
             return render(request, 'tk/transaction_details_tk.html', context)
@@ -523,17 +530,10 @@ def transaction_details_tk(request, transaction_id):
             return redirect ("transaction_details_tk", transaction_id)
         
         if request.POST.get('option_btn') == "RETURN":
-            messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL", extra_tags="scan_rfid_return")
+            messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL TO VERIFY THE RETURN", extra_tags="scan_rfid_return")
+            return redirect ("transaction_details_tk", transaction_id)
 
     return render(request, 'tk/transaction_details_tk.html', context)
-
-def check_datetime_tk(request, transaction_id):
-    transaction_details = Transactions.objects.get(id=transaction_id)
-    response = {"borrow_datetime": transaction_details.borrow_datetime,
-                "return_datetime": transaction_details.return_datetime}
-    data = serializers.serialize("json", response)
-    print(data)
-    return JsonResponse({"datetimes": data})
 
 def storages_tk(request):
     tools = Tools.objects.all()
@@ -588,13 +588,20 @@ def add_tools_tk(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
-def edit_tools_tk(request, tool_id):
+def tools_tk(request):
     if request.user.is_authenticated:
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")
 
+    if request.method == "GET" and request.GET.get('tool_id') != None:
+        tool_id = int(request.GET.get('tool_id'))
+        tool = Tools.objects.get(pk=tool_id)
+        context =  {
+            'tool': tool
+        }
+        return render(request, 'tk/manage_tools/tools_tk.html', context)
             
-    return render(request, 'tk/manage_tools/edit_tools_tk.html')
+    return render(request, 'tk/manage_tools/tools_tk.html')
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
@@ -605,7 +612,6 @@ def profile_tk(request):
 
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
-        #password_form = PasswordChangeForm(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
@@ -693,21 +699,10 @@ def reset_password(request):
 
     return render(request, 'password_reset/reset_password.html', context)
 
-def led(request):
-    if request.method == "GET" and request.GET.get("option_btn") == "BORROW":
-        requests.get("http://192.168.18.110:5000/S1")
-        requests.get("http://192.168.18.110:5000/S2")
-        requests.get("http://192.168.18.110:5000/S3")
-        requests.get("http://192.168.18.110:5000/S4")
-        requests.get("http://192.168.18.110:5000/S5")
-        requests.get("http://192.168.18.110:5000/S6")
-        requests.get("http://192.168.18.110:5000/S7")
-        requests.get("http://192.168.18.110:5000/S8")
-        
-        transaction_id = request.GET.get("transaction_id")
-        
-    return redirect("view_transaction_details_tk", int(transaction_id))
-
-def onled(request):
-    requests.get("http://192.168.0.107:5000/S1")
-    return HttpResponse("!!!!!!")
+def openStorage(request):
+    if request.method == "GET":
+        # Receive data from ajax and ge the storage value
+        storage = request.GET.get('storage')
+        requests.get(f"http://192.168.0.111:5000/S{storage}")
+        # Send request to RPI to open specific storage
+        return JsonResponse({"message": f"Storage Opening {storage}"}, status=200)

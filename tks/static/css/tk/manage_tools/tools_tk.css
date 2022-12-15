@@ -20,27 +20,40 @@ main {
     border-radius: 40px;
 } 
 
-.tool-img-wrapper {
-    border: 3px solid #3E3E3E;
-    width: max-content;
-    border-radius: 20px;
-    padding: 0 !important;
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
 
-#tool-img {
-    width: 200px;
-    border-radius: 20px;
+.card .card-header {
+    font-weight: 500;
 }
 
-input[type="file"] {
-    font-size: 12px;
+.card-header:first-child {
+    border-radius: 0.35rem 0.35rem 0 0;
 }
 
-input[type="text"] {
-    height: 50px;
-    padding-left: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 10px;
+.card-header {
+    padding: 1rem 1.35rem;
+    margin-bottom: 0;
+    background-color: rgb(33, 40, 50, 0.05);
+    border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+}
+
+.tool-image-profile {
+    height: 10rem;
+    width: 10rem;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;  
+}
+
+input[readonly] {
+    background-color: #d5d5d5;
+}
+
+input[readonly]:focus {
+    background-color: #d5d5d5;
 }
 
 input.btn {

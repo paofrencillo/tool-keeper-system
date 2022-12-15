@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TKS | Edit Tools{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/manage_tools/tools_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />    
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="row m-0 p-1">
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-header">Profile Picture</div>
+                        <div class="card-body text-center">
+                            <!-- Profile picture image-->
+                            {% if tool.tool_image == None or tool.tool_image == '' %}
+                                <h4>No Image</h4>
+                            {% elif tool.tool_image != None or tool.tool_image != '' %}
+                                <img class="tool-image-profile rounded-circle" src="{{ tool.tool_image.url }}" alt="">
+                            {% endif %}  
+                            <!-- Profile picture help block-->
+                            <div class="small font-italic text-muted mb-4">Set the tool image</div>
+                            <!-- Profile picture upload button-->
+                            <button class="btn btn-primary" type="button">Upload new image</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <div class="card mb-4">
+                        <div class="card-header">Tool Details</div>
+                        <div class="card-body">
+                            <form action="" method="">
+                                <!-- {% csrf_token %} -->
+                                <div class="mb-3">
+                                    <label for="tool_id" class="form-label">Tool ID</label>
+                                    <input type="text" class="form-control" id="tool_id" value="{{ tool.tool_id }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tool_name" class="form-label">Tool Name</label>
+                                    <input type="text" class="form-control" id="tool_id" value="{{ tool.tool_name }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tool_storage" class="form-label">Tool Storage</label>
+                                    <input type="text" class="form-control" id="tool_storage" value="{{ tool.storage }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tool_layer" class="form-label">Tool Layer</label>
+                                    <input type="text" class="form-control" id="tool_layer" value="{{ tool.layer }}" readonly>
+                                </div>
+                                <div class="mb-5">
+                                    <label for="tool_user" class="form-label">Current User</label>
+                                    {% if tool.current_user == None %}
+                                    <input type="text" class="form-control" id="tool_user" value="No current user" readonly>
+                                    {% elif tool.current_user != None %}
+                                    <input type="text" class="form-control" id="tool_user" value="{{ tool.current_user }}" readonly>
+                                    {% endif %}
+                                </div>
+                                <!-- Save changes button-->
+                                <!-- <button class="btn btn-primary" type="submit">Save changes</button> -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <form action="" method="POST" enctype="multipart/form-data">
+                <div class="edit-form-wrapper row mb-4">
+                    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="tool-img-wrapper mb-2">
+                            <img id="tool-img" src="{% static 'res/test.png' %}" alt="">
+                        </div>
+                        <input type="file" accept=".png, .jpg, .jpeg">
+                    </div>
+                    <div class="d-flex flex-column col-xl-9 col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <input type="text" name="" id="" placeholder="TOOL ID" disabled>
+                        <input type="text" name="" id="" placeholder="TOOL NAME">
+                        <input type="text" name="" id="" placeholder="STORAGE">
+                        <input type="text" name="" id="" placeholder="LAYER">
+                        <input type="text" name="" id="" placeholder="STATUS">
+                    </div> 
+                </div>
+                <div class="d-flex m-0 p-0 justify-content-between">
+                    <input id="edit" class="btn btn-primary" type="button" value="EDIT">
+                    <input id="save" class="btn btn-success" type="submit" value="SAVE">
+                    <input id="cancel" class="btn btn-danger" type="reset" value="CANCEL">
+                    <input id="remove" class="btn btn-danger" type="button" value="REMOVE TOOL">
+                </div>   
+            </form> -->
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/tk/manage_tools/tools_tk.js' %}"></script>
+{% endblock %}
