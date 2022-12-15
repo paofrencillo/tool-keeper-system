@@ -102,6 +102,19 @@ $('#tool-selected-form').on('submit', function(event){
     $(this).unbind('submit').submit();
 });
 
+<<<<<<< HEAD
+=======
+// show modal when reservation success
+$(document).ready(function(){
+    let show_modal = document.getElementById('show_modal').getAttribute('data-show-modal');
+    if ( show_modal == 'true' ) {
+        $("#modal").modal('show');
+    }
+});
+
+
+// show colored label for availability of tools
+>>>>>>> 0ded92d4622e086c51b8c47729e1a5ab6869f005
 var headers = document.getElementsByTagName("h6");
 
 for (let i = 0; i < headers.length; i++) {
@@ -110,5 +123,22 @@ for (let i = 0; i < headers.length; i++) {
     }
     else if (headers[i].textContent== "NOT AVAILABLE") {
         headers[i].style.color = "red";
+    }
+}
+
+// search tools
+function search_tools() {
+    let search = document.getElementById('search_tool').value
+    search = search.toLowerCase();
+    let tools = document.getElementsByClassName('tools');
+      
+    for (i = 0; i < tools.length; i++) { 
+        console.log(tools[i]);
+        if (tools[i].innerHTML.toLowerCase().includes(search)) {
+            tools[i].style.display="flex";
+        }
+        else {
+            tools[i].style.display="none";           
+        }
     }
 }
