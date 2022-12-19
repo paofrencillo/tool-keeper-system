@@ -90,7 +90,7 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Password</div>
                     <div class="card-body">
-                        <form action="{% url 'change_password_tk' request.user.pk %}" method="get">
+                        <form action="{% url 'change_password_tk' request.user.tupc_id %}" method="get">
                             <button class="btn btn-secondary" type="submit">Change my password</button>
                         </form> 
                     </div>   

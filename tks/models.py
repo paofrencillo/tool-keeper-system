@@ -4,10 +4,10 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    tupc_id = models.BigIntegerField(primary_key=True)
+    tupc_id = models.IntegerField(default=None, null=True, blank=True)
     role = models.CharField(max_length=225)
     year_course = models.CharField(max_length=20, null=True)
-    user_img = models.ImageField(upload_to='profile_pics/', null=True)
+    user_img = models.ImageField(upload_to='profile_pics/', default=None, null=True, blank=True)
     has_ongoing_transaction = models.BooleanField(default=False)
 
 class Tools(models.Model):
@@ -28,6 +28,7 @@ class Transactions(models.Model):
     status = models.CharField(max_length=25)
     qrcode = models.ImageField(upload_to='qrcodes/', null=False, blank=False)
 
-class TransactionDumps(models.Model):
+class FinishedTransactions(models.Model):
     transaction_id = models.CharField(max_length=255)
     tool_borrowed = models.ForeignKey("Tools", on_delete=models.CASCADE)
+    status = models.CharField(max_length=25)

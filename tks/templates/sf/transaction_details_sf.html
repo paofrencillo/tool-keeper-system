@@ -69,8 +69,8 @@
                     <hr>
 
                     <div class="tools-cards">
-                        {% if transaction_details.status == 'VOIDED' or transaction_details.status == 'RETURNED' %}
-                            {% for tool in dumps %}
+                        {% if transaction_details.status == 'VOIDED' or transaction_details.status == 'RETURNED' or transaction_details.status == 'RETURNED WITH DAMAGE' or transaction_details.status == 'MISSING' %}
+                            {% for tool in finished %}
                                 <div class="p-2">
                                     <div class="tool-info-wrapper">
                                         <div class="tool-name mb-2"> {{ tool.tool_borrowed.tool_name }} </div>
