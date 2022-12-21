@@ -394,22 +394,25 @@ def transaction_details_sf(request, transaction_id):
                 tool.current_transaction = None
                 tool.current_user = None
                 tool.status = "AVAILABLE"
-                TransactionDumps.objects.create(
+
+                FinishedTransactions.objects.create(
                     transaction_id = transaction.pk,
-                    tool_borrowed_id = tool.pk
+                    tool_borrowed_id = tool.pk,
+                    status = "NOT BORROWED"
                 )
+
                 tool.save()
 
             return redirect('transactions_sf')
 
     transaction_details = Transactions.objects.get(pk=transaction_id)
     tools_borrowed = Tools.objects.filter(current_transaction=transaction_id)
-    dumps = TransactionDumps.objects.filter(transaction_id=str(transaction.pk))
+    finished = FinishedTransactions.objects.filter(transaction_id=str(transaction.pk))
 
     context = {
         'transaction_details': transaction_details,
         'tools': tools_borrowed,
-        'dumps': dumps
+        'finished': finished
     }
 
     return render(request, 'sf/transaction_details_sf.html', context)
@@ -476,12 +479,12 @@ def transaction_details_tk(request, transaction_id):
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
     tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
-    dumps = TransactionDumps.objects.filter(transaction_id=str(transaction.pk))
+    finished = FinishedTransactions.objects.filter(transaction_id=str(transaction.pk))
     context = {
         "borrower": borrower,
         "transaction": transaction,
         "tools_borrowed": tools_borrowed,
-        "dumps": dumps
+        "finished": finished
     }
 
     if request.user.is_authenticated:
@@ -512,9 +515,11 @@ def transaction_details_tk(request, transaction_id):
                 tool.current_transaction = None
                 tool.current_user = None
                 tool.status = "AVAILABLE"
-                TransactionDumps.objects.create(
+                
+                FinishedTransactions.objects.create(
                     transaction_id = transaction.pk,
-                    tool_borrowed_id = tool.pk
+                    tool_borrowed_id = tool.pk,
+                    status = "NOT BORROWED"
                 )
 
                 tool.save()
@@ -578,6 +583,65 @@ def transaction_details_tk(request, transaction_id):
 
             messages.add_message(request, messages.INFO, "OPEN STORAGE TO RETURN TOOL/S", extra_tags="return_success")
             return render(request, 'tk/transaction_details_tk.html', context)
+
+        
+        if request.POST.get('verify_return') == "Verify Return":
+            remarks = []
+            for tool in tools_borrowed:
+                remarks = request.POST.get(f'add_remarks{tool.pk}')
+                if remarks == "r1":
+                    tool.status = "RETURNED WITH DAMAGE"
+                    remarks.append("RETURNED WITH DAMAGE")
+                    tool.current_transaction = None
+                    tool.current_user = None
+                    tool.save()
+
+                    FinishedTransactions.objects.create(
+                        transaction_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
+                        status = "RETURNED WITH DAMAGE"
+                    )
+
+                elif remarks == "r2":
+                    tool.status = "MISSING"    
+                    remarks.append("MISSING")
+                    tool.current_transaction = None
+                    tool.current_user = None           
+                    tool.save()
+                    
+                    FinishedTransactions.objects.create(
+                        transaction_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
+                        status = "MISSING"
+                    )
+
+                elif remarks != "r1" and remarks != "r2":
+                    tool.status = "AVAILABLE"  
+                    tool.current_transaction = None
+                    tool.current_user = None
+                    tool.save()
+
+                    FinishedTransactions.objects.create(
+                        transaction_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
+                        status = "RETURNED"
+                    )
+
+            if remarks == []:
+                transaction.status = "RETURNED"
+
+            if "RETURNED WITH DAMAGE" in remarks and "MISSING" in remarks:
+                transaction.status = "RETURNED WITH DAMAGE AND MISSING"
+            
+            elif "RETURNED WITH DAMAGE" in remarks:
+                transaction.status = "RETURNED WITH DAMAGE"
+
+            elif "RETURNED WITH DAMAGE" in remarks:
+                transaction.status = "RETURNED WITH MISSING"
+
+            transaction.save()
+
+            return redirect ("transaction_details_tk", transaction_id)
 
     return render(request, 'tk/transaction_details_tk.html', context)
 
