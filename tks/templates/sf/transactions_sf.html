@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load tz %}
 
 {% block title %}
   TKS | My Transactions
@@ -35,8 +36,8 @@
                                         <button class="view-btns">View Details</button>
                                     </a>
                                 </td>
-                                <td class="ps-3">{{ transaction.borrow_datetime }}</td>
-                                <td class="ps-3">{{ transaction.return_datetime }}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.borrow_datetime }} {% endtimezone %}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.return_datetime }} {% endtimezone %}</td>
                                 <td class="status" data-status="{{ transaction.status }}">{{ transaction.status }}</td>
                             </tr>         
                         {% endfor %}

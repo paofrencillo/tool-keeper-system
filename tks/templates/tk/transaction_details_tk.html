@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tz %}
 
 {% block title %}
   TKS | View Transaction
@@ -112,9 +113,10 @@
             </div>         
           </div>
           <div id="scan_rfid_tools_return" class="scan_rfid_tools_return">
+            <input type="number" id="rfid_tag_return">
             <form id="return_form" action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
               {% csrf_token %}
-              <input type="number" id="rfid_tag_return">
+              <h3 class="text-center mb-0">SCAN THE RFID TAG ON THE TOOLS</h3>
               <input type="hidden" name="rfid_scanned_return" value="DONE RETURN">
                 <div class="table-responsive p-3 w-100">
                   <table id="return-table" class="table table-bordered table-hover table-striped align-middle">
@@ -125,12 +127,13 @@
                           <th>Tool Image</th>
                           <th>Storage</th>
                           <th>Layer</th>
-                          <th>Status</th>
+                          <th>RFID</th>
+                          <th>Add Remarks</th>
                         </tr>
                     </thead>
                     <tbody id="tabledata">
                       {% for tools in tools_borrowed %}
-                        <tr class="tools_to_scan text-center" data-tool-id="{{ tools.pk }}" data-scanned="">
+                        <tr class="tools_to_scan text-center" id="row{{ tools.pk }}" data-tool-id="{{ tools.pk }}" data-scanned="">
                           <td>{{ tools.pk }}</td>
                           <td>{{ tools.tool_name }}</td>
                           <td class="table-img">
@@ -139,33 +142,45 @@
                           <td>{{ tools.storage }}</td>
                           <td>{{ tools.layer }}</td>
                           <td>
-                            <input type="hidden" name="{{ tools.pk }}">
-                            <p data-status=""></p>
+                            <div class="green-circle"></div>
+                          </td>
+                          <td>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" id="flexCheckDefault1" name="add_remarks{{ tools.pk }}" value="r1">
+                              <label class="form-check-label" for="flexCheckDefault1">
+                                DAMAGED TOOL
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" id="flexCheckDefault2" name="add_remarks{{ tools.pk }}" value="r2">
+                              <label class="form-check-label" for="flexCheckDefault2">
+                                MISSING TOOL
+                              </label>
+                            </div>
                           </td>
                         </tr>
                       {% endfor %}
                     </tbody>
                   </table>
-                </div>     
+                </div>
+                <input type="submit" name="verify_return" class="btn btn-primary" value="Verify Return">   
             </form>
+            
           </div>
-          {% for tools in tools_borrowed %}
-            <div class="tool_cards">
-              <div class="card" id="card{{ tools.pk }}" style="width: 18rem;">
-                <img src="{{ tools.tool_image.url }}" class="card-img-bottom" alt="">
-                <div class="card-body">
-                  <p class="card-text text-centered">{{ tools.tool_name }}</p>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    DAMAGED TOOL
-                  </label>
-                </div>
-                <button type="button" class="btn btn-primary">OK</button>
+          {% elif message.extra_tags == "return_success" %}
+          <div id="storages_modal" class="storages_modal">
+            <div class="d-flex justify-content-around storages_modal_content">
+              <div class="storages_btn d-flex flex-row-reverse">
+                {% for storage in storages %}
+                  <button class="storage_btn btn btn-secondary px-4 py-3 mx-2" data-storage="{{ storage }}">Open<br>Storage {{ storage }}</button>
+                {% endfor %}
+              </div>
+              <div class="d-flex justify-content-center mt-3 w-100">
+                <button type="button" id="show_rfid_modal" class="btn btn-primary w-75 me-4">OK</button> 
+                <button type="button" id="hide_storages_modal" class="btn btn-danger w-75">CLOSE</button> 
               </div>
             </div>
-          {% endfor %}
+          </div>
       {% endif %}
     {% endfor %}
   {% endif %}
@@ -203,8 +218,8 @@
           <div class="top-wrapper p-3">
             <div class="transaction-details-wrapper m-0">
               <div class="flex-row">
-                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2" id="borrow-datetime">{{ transaction.borrow_datetime }}</span></p>
-                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2" id="return-datetime">{{ transaction.return_datetime }}</span></p>
+                  <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2" id="borrow-datetime">{% timezone "Asia/Manila" %} {{ transaction.borrow_datetime }} {% endtimezone %}</span></p>
+                  <p class="transaction-details m-2">DateTime of Return:<span class="ms-2" id="return-datetime">{% timezone "Asia/Manila" %} {{ transaction.return_datetime }} {% endtimezone %}</span></p>
                   <p class="transaction-details m-2">Status:<span class="ms-2" id="status" data-to-void="{{ to_void }}">{{ transaction.status }}</span></p>
               </div>
             </div>
@@ -261,7 +276,7 @@
               </tr>
           </thead>
           <tbody id="tabledata">
-            {% if transaction.status == 'VOIDED' or transaction.status == 'RETURNED' %}
+            {% if transaction.status == 'VOIDED' or transaction.status == 'RETURNED' or transaction.status == 'RETURNED WITH DAMAGE' or transaction.status == 'MISSING' %}
               {% for tools in dumps %}
               <h1></h1>
                 <tr class="text-center">

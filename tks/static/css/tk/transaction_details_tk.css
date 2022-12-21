@@ -12,7 +12,7 @@ main {
     margin-left: 200px;
 }
 
-#rfid_tag {
+#rfid_tag, #rfid_tag_return {
     opacity: 0;
 }
 

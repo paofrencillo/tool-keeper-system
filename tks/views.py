@@ -532,6 +532,52 @@ def transaction_details_tk(request, transaction_id):
         if request.POST.get('option_btn') == "RETURN":
             messages.add_message(request, messages.INFO, "SCAN THE RFID TAG ON THE TOOL TO VERIFY THE RETURN", extra_tags="scan_rfid_return")
             return redirect ("transaction_details_tk", transaction_id)
+        
+        if request.POST.get('verify_return') == "Verify Return":
+            for tool in tools_borrowed:
+                remarks = request.POST.get(f'add_remarks{tool.pk}')
+                if remarks == "r1":
+                    tool.status = "RETURNED WITH DAMAGE"
+                    transaction.status = "RETURNED WITH DAMAGE"
+                    tool.save()
+                    transaction.save()
+                if remarks == "r2":
+                    tool.status = "MISSING"
+                    transaction.status = "RETURNED WITH MISSING"
+                    tool.save()
+                    transaction.save()
+                    
+
+                if remarks != "r1" and remarks != "r2":
+                    tool.status = "RETURNED"
+                    transaction.status = "RETURNED"
+                    tool.save()
+                    transaction.save()
+
+                borrower.has_ongoing_transaction = False
+                borrower.save()
+            
+            tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
+            for tool in tools_borrowed:
+                tool.current_transaction = None
+                tool.current_user = None
+                tool.status = "AVAILABLE"
+                TransactionDumps.objects.create(
+                    transaction_id = transaction.pk,
+                    tool_borrowed_id = tool.pk
+                )
+                tool.save()
+            storages = []
+            # Open storage according where tools are located (send request.get in RPI)
+            # Put rfid column in transaction table and scan rfid in tools
+            for tool in tools_borrowed:
+                storages.append(tool.storage)
+                storages = list(dict.fromkeys(storages))
+            
+            context["storages"] = storages
+
+            messages.add_message(request, messages.INFO, "OPEN STORAGE TO RETURN TOOL/S", extra_tags="return_success")
+            return render(request, 'tk/transaction_details_tk.html', context)
 
     return render(request, 'tk/transaction_details_tk.html', context)
 
@@ -576,7 +622,8 @@ def add_tools_tk(request):
             new_tool.save()
 
             messages.add_message(request, messages.SUCCESS, "TOOL REGISTERED SUCCESSFULLY!")
-            return redirect("add_tools_tk")
+            context = {"storage": storage}
+            return render(request, "tk/manage_tools/add_tools_tk.html", context)
         
         except ValueError:
             messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!", extra_tags="no_image_error")

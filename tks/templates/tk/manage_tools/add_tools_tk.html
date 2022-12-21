@@ -11,17 +11,31 @@
 
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
-    <main class="px-5 py-5">
-        {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'success' %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div id="storages_modal" class="storages_modal">
+                <div class="d-flex justify-content-around storages_modal_content">
+                  <div class="storages_btn d-flex flex-row-reverse">
+     
+                      <button class="storage_btn btn btn-success px-4 py-3 mx-2" data-storage="{{ storage }}">Open<br>Storage {{ storage }}</button>
+
+                  </div>
+                  <div class="d-flex justify-content-center mt-3 w-100">
+                    <button type="button" id="hide_storages_modal" class="btn btn-secondary w-50">Back</button> 
+                  </div>
                 </div>
-            {% endif %}
-        {% endfor %}
-        {% endif %} 
+            </div>
+
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+    <main class="px-5 py-5">
+ 
         <div class="main_wrapper">
             <form method="POST" action="{% url 'add_tools_tk' %}" name="add_tools_form" id="add_tools_form">
                 {% csrf_token %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load tz %}
 {% block title %}
   TKS | Tool Keeper Transactions
 {% endblock %}
@@ -46,8 +46,8 @@
                             </td>
                             <td>{{ transaction.pk }}</td>
                             <td>{{ transaction.tupc_id_id }}</td>
-                            <td>{{ transaction.borrow_datetime }}</td>
-                            <td>{{ transaction.return_datetime }}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.borrow_datetime }} {% endtimezone %}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.return_datetime }}{% endtimezone %}</td>
                             <td class="status"><strong>{{ transaction.status }}</strong></td>
                         </tr>
                         {% endfor %}
