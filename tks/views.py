@@ -32,7 +32,6 @@ import qrcode
 import os
 
 
-
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -159,25 +158,14 @@ def home_sf(request):
                 messages.WARNING,
                 "You have ongoing transaction. Void your reservation or return the tool/s you borrowed.",
                 extra_tags="has_ongoing_transaction")
-        return render(request, 'sf/home_sf.html', context)
-        
-    if request.method == "GET" and request.GET.get('storage') != None and request.GET.get('layer') != None:
-        storage_num = int(request.GET.get('storage'))
-        layer_num = int(request.GET.get('layer'))
-
-        if storage_num != None:
-            if layer_num != None:
-                tools = Tools.objects.filter(storage=storage_num).filter(layer=layer_num).filter(status="AVAILABLE")
-                context = {'tools': tools,
-                            'storage': storage_num,
-                            'layer': layer_num}
-                return render(request, 'sf/home_sf.html', context)
-             
-            elif layer_num == None:
-                tools = Tools.objects.filter(storage=storage_num).filter(status="AVAILABLE")
-                context = {'tools': tools,
-                            'storage': storage_num}
-                return render(request, 'sf/home_sf.html', context)
+        return render(request, 'sf/home_sf.html')
+    
+    if tools.count() == 0:
+        messages.add_message(request,
+                messages.INFO,
+                "There are no available tools for this moment. Try again later.",
+                extra_tags="no_tools")
+        return render(request, 'sf/home_sf.html')
         
     return render(request, 'sf/home_sf.html', context)
 
@@ -215,7 +203,7 @@ def reservation_sf(request):
         borrower.save()
 
         new_transaction = Transactions.objects.create(
-                tupc_id=borrower.tupc_id,
+                tupc_id_id=borrower.tupc_id,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
                 status="RESERVED")
@@ -226,6 +214,8 @@ def reservation_sf(request):
             tools.current_transaction = new_transaction
             tools.status = "RESERVED"
             tools.save()
+        
+        
 
         # Generate QR code
         transaction_code = str(new_transaction.pk)
@@ -250,14 +240,14 @@ def reservation_sf(request):
                 This will be used for borrowing and returning the tools you reserved.\n\
                 Please keep in mind to save the QR Code to your device.\n\n\
                 Thank You!"
-
+        sender = f"TUP-C Tool Keeper System <from {settings.EMAIL_HOST_USER}>"
         borrower_email = borrower.email
+
         email = EmailMessage(
             subject,
             body,
-            settings.EMAIL_HOST_USER,
+            sender,
             [borrower_email],
-            reply_to=[settings.EMAIL_HOST_USER],
             headers={'Message-ID': 'QRCODE'},
         )
 
@@ -275,20 +265,10 @@ def reservation_sf(request):
         print(selected_tools)
         tools = []
 
-        ## Verify the tool id status if it is available
-        ## If not, void reservation
-
         for item in selected_tools:
             tool = Tools.objects.get(pk=int(item))
             if tool.status == "AVAILABLE":
                 tools.append(tool.tool_name)
-                ## --- Update tool status to 'RESERVED'
-            elif tool.status != "NOT AVAILABLE":
-                ### --- Pop up message that the user 
-                ### - tool/s selected were not available
-                ### --- Then return redirect to the home page
-                
-                return redirect('home_sf')
     
         context = {'tools': tools,
                 'selected_tools_all': selected_tools}
@@ -330,7 +310,7 @@ def profile_sf(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
-def change_password_sf(request, pk):
+def change_password_sf(request, username):
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
@@ -360,10 +340,9 @@ def transactions_sf(request):
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
         
-
-    user_transaction = Transactions.objects.filter(tupc_id_id=request.user.pk).order_by('-pk')
+    transactions = Transactions.objects.filter(tupc_id_id=request.user.tupc_id).order_by('-pk')
     context = {
-        'transactions': user_transaction
+        'transactions': transactions
     }
 
     return render(request, 'sf/transactions_sf.html', context)
@@ -377,7 +356,7 @@ def transaction_details_sf(request, transaction_id):
         get_borrower = transaction.tupc_id_id
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
-        if get_borrower != request.user.pk:
+        if get_borrower != request.user.tupc_id:
             return redirect("home_sf")
 
     if request.method == "POST":
@@ -541,53 +520,6 @@ def transaction_details_tk(request, transaction_id):
             return redirect ("transaction_details_tk", transaction_id)
         
         if request.POST.get('verify_return') == "Verify Return":
-            for tool in tools_borrowed:
-                remarks = request.POST.get(f'add_remarks{tool.pk}')
-                if remarks == "r1":
-                    tool.status = "RETURNED WITH DAMAGE"
-                    transaction.status = "RETURNED WITH DAMAGE"
-                    tool.save()
-                    transaction.save()
-                if remarks == "r2":
-                    tool.status = "MISSING"
-                    transaction.status = "RETURNED WITH MISSING"
-                    tool.save()
-                    transaction.save()
-                    
-
-                if remarks != "r1" and remarks != "r2":
-                    tool.status = "RETURNED"
-                    transaction.status = "RETURNED"
-                    tool.save()
-                    transaction.save()
-
-                borrower.has_ongoing_transaction = False
-                borrower.save()
-            
-            tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
-            for tool in tools_borrowed:
-                tool.current_transaction = None
-                tool.current_user = None
-                tool.status = "AVAILABLE"
-                TransactionDumps.objects.create(
-                    transaction_id = transaction.pk,
-                    tool_borrowed_id = tool.pk
-                )
-                tool.save()
-            storages = []
-            # Open storage according where tools are located (send request.get in RPI)
-            # Put rfid column in transaction table and scan rfid in tools
-            for tool in tools_borrowed:
-                storages.append(tool.storage)
-                storages = list(dict.fromkeys(storages))
-            
-            context["storages"] = storages
-
-            messages.add_message(request, messages.INFO, "OPEN STORAGE TO RETURN TOOL/S", extra_tags="return_success")
-            return render(request, 'tk/transaction_details_tk.html', context)
-
-        
-        if request.POST.get('verify_return') == "Verify Return":
             remarks = []
             for tool in tools_borrowed:
                 remarks = request.POST.get(f'add_remarks{tool.pk}')
@@ -694,8 +626,8 @@ def add_tools_tk(request):
         except ValueError:
             messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!", extra_tags="no_image_error")
 
-        except IntegrityError:
-            messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
+        # except IntegrityError:
+        #     messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
@@ -731,6 +663,15 @@ def profile_tk(request):
             messages.add_message(request, messages.SUCCESS, "Account details has been updated!", extra_tags="details_change_success")
             return redirect('profile_tk')
     
+    if request.method == "POST" and request.FILES.get('imageUpload'):
+        img = request.FILES.get('imageUpload')
+        _user = User.objects.get(pk=request.user.pk)
+        _user.user_img = img
+        _user.save()
+        messages.add_message(request, messages.SUCCESS, "Profile picture updated successfully!", extra_tags="img_change_success")
+
+        return redirect('profile_tk')
+    
     form = EditUserForm(instance=request.user)
         
     context = {
@@ -742,7 +683,7 @@ def profile_tk(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
-def change_password_tk(request, pk):
+def change_password_tk(request, username):
     if request.user.is_authenticated:
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")

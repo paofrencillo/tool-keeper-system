@@ -21,7 +21,7 @@ urlpatterns = [
     path('profile/', views.profile_sf, name='profile_sf'),
     path('transactions/', views.transactions_sf, name='transactions_sf'),
     path('transactions/<str:transaction_id>/', views.transaction_details_sf, name='transaction_details_sf'),
-    path('change_password/<int:tupc_id>', views.change_password_sf, name='change_password_sf'),
+    path('change_password/<str:username>', views.change_password_sf, name='change_password_sf'),
    
 
     # Tool Keeper
@@ -33,7 +33,7 @@ urlpatterns = [
 
     # profile toolkeeper
     path('tk/profile/', views.profile_tk, name='profile_tk'),
-    path('tk/change_password/<int:tupc_id>', views.change_password_tk, name='change_password_tk'),
+    path('tk/change_password/<str:username>', views.change_password_tk, name='change_password_tk'),
 
     # view transaction details toolkeeper
     path('tk/transactions/<str:transaction_id>', views.transaction_details_tk, name='transaction_details_tk'),

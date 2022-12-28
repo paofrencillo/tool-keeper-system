@@ -30,18 +30,26 @@
                 <!-- Profile picture card-->
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
-                    <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        {% if request.user.user_img == None or request.user.user_img == '' %}
-                            <img class="img-account-profile rounded-circle" src="{% static 'res/free-avatar.png' %}" alt="">
-                        {% elif request.user.user_img != None or request.user.user_img != '' %}
-                            <img class="img-account-profile rounded-circle" src="{{ request.user.user_img.url }}" alt="">
-                        {% endif %}  
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">Set your profile image</div>
-                        <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button">Upload new image</button>
-                    </div>
+                    <form action="{% url 'profile_tk' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input type='file' name="imageUpload" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                <label for="imageUpload" id="imageUploadLabel" class="bi bi-pen">
+                                </label>
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview">
+                                    {% if request.user.user_img == None or request.user.user_img == '' %}
+                                        <img id="image" src="{% static 'res/free-avatar.png' %}" alt="">
+                                    {% elif request.user.user_img != None or request.user.user_img != '' %}
+                                        <img id="image" src="{{ request.user.user_img.url }}" alt="">
+                                    {% endif %}     
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-primary mt-4" id="submit_img_btn" value="Save New Image" />
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="col-xl-8">
@@ -90,7 +98,7 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Password</div>
                     <div class="card-body">
-                        <form action="{% url 'change_password_tk' request.user.tupc_id %}" method="get">
+                        <form action="{% url 'change_password_tk' request.user.username %}" method="get">
                             <button class="btn btn-secondary" type="submit">Change my password</button>
                         </form> 
                     </div>   
@@ -101,5 +109,5 @@
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript" src="{% static 'js/sf/profile_sf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/tk/profile_tk.js' %}"></script>
 {% endblock %} 

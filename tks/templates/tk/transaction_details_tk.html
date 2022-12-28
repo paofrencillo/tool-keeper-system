@@ -280,11 +280,7 @@
           </thead>
           <tbody id="tabledata">
             {% if transaction.status == 'VOIDED' or transaction.status == 'RETURNED' or transaction.status == 'RETURNED WITH DAMAGE' or transaction.status == 'MISSING' %}
-<<<<<<< HEAD
-              {% for tools in dumps %}
-=======
               {% for tools in finished %}
->>>>>>> accbb7e6abcbfcbe7d91d12791442552f6711e2f
               <h1></h1>
                 <tr class="text-center">
                   <td>{{ tools.tool_borrowed.pk }}</td>

@@ -76,6 +76,10 @@ main {
     margin-top: 1rem;
 }
 
+th, td {
+    font-size: 14px;
+}
+
 
 /* ====== SCREEN REPONSIVENESS ====== */
 @media screen and (max-width: 576px) {

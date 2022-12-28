@@ -32,7 +32,7 @@
                         {% for transaction in transactions %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'transaction_details_sf' transaction.transaction_id %}">
+                                    <a href="{% url 'transaction_details_sf' transaction.pk %}">
                                         <button class="view-btns">View Details</button>
                                     </a>
                                 </td>
