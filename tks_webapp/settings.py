@@ -30,8 +30,8 @@ if DEBUG:  # for DEVELOPMENT ONLY!!
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_USE_TLS = True
     EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = 'fearlessphbg@gmail.com'
-    EMAIL_HOST_PASSWORD = 'xhkgpkfzswzlshqr'
+    EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
+    EMAIL_HOST_PASSWORD = 'uotavuxgfiztjfgi'
     EMAIL_PORT = 587
 
 ALLOWED_HOSTS = []

@@ -215,7 +215,7 @@ def reservation_sf(request):
         borrower.save()
 
         new_transaction = Transactions.objects.create(
-                tupc_id_id=borrower.pk,
+                tupc_id=borrower.tupc_id,
                 borrow_datetime=borrow_datetime,
                 return_datetime=return_datetime,
                 status="RESERVED")
@@ -272,10 +272,12 @@ def reservation_sf(request):
     if request.method == "GET":
         ## Get all the tool ids in request.GET
         selected_tools = request.GET.get('selected-tools-all').split(',')
+        print(selected_tools)
         tools = []
 
         ## Verify the tool id status if it is available
         ## If not, void reservation
+
         for item in selected_tools:
             tool = Tools.objects.get(pk=int(item))
             if tool.status == "AVAILABLE":

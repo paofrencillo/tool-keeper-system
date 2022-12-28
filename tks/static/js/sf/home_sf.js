@@ -67,25 +67,51 @@ function filter() {
     let layer = document.getElementById('layer').value;
     let tools = document.getElementsByClassName('card');
 
-    for ( i=0; i<tools.length; i++ ) {
-        tools[i].style.display = 'flex';
+    for ( let tool of tools ) {
+        tool.style.display = 'flex';
     }
 
     if ( storage != '0' ) {
         if ( layer != '0' ) {
             
-            for ( i=0; i<tools.length; i++ ) {
-                console.log(tools[i]);
+            for ( let tool of tools ) {
                 
-                if ( tools[i].getAttribute('data-storage') != storage ) {
-                    tools[i].style.display = 'none';
+                if ( tool.getAttribute('data-storage') != storage ) {
+                    tool.style.display = 'none';
                     continue
                 }
 
-                if ( tools[i].getAttribute('data-layer') != layer ) {
-                    tools[i].style.display = 'none';
+                if ( tool.getAttribute('data-layer') != layer ) {
+                    tool.style.display = 'none';
                 }         
             }
+        }
+    }
+}
+
+function resetFilter() {
+    let tools = document.getElementsByClassName('card');
+
+    for ( let tool of tools ) {
+        tool.style.display = 'flex';
+        document.getElementById('storage').value = "0";
+        document.getElementById('layer').value = "0"; 
+    }
+}
+
+// search tools
+function search_tools() {
+    let search = document.getElementById('search_tool').value.toLowerCase();
+    let re = new RegExp(search, 'gi');
+    let tools = document.getElementsByClassName('card');
+
+    for ( let tool of tools ) { 
+        let tool_name = tool.getAttribute('data-tool-name').toLowerCase();
+
+        if ( re.test(tool_name) == true ) {
+            tool.style.display = "flex";
+        } else {
+            tool.style.display = "none";           
         }
     }
 }
@@ -102,40 +128,14 @@ $('#tool-selected-form').on('submit', function(event){
     $(this).unbind('submit').submit();
 });
 
-// show modal when reservation success
-$(document).ready(function(){
-    let show_modal = document.getElementById('show_modal').getAttribute('data-show-modal');
-    if ( show_modal == 'true' ) {
-        $("#modal").modal('show');
-    }
-});
-
-
 // show colored label for availability of tools
 var headers = document.getElementsByTagName("h6");
 
-for (let i = 0; i < headers.length; i++) {
-    if (headers[i].textContent == "AVAILABLE") {
-        headers[i].style.color = "green";
+for ( let header of headers ) {
+    if (header.textContent == "AVAILABLE") {
+        header.style.color = "green";
     }
-    else if (headers[i].textContent== "NOT AVAILABLE") {
-        headers[i].style.color = "red";
-    }
-}
-
-// search tools
-function search_tools() {
-    let search = document.getElementById('search_tool').value
-    search = search.toLowerCase();
-    let tools = document.getElementsByClassName('tools');
-      
-    for (i = 0; i < tools.length; i++) { 
-        console.log(tools[i]);
-        if (tools[i].innerHTML.toLowerCase().includes(search)) {
-            tools[i].style.display="flex";
-        }
-        else {
-            tools[i].style.display="none";           
-        }
+    else if (header.textContent== "NOT AVAILABLE") {
+        header.style.color = "red";
     }
 }

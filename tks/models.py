@@ -22,7 +22,7 @@ class Tools(models.Model):
 
 class Transactions(models.Model):
     transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable = False)
-    tupc_id = models.ForeignKey("User", on_delete=models.CASCADE)
+    tupc_id = models.ForeignKey("User", to_field="tupc_id", on_delete=models.CASCADE)
     borrow_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
     status = models.CharField(max_length=25)
