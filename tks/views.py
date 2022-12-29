@@ -377,8 +377,8 @@ def transaction_details_sf(request, transaction_id):
                 tool.status = "AVAILABLE"
 
                 FinishedTransactions.objects.create(
-                    transaction_id = transaction.pk,
-                    tool_borrowed_id = tool.pk,
+                    transaction_id_id = transaction,
+                    tool_borrowed_id = tool,
                     status = "NOT BORROWED"
                 )
 
@@ -388,7 +388,7 @@ def transaction_details_sf(request, transaction_id):
 
     transaction_details = Transactions.objects.get(pk=transaction_id)
     tools_borrowed = Tools.objects.filter(current_transaction=transaction_id)
-    finished = FinishedTransactions.objects.filter(transaction_id=str(transaction.pk))
+    finished = FinishedTransactions.objects.filter(transaction_id=transaction.pk)
 
     context = {
         'transaction_details': transaction_details,
@@ -460,7 +460,7 @@ def transaction_details_tk(request, transaction_id):
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
     tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
-    finished = FinishedTransactions.objects.filter(transaction_id=str(transaction.pk))
+    finished = FinishedTransactions.objects.filter(transaction_id=transaction.pk)
     context = {
         "borrower": borrower,
         "transaction": transaction,
@@ -498,8 +498,8 @@ def transaction_details_tk(request, transaction_id):
                 tool.status = "AVAILABLE"
                 
                 FinishedTransactions.objects.create(
-                    transaction_id = transaction.pk,
-                    tool_borrowed_id = tool.pk,
+                    transaction_id_id = transaction,
+                    tool_borrowed_id = tool,
                     status = "NOT BORROWED"
                 )
 
@@ -531,8 +531,8 @@ def transaction_details_tk(request, transaction_id):
                     tool.save()
 
                     FinishedTransactions.objects.create(
-                        transaction_id = transaction.pk,
-                        tool_borrowed_id = tool.pk,
+                        transaction_id_id = transaction,
+                        tool_borrowed_id = tool,
                         status = "RETURNED WITH DAMAGE"
                     )
 
@@ -544,8 +544,8 @@ def transaction_details_tk(request, transaction_id):
                     tool.save()
                     
                     FinishedTransactions.objects.create(
-                        transaction_id = transaction.pk,
-                        tool_borrowed_id = tool.pk,
+                        transaction_id_id = transaction,
+                        tool_borrowed_id = tool,
                         status = "MISSING"
                     )
 
@@ -556,8 +556,8 @@ def transaction_details_tk(request, transaction_id):
                     tool.save()
 
                     FinishedTransactions.objects.create(
-                        transaction_id = transaction.pk,
-                        tool_borrowed_id = tool.pk,
+                        transaction_id_id = transaction,
+                        tool_borrowed_id = tool,
                         status = "RETURNED"
                     )
 
@@ -626,8 +626,8 @@ def add_tools_tk(request):
         except ValueError:
             messages.add_message(request, messages.ERROR, "NO TOOL IMAGE!", extra_tags="no_image_error")
 
-        # except IntegrityError:
-        #     messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
+        except IntegrityError:
+            messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 

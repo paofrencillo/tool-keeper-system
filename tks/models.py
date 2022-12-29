@@ -29,6 +29,6 @@ class Transactions(models.Model):
     qrcode = models.ImageField(upload_to='qrcodes/', null=False, blank=False)
 
 class FinishedTransactions(models.Model):
-    transaction_id = models.CharField(max_length=255)
+    transaction_id = models.ForeignKey("Transactions", on_delete=models.CASCADE)
     tool_borrowed = models.ForeignKey("Tools", on_delete=models.CASCADE)
     status = models.CharField(max_length=25)
