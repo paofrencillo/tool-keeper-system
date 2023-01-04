@@ -103,9 +103,9 @@
                 <form method="GET" id="tool-selected-form" action="{% url 'reservation_sf' %}">
                     <h5 class="mb-4">Tools Selected</h5>
                     <div id="tool-selected">
-                        <!-- SELECTED TOOLS -->      
-                        <input type="hidden" name="selected-tools-all" id="selected-tools-all">       
+                        <!-- SELECTED TOOLS -->           
                     </div>
+                    <input type="hidden" name="selected-tools-all" id="selected-tools-all">  
                     <div id="options">
                         <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
                         <button class="btn btn-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>

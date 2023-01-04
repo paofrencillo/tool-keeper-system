@@ -3,111 +3,125 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  TKS | Reserve Tool
+TKS | Reserve Tool
 {% endblock %}
 
 {% block style %}
-  <link rel="stylesheet" href="{% static 'css/sf/reservation.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+<link rel="stylesheet" href="{% static 'css/sf/reservation.css' %}" />
+<link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />
 {% endblock %}
 
 {% block main_content %}
-    {% include 'sf/navbar_sf.html' %}
+{% include 'sf/navbar_sf.html' %}
 
-    <main class="container-fluid justify-content-center align-items-center">
-        <form method="POST" action="{% url 'reservation_sf' %}" class="was-validated" id="reservation-form">
-            {% csrf_token %}
-            <div class="container-fluid row p-0 m-0">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                    <div class="d-flex flex-column justify-content-center align-items-center">
-                        <div class="card align-items-center">
-                            <h3>RESERVATION FORM</h3>
-                            <hr>
-                            <input type="text" name="fullname" id="fullname" class="form-control" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly required>
-                            <input type="text" name="role" id="role" class="form-control" value="{{ request.user.year_course }}" readonly required>
-                            <input type="text" name="tupc-id" id="tupcid" class="form-control" value="{{ request.user.tupc_id }}" readonly required>
-                            <div class="form-group mt-4">
-                                <h6> Date and Time of Borrow</h6>
-                                <div class="date_time">                     
-                                    <input type="date" name="borrow-date" id="borrow-date" class="form-control"  placeholder="Date" required>
-                                    <input type="time" name="borrow-time" id="borrow-time" class="form-control"  placeholder="Time" required>
-                                </div>
-                            </div>
-                            <div class="form-group mt-2">
-                                <h6> Date and Time of Return</h6>
-                                <div class="date_time">                        
-                                    <input type="date" name="return-date" id="return-date" class="form-control" placeholder="Date" required>
-                                    <input type="time" name="return-time" id="return-time" class="form-control" placeholder="Time" required>
-                                </div>
+<main class="container-fluid justify-content-center align-items-center">
+    <form method="POST" action="{% url 'reservation_sf' %}" id="reservation-form">
+        {% csrf_token %}
+        <div class="container-fluid row p-0 m-0">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="card align-items-center">
+                        <h3>RESERVATION FORM</h3>
+                        <hr>
+                        <input type="text" name="fullname" id="fullname" class="form-control"
+                            value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly required>
+                        {% if request.user.role == "FACULTY" %}
+                        <input type="text" name="role" id="role" class="form-control" value="{{ request.user.role }}"
+                            readonly required>
+                        {% elif request.user.role == "STUDENT" %}
+                        <input type="text" name="role" id="role" class="form-control"
+                            value="{{ request.user.year_course }}" readonly required>
+                        {% endif %}
+                        <input type="text" name="tupc-id" id="tupcid" class="form-control"
+                            value="{{ request.user.tupc_id }}" readonly required>
+                        <div class="form-group mt-4">
+                            <h6> Date and Time of Borrow</h6>
+                            <div class="date_time">
+                                <input type="date" name="borrow-date" id="borrow-date" class="form-control"
+                                    placeholder="Date" required>
+                                <input type="time" name="borrow-time" id="borrow-time" class="form-control"
+                                    placeholder="Time" required>
                             </div>
                         </div>
-                        <button type="button" id="reset-btn" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
-                    </div>
-                </div>
-
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                    <div class="selected_tools_wrapper">
-                        <div class="card3 justify-content-center align-items-center mx-3 my-2">
-                            <input type="hidden" name="selected-tools-all" value="{{ selected_tools_all }}">
-                            <h4>Selected Tools:</h4>
-                            <ul>
-                                {% for tool in tools %} 
-                                    <li class="tools">{{ tool }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="form-group mt-2">
+                            <h6> Date and Time of Return</h6>
+                            <div class="date_time">
+                                <input type="date" name="return-date" id="return-date" class="form-control"
+                                    placeholder="Date" required>
+                                <input type="time" name="return-time" id="return-time" class="form-control"
+                                    placeholder="Time" required>
+                            </div>
                         </div>
                     </div>
-                    <div class="card2 mx-5 mt-4 p-0">
-                        <h6>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <i class="bi bi-exclamation-circle-fill"></i>
-                            If tools borrowed were damage, broken, or missing, 
-                            the borrower shall be held responsible and must report to the tool keeper immediately.
-                        </h6>
-                        <button type="button" id="submit-btn" class="btn btn-success p-2">SUBMIT</button>             
-                    </div>
+                    <button type="button" id="reset-btn" class="btn btn-danger mt-3 p-2"> Cancel Reservation </button>
                 </div>
             </div>
-            <div class="modal" id="modal1" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content modal1-content">
+
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="selected_tools_wrapper">
+                    <div class="card3 justify-content-center align-items-center mx-3 my-2">
+                        <input type="hidden" name="selected-tools-all" value="{{ selected_tools_all }}">
+                        <h4>Selected Tools:</h4>
+                        <ul>
+                            {% for tool in tools %}
+                            <li class="tools">{{ tool }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card2 mx-5 mt-4 p-0">
+                    <h6>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        If tools borrowed were damage, broken, or missing,
+                        the borrower shall be held responsible and must report to the tool keeper immediately.
+                    </h6>
+                    <button type="button" id="submit-btn" class="btn btn-success p-2">SUBMIT</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="modal1" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal1-content">
                     <div class="modal-body modal1-body">
                         <p>We have sent an email to your registered account containing
-                            a <strong style="color: #FF0000">QR CODE</strong> 
+                            a <strong style="color: #FF0000">QR CODE</strong>
                         </p>
                         <p>We will scan the <strong style="color: #FF0000">QR CODE</strong>
                             to get your tools and verify your reservation
                         </p>
                         <p><strong>MAKE SURE TO SAVE THE <span style="color: #FF0000">QR CODE</span></strong>
                         </p>
-                        <button type="submit" id="ok-btn" class="btn btn-primary" action="{% url 'home_sf' %}">
-                            OK
-                        </button>
+                        <input type="submit" id="ok-btn" class="btn btn-primary" name="submit_option" value="OK" />
                     </div>
-                  </div>
                 </div>
             </div>
-            <div class="modal" id="modal2" tabindex="-1">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Cancel Reservation</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Are you sure to cancel the tool reservation?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" action="{% url 'home_sf' %}">Yes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    </div>
-                  </div>
+        </div>
+    </form>
+    <div class="modal" id="modal2" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancel Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              </div>
-        </form>
-    </main>
+                <div class="modal-body">
+                    <p>Are you sure to cancel the tool reservation?</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="{% url 'reservation_sf' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-primary" name="submit_option" value="YES" />
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/sf/reservation_sf.js' %}"></script>
-{% endblock %} 
+<script type="text/javascript" src="{% static 'js/sf/reservation_sf.js' %}"></script>
+{% endblock %}

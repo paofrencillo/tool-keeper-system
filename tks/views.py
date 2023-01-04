@@ -1,8 +1,8 @@
 
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseNotFound
-from django.utils import timezone
-from django.core import serializers
+from django.http import HttpResponseNotFound
+from django.urls import reverse
+from django.http import JsonResponse
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
@@ -21,7 +21,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.base import ContentFile
 from django.utils.http import urlsafe_base64_encode
 from django.http import HttpResponse
-from django.templatetags.static import static
 from .models import *
 from .forms import *
 from datetime import datetime
@@ -146,7 +145,7 @@ def registration_toolkeeper(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
 def home_sf(request):
-    tools = Tools.objects.filter(status="AVAILABLE")
+    tools = Tools.objects.filter(status="AVAILABLE").exclude(is_removed=True)
     context = {'tools': tools}
 
     if request.user.is_authenticated:
@@ -177,92 +176,92 @@ def reservation_sf(request):
             return redirect("transactions_tk")
 
     if request.method == "POST":
-        ## Get all the tool ids in request.POST
-        selected_tools = ast.literal_eval(request.POST.get('selected-tools-all'))
+        if request.POST.get('submit_option') == "OK":
+            ## Get all the tool ids in request.POST
+            selected_tools = ast.literal_eval(request.POST.get('selected-tools-all'))
 
-        ## Get the other values in request.POST
-        borrow_date = request.POST.get('borrow-date')
-        borrow_time = request.POST.get('borrow-time')
-        return_date = request.POST.get('return-date')
-        return_time = request.POST.get('return-time')
+            ## Get the other values in request.POST
+            borrow_date = request.POST.get('borrow-date')
+            borrow_time = request.POST.get('borrow-time')
+            return_date = request.POST.get('return-date')
+            return_time = request.POST.get('return-time')
 
-        ## Format date and time from the request.POST
-        date_format = '%Y-%m-%d'
-        time_format = '%H:%M'
-        formatted_borrow_date = datetime.strptime(borrow_date, date_format).date()
-        formatted_borrow_time = datetime.strptime(borrow_time, time_format).time()
-        formatted_return_date = datetime.strptime(return_date, date_format).date()
-        formatted_return_time = datetime.strptime(return_time, time_format).time()
+            ## Format date and time from the request.POST
+            date_format = '%Y-%m-%d'
+            time_format = '%H:%M'
+            formatted_borrow_date = datetime.strptime(borrow_date, date_format).date()
+            formatted_borrow_time = datetime.strptime(borrow_time, time_format).time()
+            formatted_return_date = datetime.strptime(return_date, date_format).date()
+            formatted_return_time = datetime.strptime(return_time, time_format).time()
 
-        borrow_datetime = datetime.combine(formatted_borrow_date, formatted_borrow_time).astimezone()
-        return_datetime = datetime.combine(formatted_return_date, formatted_return_time).astimezone()
+            borrow_datetime = datetime.combine(formatted_borrow_date, formatted_borrow_time).astimezone()
+            return_datetime = datetime.combine(formatted_return_date, formatted_return_time).astimezone()
 
-        ## Save new transaction
-        borrower = User.objects.get(pk=request.user.pk)
-        borrower.has_ongoing_transaction = True
-        borrower.save()
+            ## Save new transaction
+            borrower = User.objects.get(pk=request.user.pk)
+            borrower.has_ongoing_transaction = True
+            borrower.save()
 
-        new_transaction = Transactions.objects.create(
-                tupc_id_id=borrower.tupc_id,
-                borrow_datetime=borrow_datetime,
-                return_datetime=return_datetime,
-                status="RESERVED")
+            new_transaction = Transactions.objects.create(
+                    tupc_id_id=borrower.tupc_id,
+                    borrow_datetime=borrow_datetime,
+                    return_datetime=return_datetime,
+                    status="RESERVED")
 
-        for item in selected_tools:
-            tools = Tools.objects.get(pk=int(item))
-            tools.current_user = borrower
-            tools.current_transaction = new_transaction
-            tools.status = "RESERVED"
-            tools.save()
+            for item in selected_tools:
+                tools = Tools.objects.get(pk=int(item))
+                tools.current_user = borrower
+                tools.current_transaction = new_transaction
+                tools.status = "RESERVED"
+                tools.save()
+
+            # Generate QR code
+            transaction_code = str(new_transaction.pk)
+
+            # Creating an instance of qrcode
+            qr = qrcode.QRCode(
+                    version=1,
+                    box_size=10,
+                    border=5)
+            qr.add_data(transaction_code)
+            qr.make(fit=True)
+            qrcode_img = qr.make_image(fill='black', back_color='white')
+            qrcode_img_file = f'{borrower.last_name+transaction_code[:2]+transaction_code[5:10]+transaction_code[-5:]}.png'
+            qrcode_img.save(qrcode_img_file)
         
-        
+            # Send email to user
+            subject = "TKS Transaction Code"
+            body = f"Greetings!\n\
+                    This is your QR Code for your transaction in TUP-C Tool Keeper System.\n\
+                    This will be used for borrowing and returning the tools you reserved.\n\
+                    Please keep in mind to save the QR Code to your device.\n\n\
+                    Thank You!"
+            sender = f"TUP-C Tool Keeper System <from {settings.EMAIL_HOST_USER}>"
+            borrower_email = borrower.email
 
-        # Generate QR code
-        transaction_code = str(new_transaction.pk)
+            email = EmailMessage(
+                subject,
+                body,
+                sender,
+                [borrower_email],
+                headers={'Message-ID': 'QRCODE'},
+            )
 
-        # Creating an instance of qrcode
-        qr = qrcode.QRCode(
-                version=1,
-                box_size=10,
-                border=5)
-        qr.add_data(transaction_code)
-        qr.make(fit=True)
-        qrcode_img = qr.make_image(fill='black', back_color='white')
-        qrcode_img_file = f'{borrower.last_name+transaction_code[:2]+transaction_code[5:10]+transaction_code[-5:]}.png'
-        qrcode_img.save(qrcode_img_file)
-        new_transaction.qrcode = qrcode_img_file
-        new_transaction.save()
-       
-        # Send email to user
-        subject = "TKS Transaction Code"
-        body = f"Greetings!\n\
-                This is your QR Code for your transaction in TUP-C Tool Keeper System.\n\
-                This will be used for borrowing and returning the tools you reserved.\n\
-                Please keep in mind to save the QR Code to your device.\n\n\
-                Thank You!"
-        sender = f"TUP-C Tool Keeper System <from {settings.EMAIL_HOST_USER}>"
-        borrower_email = borrower.email
+            email.attach_file(qrcode_img_file)
+            email.send()
 
-        email = EmailMessage(
-            subject,
-            body,
-            sender,
-            [borrower_email],
-            headers={'Message-ID': 'QRCODE'},
-        )
+            # Delete generated qrcode in the root directory
+            os.remove(qrcode_img_file)
 
-        email.attach_file(qrcode_img_file)
-        email.send()
+            return redirect('home_sf')
 
-        # Delete generated qrcode in the root directory
-        os.remove(qrcode_img_file)
-
-        return redirect('home_sf')
+        elif request.POST.get('submit_option') == "YES":
+            print("!!!!!!!!!!!!!!!!!!!!!")
+            return redirect('home_sf')
 
     if request.method == "GET":
         ## Get all the tool ids in request.GET
         selected_tools = request.GET.get('selected-tools-all').split(',')
-        print(selected_tools)
         tools = []
 
         for item in selected_tools:
@@ -310,7 +309,7 @@ def profile_sf(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
-def change_password_sf(request, username):
+def change_password_sf(request):
     if request.user.is_authenticated:
         if request.user.role == "TOOL KEEPER":
             return redirect("transactions_tk")
@@ -361,7 +360,7 @@ def transaction_details_sf(request, transaction_id):
 
     if request.method == "POST":
         void_transaction = request.POST.get('void')
-    ### --- Try catch errors next time. For the meantime...
+
         if void_transaction == "Yes, I'm sure":
             transaction = Transactions.objects.get(pk=transaction_id)
             borrower = User.objects.get(pk=request.user.pk)
@@ -377,8 +376,8 @@ def transaction_details_sf(request, transaction_id):
                 tool.status = "AVAILABLE"
 
                 FinishedTransactions.objects.create(
-                    transaction_id_id = transaction,
-                    tool_borrowed_id = tool,
+                    transaction_id_id = transaction.pk,
+                    tool_borrowed_id = tool.pk,
                     status = "NOT BORROWED"
                 )
 
@@ -460,12 +459,19 @@ def transaction_details_tk(request, transaction_id):
     transaction = Transactions.objects.get(pk=transaction_id)
     borrower = User.objects.get(tupc_id=transaction.tupc_id_id)
     tools_borrowed = Tools.objects.filter(current_transaction_id=transaction.pk)
-    finished = FinishedTransactions.objects.filter(transaction_id=transaction.pk)
+    finished = FinishedTransactions.objects.filter(transaction_id_id=transaction.pk)
+
+    storages = []
+    for tool in tools_borrowed:
+        storages.append(tool.storage)
+        storages = list(dict.fromkeys(storages))
+    
     context = {
         "borrower": borrower,
         "transaction": transaction,
         "tools_borrowed": tools_borrowed,
-        "finished": finished
+        "finished": finished,
+        "storages": storages
     }
 
     if request.user.is_authenticated:
@@ -475,8 +481,6 @@ def transaction_details_tk(request, transaction_id):
     if request.method == "POST":
         if request.POST.get('option_btn') == "BORROW":
             storages = []
-            # Open storage according where tools are located (send request.get in RPI)
-            # Put rfid column in transaction table and scan rfid in tools
             for tool in tools_borrowed:
                 storages.append(tool.storage)
                 storages = list(dict.fromkeys(storages))
@@ -498,8 +502,8 @@ def transaction_details_tk(request, transaction_id):
                 tool.status = "AVAILABLE"
                 
                 FinishedTransactions.objects.create(
-                    transaction_id_id = transaction,
-                    tool_borrowed_id = tool,
+                    transaction_id_id = transaction.pk,
+                    tool_borrowed_id = tool.pk,
                     status = "NOT BORROWED"
                 )
 
@@ -522,44 +526,49 @@ def transaction_details_tk(request, transaction_id):
         if request.POST.get('verify_return') == "Verify Return":
             remarks = []
             for tool in tools_borrowed:
-                remarks = request.POST.get(f'add_remarks{tool.pk}')
-                if remarks == "r1":
+                r = request.POST.get(f'add_remarks{tool.pk}')
+                if r == "r1":
                     tool.status = "RETURNED WITH DAMAGE"
                     remarks.append("RETURNED WITH DAMAGE")
                     tool.current_transaction = None
                     tool.current_user = None
+                    tool.status = "DAMAGED"
                     tool.save()
 
                     FinishedTransactions.objects.create(
-                        transaction_id_id = transaction,
-                        tool_borrowed_id = tool,
+                        transaction_id_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
                         status = "RETURNED WITH DAMAGE"
                     )
 
-                elif remarks == "r2":
+                elif r == "r2":
                     tool.status = "MISSING"    
                     remarks.append("MISSING")
                     tool.current_transaction = None
-                    tool.current_user = None           
+                    tool.current_user = None   
+                    tool.status = "MISSING"        
                     tool.save()
                     
                     FinishedTransactions.objects.create(
-                        transaction_id_id = transaction,
-                        tool_borrowed_id = tool,
+                        transaction_id_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
                         status = "MISSING"
                     )
 
-                elif remarks != "r1" and remarks != "r2":
+                elif r != "r1" and r != "r2":
                     tool.status = "AVAILABLE"  
                     tool.current_transaction = None
                     tool.current_user = None
                     tool.save()
 
                     FinishedTransactions.objects.create(
-                        transaction_id_id = transaction,
-                        tool_borrowed_id = tool,
+                        transaction_id_id = transaction.pk,
+                        tool_borrowed_id = tool.pk,
                         status = "RETURNED"
                     )
+                
+                borrower.has_ongoing_transaction = False
+                borrower.save()
 
             if remarks == []:
                 transaction.status = "RETURNED"
@@ -570,7 +579,7 @@ def transaction_details_tk(request, transaction_id):
             elif "RETURNED WITH DAMAGE" in remarks:
                 transaction.status = "RETURNED WITH DAMAGE"
 
-            elif "RETURNED WITH DAMAGE" in remarks:
+            elif "MISSING" in remarks:
                 transaction.status = "RETURNED WITH MISSING"
 
             transaction.save()
@@ -580,12 +589,43 @@ def transaction_details_tk(request, transaction_id):
     return render(request, 'tk/transaction_details_tk.html', context)
 
 def storages_tk(request):
-    tools = Tools.objects.all()
+    # try:
+    #     r = requests.get("http://192.168.0.102:8080/checkRPI")
+    #     print(r.json())
+
+    # except requests.Timeout:
+    #     return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+
+    s1_count = Tools.objects.filter(storage=1).exclude(is_removed=True).count()
+    s2_count = Tools.objects.filter(storage=2).exclude(is_removed=True).count()
+    s3_count = Tools.objects.filter(storage=3).exclude(is_removed=True).count()
+    s4_count = Tools.objects.filter(storage=4).exclude(is_removed=True).count()
+    s5_count = Tools.objects.filter(storage=5).exclude(is_removed=True).count()
+    s6_count = Tools.objects.filter(storage=6).exclude(is_removed=True).count()
+    s7_count = Tools.objects.filter(storage=7).exclude(is_removed=True).count()
+    s8_count = Tools.objects.filter(storage=8).exclude(is_removed=True).count()
+
     context =  {
-        'tools': tools
+        's1_count': s1_count,
+        's2_count': s2_count,
+        's3_count': s3_count,
+        's4_count': s4_count,
+        's5_count': s5_count,
+        's6_count': s6_count,
+        's7_count': s7_count,
+        's8_count': s8_count
     }
 
     return render(request, 'tk/manage_tools/storages_tk.html', context)
+
+def storage_tk(request, storage):
+    tools = Tools.objects.filter(storage=storage).exclude(is_removed=True).order_by('layer')
+    context =  {
+        'tools': tools,
+        'storage': storage
+    }
+
+    return render(request, 'tk/manage_tools/storage_tk.html', context)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
@@ -613,7 +653,6 @@ def add_tools_tk(request):
                     tool_name = tool_name,
                     storage = storage,
                     layer = layer,
-                    status = "AVAILABLE"
             )
 
             new_tool.tool_image.save(file_name, data, save=True)
@@ -637,16 +676,124 @@ def tools_tk(request):
     if request.user.is_authenticated:
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")
+    
+    try:
+        if request.method == "GET":
+            if request.GET.get('tool_id') != None:
+                tool_id = int(request.GET.get('tool_id'))
+                tool = Tools.objects.get(pk=tool_id)
 
-    if request.method == "GET" and request.GET.get('tool_id') != None:
-        tool_id = int(request.GET.get('tool_id'))
-        tool = Tools.objects.get(pk=tool_id)
-        context =  {
-            'tool': tool
-        }
-        return render(request, 'tk/manage_tools/tools_tk.html', context)
+                if tool.is_removed == False:
+                    context =  {
+                        'tool': tool
+                    }
+                    return render(request, 'tk/manage_tools/tools_tk.html', context)
+                
+                elif tool.is_removed == True:
+                    messages.add_message(request, messages.ERROR, "Tool was not registered or has been removed.")
+                    return redirect('storages_tk')
+
+            if request.GET.get('rfid') != None:
+                tool_id = request.GET.get('rfid')
+                tool = Tools.objects.get(pk=tool_id)
+
+                if tool.is_removed == False:
+                    context =  {
+                        'tool': tool
+                    }
+                    return render(request, 'tk/manage_tools/tools_tk.html', context)
+
+                elif tool.is_removed == True:
+                    messages.add_message(request, messages.ERROR, "Tool was not registered or has been removed.")
+                    return redirect('storages_tk')
+    
+    except Tools.DoesNotExist:
+        messages.add_message(request, messages.ERROR, "Tool was not registered or has been removed.")
+        return redirect('storages_tk')
+                   
+    if request.method == "POST" and request.FILES.get('imageUpload'):
+        img = request.FILES.get('imageUpload')
+        tool = Tools.objects.get(pk=int(request.POST.get('tool_id')))
+        tool.tool_image = img
+        tool.save()
+        messages.add_message(request, messages.SUCCESS, "Tool image updated!", extra_tags="img_change_success")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+    
+    if request.method == "POST" and request.POST.get('change_tool_name') != None:
+        tool_name = request.POST.get('change_tool_name')
+        tool = Tools.objects.get(pk=int(request.POST.get('tool_id_hidden')))
+        tool.tool_name = tool_name
+        tool.save()
+
+        messages.add_message(request, messages.SUCCESS, "Tool name changed!", extra_tags="name_change_success")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+    
+    if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') == None:
+        tool_storage = int(request.POST.get('select_storage'))
+        tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
+        tool.storage = tool_storage
+        tool.save()
+
+        messages.add_message(request, messages.SUCCESS, "Tool location changed!", extra_tags="location_change_success")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+    
+    if request.method == "POST" and request.POST.get('select_storage') == None and request.POST.get('select_layer') != "0":
+        tool_layer = int(request.POST.get('select_layer'))
+        tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
+        tool.layer = tool_layer
+        tool.save()
+
+        messages.add_message(request, messages.SUCCESS, "Tool location changed!", extra_tags="location_change_success")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+    
+    if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') != "0":
+        tool_storage = int(request.POST.get('select_storage'))
+        tool_layer = int(request.POST.get('select_layer'))
+        tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
+        tool.storage = tool_storage
+        tool.layer = tool_layer
+        tool.save()
+
+        messages.add_message(request, messages.SUCCESS, "Tool location changed!", extra_tags="location_change_success")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+
+    if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
+        tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
+        tool.is_removed = True
+        tool.status = "REMOVED"
+        tool.save()
+
+        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+        return redirect('storage_tk', tool.storage)
+
+    if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
+        tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
+        tool.is_under_maintenance = True
+        tool.status = "UNDER MAINTENANCE/REPAIR"
+        tool.save()
+
+        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+
+    if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
+        tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
+        tool.is_under_maintenance = False
+        tool.status = "AVAILABLE"
+        tool.save()
+
+        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+
+    if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
+        tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
+        tool.is_removed = True
+        tool.status = "REMOVED"
+        tool.save()
+
+        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+        return redirect('storage_tk', tool.storage)
             
-    return render(request, 'tk/manage_tools/tools_tk.html')
+    return HttpResponseNotFound('<h1>Page not found</h1>')
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
@@ -655,7 +802,7 @@ def profile_tk(request):
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES.get('imageUpload') == None:
         form = EditUserForm(request.POST, instance=request.user)
 
         if form.is_valid():
@@ -683,7 +830,7 @@ def profile_tk(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='index')
-def change_password_tk(request, username):
+def change_password_tk(request):
     if request.user.is_authenticated:
         if request.user.role == "STUDENT" or request.user.role == "FACULTY":
             return redirect("home_sf")
@@ -757,6 +904,6 @@ def openStorage(request):
     if request.method == "GET":
         # Receive data from ajax and ge the storage value
         storage = request.GET.get('storage')
-        requests.get(f"http://192.168.0.111:5000/S{storage}")
+        requests.get(f"http://192.168.0.102:8080/S{storage}")
         # Send request to RPI to open specific storage
-        return JsonResponse({"message": f"Storage Opening {storage}"}, status=200)
+        return JsonResponse({"message": f"Storage {storage} is open."}, status=200)

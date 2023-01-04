@@ -1,15 +1,3 @@
-function checkDateTime() {
-    let borrow_date = document.getElementsByName('borrow-date')[0];
-    let borrow_time = document.getElementsByName('borrow-time')[0];
-    let return_date = document.getElementsByName('return-date')[0];
-    let return_time = document.getElementsByName('return-time')[0];
-    
-
-    let startTime = new Date(`${borrow_date.value} ${borrow_time.value}`);
-    
-
-
-}
 
 $("#submit-btn").click(function() {
     let borrow_date = document.getElementsByName('borrow-date')[0];

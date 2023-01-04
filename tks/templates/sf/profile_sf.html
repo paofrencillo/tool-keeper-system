@@ -37,7 +37,7 @@
                 <!-- Profile picture card-->
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
-                    <form action="{% url 'profile_sf' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'profile_sf' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="avatar-upload">
                             <div class="avatar-edit">
@@ -64,7 +64,7 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form action="{% url 'profile_sf' %}" method="POST">
+                        <form action="{% url 'profile_sf' %}" method="POST" class="needs-validation">
                             {% csrf_token %}
                             <!-- Form Group (username)-->
                             <div class="mb-3">
@@ -105,7 +105,7 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Password</div>
                     <div class="card-body">
-                        <form action="{% url 'change_password_sf' request.user.tupc_id %}" method="get">
+                        <form action="{% url 'change_password_sf' %}" method="GET">
                             <button class="btn btn-secondary" type="submit">Change my password</button>
                         </form> 
                     </div>   

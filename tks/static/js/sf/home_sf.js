@@ -38,12 +38,14 @@ function removeSelectedTool(element) {
     if ( item_count == 0 ) {
         document.getElementById('options').style.display = "none";
     }
+
 }
 
 function removeAllSelectedTools() {
     let canvas = document.getElementById('tool-selected');
     let cards = document.getElementsByClassName('card')
     let child = canvas.firstElementChild;
+
     while ( child ) {
         canvas.removeChild(child);
         child = canvas.firstElementChild;
@@ -53,12 +55,11 @@ function removeAllSelectedTools() {
         cards[i].style.border = "2px solid #207A29";
         cards[i].setAttribute('data-is-selected', 'no');
     }
-
     item_count = 0;
 
     if ( item_count == 0 ) {
         document.getElementById('options').style.display = "none";
-    }
+    } 
 }
 
 // Filter Tools

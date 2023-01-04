@@ -31,8 +31,8 @@
             {% endfor %}
           </div>
           <div class="d-flex justify-content-center mt-3 w-100">
-            <button type="button" id="show_rfid_modal" class="btn btn-primary w-25 me-4">OK</button> 
-            <button type="button" id="hide_storages_modal" class="btn btn-danger w-25">CLOSE</button> 
+            <button type="button" id="show_rfid_modal" class="btn btn-success me-3">I got the tool/s</button> 
+            <button type="button" id="hide_storages_modal" class="btn btn-danger">Cancel</button> 
           </div>
           
           <div class="table-responsive p-3 w-100">
@@ -67,6 +67,9 @@
       </div>
         <div id="scan_rfid_tools" class="scan_rfid_tools">
           <form id="borrow_form" action="{% url 'transaction_details_tk' transaction.pk %}" method="POST">
+            <div class="alert alert-primary" role="alert">
+              Scan the <strong>RFID Tag</strong> on the tool for verification.
+            </div>
             {% csrf_token %}
             <input type="number" id="rfid_tag">
             <input type="hidden" name="rfid_scanned" value="DONE">
@@ -162,28 +165,15 @@
                       {% endfor %}
                     </tbody>
                   </table>
+                  {% for storage in storages %}
+                    <button type="button" class="btn btn-secondary mb-3 mt-2" data-storage="{{ storage }}">Open STORAGE {{ storage }}</button>
+                  {% endfor %}
+                    
                 </div>
                 <input type="submit" name="verify_return" class="btn btn-primary" value="Verify Return">   
             </form>
             
           </div>
-<<<<<<< HEAD
-          {% elif message.extra_tags == "return_success" %}
-          <div id="storages_modal" class="storages_modal">
-            <div class="d-flex justify-content-around storages_modal_content">
-              <div class="storages_btn d-flex flex-row-reverse">
-                {% for storage in storages %}
-                  <button class="storage_btn btn btn-secondary px-4 py-3 mx-2" data-storage="{{ storage }}">Open<br>Storage {{ storage }}</button>
-                {% endfor %}
-              </div>
-              <div class="d-flex justify-content-center mt-3 w-100">
-                <button type="button" id="show_rfid_modal" class="btn btn-primary w-75 me-4">OK</button> 
-                <button type="button" id="hide_storages_modal" class="btn btn-danger w-75">CLOSE</button> 
-              </div>
-            </div>
-          </div>
-=======
->>>>>>> accbb7e6abcbfcbe7d91d12791442552f6711e2f
       {% endif %}
     {% endfor %}
   {% endif %}
@@ -257,7 +247,7 @@
           </div>
           <div class="modal-footer">
             <input type="submit" name="option_btn" class="btn btn-danger option-btn" value="VOID" />
-            <button type="button" class="btn btn-secondary option-btn" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary option-btn" data-bs-dismiss="modal">No</button>
           </div>
         </div>
       </div>
@@ -276,10 +266,11 @@
                 <th>Tool Image</th>
                 <th>Storage</th>
                 <th>Layer</th>
+                <th>Status</th>
               </tr>
           </thead>
           <tbody id="tabledata">
-            {% if transaction.status == 'VOIDED' or transaction.status == 'RETURNED' or transaction.status == 'RETURNED WITH DAMAGE' or transaction.status == 'MISSING' %}
+            {% if transaction.status == 'VOIDED' or transaction.status == 'RETURNED' or transaction.status == 'RETURNED WITH DAMAGE' or transaction.status == 'RETURNED WITH MISSING' %}
               {% for tools in finished %}
               <h1></h1>
                 <tr class="text-center">
@@ -290,9 +281,10 @@
                   </td>
                   <td>{{ tools.tool_borrowed.storage }}</td>
                   <td>{{ tools.tool_borrowed.layer }}</td>
+                  <td>{{ tools.status }}</td>
                 </tr>
               {% endfor %}
-              {% elif transaction.status != 'VOIDED' or transaction.status != 'RETURNED' %}
+              {% else %}
                 {% for tools in tools_borrowed %}
                 <tr class="text-center">
                   <td>{{ tools.pk }}</td>
@@ -302,6 +294,7 @@
                   </td>
                   <td>{{ tools.storage }}</td>
                   <td>{{ tools.layer }}</td>
+                  <td>{{ tools.status }}</td>
                 </tr>
               {% endfor %}
             {% endif %}

@@ -13,105 +13,175 @@
 
 {% block main_content %}
     {% include 'tk/navbar_tk.html' %}
-
+    
     <main class="px-5 py-4">
         <div class="main_wrapper">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-primary" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
-                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rfid_modal">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-4">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <a class="btn btn-primary me-3" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
+                        <button type="button"
+                                class="btn btn-success"
+                                id="scan_rfid_btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#scan_rfid_modal"
+                                >
+                            <i class="bi bi-upc-scan"></i>
                             Scan RFID
-                          </button>  
-                          <div class="modal fade" id="rfid_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rfid_modalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="staticBackdropLabel">Scan RFID</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <form action="{% url 'tools_tk' %}" method="GET">
-                                    <input type="hidden" name="tool_id_rfid" />
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                          </div> -->
-                        <!-- <form action="" method="GET">
-                            <div class="dropdowns d-flex">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      STORAGES
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="#">Storage 1</a></li>
-                                      <li><a class="dropdown-item" href="#">Storage 2</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown ps-2">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        LAYER
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Layer 1</a></li>
-                                        <li><a class="dropdown-item" href="#">Layer 2</a></li>
-                                        <li><a class="dropdown-item" href="#">Layer 3</a></li>
-                                    </ul>
+                        </button>
+                        <div class="modal fade" id="scan_rfid_modal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h3>SCAN RFID TAG ON THE TOOL</h3>
+                                        <form action="{% url 'tools_tk' %}"
+                                            method="GET"
+                                            id="rfid_get_tool_form"
+                                            name="rfid_get_tool_form"
+                                            >
+                                            <input type="number" id="rfid" name="rfid" class="w-100">
+                                        </form>       
+                                        <img src="{% static 'res/rfid.png' %}" alt="">   
+                                    </div>
                                 </div>
                             </div>
-                        </form> -->
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="table-responsive mt-4 p-0">
-                        <table id="storages-table" class="table table-bordered table-hover table-striped align-middle">
-                            <thead class="table-dark justify-content-center">
-                                <tr>
-                                  <th></th>
-                                  <th>Tool ID</th>
-                                  <th>Tool Name</th>
-                                  <th>Image</th>
-                                  <th>Status</th>
-                                </tr>
-                              </thead>
-                              <form action="{% url 'tools_tk' %}"
-                                    method="GET"
-                                    id="get_tool_form"
-                                    name="get_tool_form">
-                                    <input type="hidden" id="tool_id" name="tool_id" value="">
-                                </form>
-                                <tbody id="tabledata">  
-   
-                                    {% for tool in tools %}
-                                    <tr class="rows">
-                                        <td class="view_btns">
-                                            <button type="button"
-                                                    value="{{ tool.pk }}"
-                                                    class="get_tool btn btn-secondary w-100"
-                                                    >
-                                                    View
-                                            </button>
-                                        </td>
-                                        <td>{{ tool.pk }}</td>
-                                        <td>{{ tool.tool_name }}</td>
-                                        <td class="table-img">
-                                            <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
-                                        </td>
-                                        <td>{{ tool.status }}</td>
-                                    </tr>
-                                {% endfor %}
-                                
-                              </tbody>
-                        </table>
+                    <div class="storages">
+                        <a href="{% url 'storage_tk' 1 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 1</h5>
+                                    {% if s1_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s1_count }}</small>
+                                    {% endif %}   
+                                </div>
+                            </div>
+                        </a>
+    
+                        <a href="{% url 'storage_tk' 2 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 2</h5>
+                                    {% if s2_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s2_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'storage_tk' 3 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 3</h5>
+                                    {% if s3_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s3_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'storage_tk' 4 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 4</h5>
+                                    {% if s4_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s4_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'storage_tk' 5 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 5</h5>
+                                    {% if s5_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s5_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'storage_tk' 6 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 6</h5>
+                                    {% if s6_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s6_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a href="{% url 'storage_tk' 7 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 7</h5>
+                                    {% if s7_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s7_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'storage_tk' 8 %}">
+                            <div class="storage">
+                                <img src="{% static 'res/cabinet.jpg' %}" alt="">
+                                <div class="description">
+                                    <h5>STORAGE 8</h5>
+                                    {% if s8_count == 0 %}
+                                        <small>Empty</small>
+                                    {% else %}
+                                        <small>Tools: {{ s8_count }}</small>
+                                    {% endif %}  
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
+                </div>  
             </div>
-        </div>     
+        </div>
     </main>
 {% endblock %}
 
 {% block js %}
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
-    <script src="{% static 'js/tk/manage_tools/storages_tk.js' %}"></script>
+    <script src="{% static 'js/tk/manage_tools/STORAGEs_tk.js' %}"></script>
 {% endblock %}

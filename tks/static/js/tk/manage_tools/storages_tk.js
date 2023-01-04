@@ -1,12 +1,12 @@
-$('#storages-table').DataTable( {
-    "paging": true,
-    "searching": true
+$('#scan_rfid_modal').on('click', ()=> {
+    $('#rfid').focus();
 });
 
-$('.get_tool').on('click', (e)=> {
-   
-    // $('#get_tool_form').submit();
-    document.getElementById('tool_id').value = e.target.value;
-    console.log(document.getElementById('tool_id').value);
-    $('#get_tool_form').submit()
+$('#scan_rfid_modal').on('shown.bs.modal', ()=> {
+    $('#rfid').focus();
+    $('#rfid').val('');
+});
+
+$('#rfid1').on('change', ()=> {
+    $('#rfid_get_tool_form').submit();
 });

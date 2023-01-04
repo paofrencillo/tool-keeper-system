@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}TKS | Edit Tools{% endblock %}
+{% block title %}TKS | Tool Keeper Tools{% endblock %}
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/tk/manage_tools/tools_tk.css' %}" />
@@ -15,84 +15,535 @@
         <div class="main_wrapper">
             <div class="row m-0 p-1">
                 <div class="col-xl-4">
-                    <!-- Profile picture card-->
+                    <!-- Tool image card-->
                     <div class="card mb-4 mb-xl-0">
-                        <div class="card-header">Profile Picture</div>
-                        <div class="card-body text-center">
-                            <!-- Profile picture image-->
-                            {% if tool.tool_image == None or tool.tool_image == '' %}
-                                <h4>No Image</h4>
-                            {% elif tool.tool_image != None or tool.tool_image != '' %}
-                                <img class="tool-image-profile rounded-circle" src="{{ tool.tool_image.url }}" alt="">
-                            {% endif %}  
-                            <!-- Profile picture help block-->
-                            <div class="small font-italic text-muted mb-4">Set the tool image</div>
-                            <!-- Profile picture upload button-->
-                            <button class="btn btn-primary" type="button">Upload new image</button>
-                        </div>
+                        <div class="card-header">Tool Image</div>
+                        {% if tool.is_removed == True or tool.current_user != None %}
+                            <div class="tool-upload">
+                                <div class="tool-preview">
+                                    <div id="imagePreview">
+                                        <img id="image" src="{{ tool.tool_image.url }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        {% elif tool.is_removed == False %}
+                            <form action="{% url 'tools_tk' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="tool-upload">
+                                    <div class="tool-edit">
+                                        <input type='file' name="imageUpload" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                        <label for="imageUpload" id="imageUploadLabel" class="bi bi-pen">
+                                        </label>
+                                    </div>
+                                    <div class="tool-preview">
+                                        <div id="imagePreview">
+                                            <img id="image" src="{{ tool.tool_image.url }}" alt="">
+                                        </div>
+                                    </div>
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            {% if message.extra_tags == 'img_change_success' %}
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    <small>{{ message }}</small>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <input type="hidden" name="tool_id" value="{{ tool.tool_id }}">
+                                    <input type="submit" class="btn btn-primary mt-4 w-100" id="submit_img_btn" value="Save New Image" />
+                                </div>
+                            </form>       
+ 
+                        {% endif %}
                     </div>
                 </div>
+
                 <div class="col-xl-8">
-                    <!-- Account details card-->
+                    <!-- Tool details card-->
                     <div class="card mb-4">
                         <div class="card-header">Tool Details</div>
-                        <div class="card-body">
-                            <form action="" method="">
-                                <!-- {% csrf_token %} -->
-                                <div class="mb-3">
-                                    <label for="tool_id" class="form-label">Tool ID</label>
-                                    <input type="text" class="form-control" id="tool_id" value="{{ tool.tool_id }}" readonly>
-                                </div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.extra_tags == 'tool_removed_warning' %}
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <small>{{ message }}</small>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <div class="card-body">     
+                            <div class="mb-3">
+                                <label for="tool_id" class="form-label">Tool ID</label>
+                                <input type="text" class="form-control" id="tool_id" value="{{ tool.pk }}" readonly>
+                            </div>
+                            {% if tool.current_user != None or tool.is_removed == True or tool.status == "MISSING" %}
                                 <div class="mb-3">
                                     <label for="tool_name" class="form-label">Tool Name</label>
-                                    <input type="text" class="form-control" id="tool_id" value="{{ tool.tool_name }}" readonly>
+                                    <input type="text" class="form-control" id="tool_name" value="{{ tool.tool_name }}" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="tool_storage" class="form-label">Tool Storage</label>
-                                    <input type="text" class="form-control" id="tool_storage" value="{{ tool.storage }}" readonly>
+                                    <label for="tool_location" class="form-label">Tool Location</label>
+                                    <input type="text" class="form-control" id="tool_location" value="Storage {{ tool.storage }} | Layer {{ tool.layer }}" readonly>
                                 </div>
+                            {% elif tool.current_user == None %}
                                 <div class="mb-3">
-                                    <label for="tool_layer" class="form-label">Tool Layer</label>
-                                    <input type="text" class="form-control" id="tool_layer" value="{{ tool.layer }}" readonly>
+                                    <label for="tool_name" class="form-label">Tool Name</label>
+                                    <form action="{% url 'tools_tk' %}" method="POST">
+                                    {% csrf_token %}
+                                        <input type="hidden" class="form-control" name="tool_id_hidden" value="{{ tool.pk }}" readonly>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="tool_name" value="{{ tool.tool_name }}" readonly>  
+                                            <button class="btn btn-success"
+                                                    type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#change_tool_name_modal"
+                                                >
+                                                    Change
+                                            </button>
+                                            <div class="modal fade" id="change_tool_name_modal" tabindex="-1" aria-labelledby="change_tool_name_modalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">          
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="change_tool_name_modalLabel">Change Name</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input type="text" class="form-control" name="change_tool_name">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="mb-5">
+
+                                <div class="mb-3">
+                                    <label for="tool_location" class="form-label">Tool Location</label>
+                                    <form action="{% url 'tools_tk' %}" method="POST">
+                                    {% csrf_token %}
+                                        <input type="hidden" class="form-control" name="tool_id_hidden" value="{{ tool.pk }}" readonly>
+                                        <div class="input-group">
+                                            <input type="hidden" name="" id="tool_storage" value="{{ tool.storage }}" />
+                                            <input type="hidden" name="" id="tool_layer" value="{{ tool.layer }}" />
+                                            <input type="text" class="form-control" id="tool_location" value="Storage {{ tool.storage }} | Layer {{ tool.layer }}" readonly>
+                                            <button type="button"
+                                                    class="btn btn-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#move_tool_location_modal"
+                                                >
+                                                Move
+                                            </button>
+                                        </div>
+                                        <div class="modal fade" id="move_tool_location_modal" tabindex="-1" aria-labelledby="move_tool_location_modalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action="{% url 'tools_tk' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="move_tool_location_modalLabel">Move Location</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <select class="form-select mb-3" id="select_storage" name="select_storage">
+                                                                <option selected disabled value="0">Select Storage</option>
+                                                                <option value="1">Storage 1</option>
+                                                                <option value="2">Storage 2</option>
+                                                                <option value="3">Storage 3</option>
+                                                                <option value="4">Storage 4</option>
+                                                                <option value="5">Storage 5</option>
+                                                                <option value="6">Storage 6</option>
+                                                                <option value="7">Storage 7</option>
+                                                                <option value="8">Storage 8</option>
+                                                            </select>
+                                                            <select class="form-select" id="select_layer" name="select_layer">
+                                                                <option selected disabled value="0">Select Layer</option>
+                                                                <option value="1">Layer 1</option>
+                                                                <option value="2">Layer 2</option>
+                                                                <option value="3">Layer 3</option>
+                                                                <option value="4">Layer 4</option>
+                                                                <option value="5">Layer 5</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input type="hidden"
+                                                                    name="location_tool_id"
+                                                                    value="{{ tool.pk }}" 
+                                                                />
+                                                            <input type="submit" class="btn btn-primary" id="save_location_btn" name="save_location" value="Save changes" disabled />
+                                                            <button type="button" class="btn btn-secondary" id="close_location_modal_btn" data-bs-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endif %}
+
+                                <div class="mb-3">
                                     <label for="tool_user" class="form-label">Current User</label>
                                     {% if tool.current_user == None %}
-                                    <input type="text" class="form-control" id="tool_user" value="No current user" readonly>
+                                        <input type="text" class="form-control" id="tool_user" value="No current user" readonly>
                                     {% elif tool.current_user != None %}
-                                    <input type="text" class="form-control" id="tool_user" value="{{ tool.current_user }}" readonly>
+                                        <input type="text"
+                                                class="form-control"
+                                                id="tool_user"
+                                                value="{{ tool.current_user.tupc_id }} {{ tool.current_user.first_name }} {{ tool.current_user.last_name }}"
+                                                readonly />
                                     {% endif %}
                                 </div>
-                                <!-- Save changes button-->
-                                <!-- <button class="btn btn-primary" type="submit">Save changes</button> -->
-                            </form>
+                                <div class="mb-5">
+                                    <label for="tool_status" class="form-label">Status</label>
+                                        <input type="text" class="form-control" id="tool_status" value="{{ tool.status }}" readonly>
+                                </div>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.extra_tags == 'name_change_success' %}
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <small>{{ message }}</small>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        {% elif message.extra_tags == 'location_change_success' %}
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <small>{{ message }}</small>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% if tool.current_user == None and tool.is_under_maintenance == False and tool.status != "MISSING" and tool.is_removed != True %}
+                                    <div class="d-flex justify-content-around">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#maintenance_tool_modal"
+                                            >
+                                            Maintenance/Repair
+                                        </button>
+                                        <button class="btn btn-danger"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#remove_tool_modal"
+                                            >
+                                            Remove this tool
+                                        </button>
+                                        <button class="btn btn-danger"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#missing_tool_modal"
+                                            >
+                                            Mark as MISSING
+                                        </button>
+                                        <div class="modal fade" id="maintenance_tool_modal" tabindex="-1" aria-labelledby="maintenance_tool_modalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="remove_tool_modalLabel">Maintenance/Repair Tool</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to get under maintenance or repair this tool: {{ tool.tool_name }}?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" onclick="openStorageModalMaintenance()" data-bs-dismiss="modal">Yes, I'm sure</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="remove_tool_modal" tabindex="-1" aria-labelledby="remove_tool_modalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="remove_tool_modalLabel">Remove Tool</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to remove {{ tool.tool_name }} from the Storage {{ tool.storage }}?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" onclick="openStorageModalRemove()" data-bs-dismiss="modal">Yes, I'm sure</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="open_storage_modal" id="open_storage_maintenance_modal">
+                                            <div class="open_storage_modal_content">
+                                                <div class="alert alert-info w-100" role="alert">
+                                                    Unlock <strong>STORAGE {{ tool.storage }}</strong> to get the tool.
+                                                    <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                </div>
+                                                <div class="alert alert-info w-100" role="alert">
+                                                    Click the <strong style="color: #707070;">GRAY CIRCLE</strong> on the RFID column to scan and verify the tool.
+                                                </div>
+                                                <div class="table-responsive p-3 w-100">
+                                                    <table class="table table-bordered table-hover table-striped align-middle">
+                                                        <thead class="table-dark justify-content-center">
+                                                            <tr>
+                                                                <th>Tool ID</th>
+                                                                <th>Tool Name</th>
+                                                                <th>Tool Storage</th>
+                                                                <th>Tool Layer</th>
+                                                                <th>Image</th>
+                                                                <th>RFID</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="tabledata">  
+                                                                <tr>
+                                                                    <td>{{ tool.pk }}</td>
+                                                                    <td>{{ tool.tool_name }}</td>
+                                                                    <td>{{ tool.storage }}</td>
+                                                                    <td>{{ tool.layer }}</td>
+                                                                    <td class="table-img">
+                                                                        <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="green-circle" id="green-circle-maintenance"></div>
+                                                                        <br>
+                                                                        <input type="number" data-tool-id="{{ tool.pk }}" class="rfid_scan" id="rfid_scan_maintenance" />
+                                                                        <br>
+                                                                        <small><strong style="color: green; display: none;" class="ready_scan"></strong></small>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <form id="maintenance_form" action="{% url 'tools_tk' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden"
+                                                            name="maintenance_tool_id"
+                                                            value="{{ tool.pk }}" 
+                                                        />
+                                                    <input type="submit"
+                                                            class="btn btn-primary me-3"
+                                                            name="maintenance_tool"
+                                                            id="maintenance_btn"
+                                                            value="Proceed"
+                                                            disabled
+                                                        />
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            id="dont_maintenance_btn"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="open_storage_modal" id="open_storage_remove_modal">
+                                            <div class="open_storage_modal_content">
+                                                <div class="alert alert-info w-100" role="alert">
+                                                    Unlock <strong>STORAGE {{ tool.storage }}</strong> to get the tool.
+                                                    <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                </div>
+                                                <div class="alert alert-info w-100" role="alert">
+                                                    Click the <strong style="color: #707070;">GRAY CIRCLE</strong> on the RFID column to scan and verify the tool.
+                                                </div>
+                                                <div class="table-responsive p-3 w-100">
+                                                    <table class="table table-bordered table-hover table-striped align-middle">
+                                                        <thead class="table-dark justify-content-center">
+                                                            <tr>
+                                                                <th>Tool ID</th>
+                                                                <th>Tool Name</th>
+                                                                <th>Tool Storage</th>
+                                                                <th>Tool Layer</th>
+                                                                <th>Image</th>
+                                                                <th>RFID</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="tabledata">  
+                                                                <tr>
+                                                                    <td>{{ tool.pk }}</td>
+                                                                    <td>{{ tool.tool_name }}</td>
+                                                                    <td>{{ tool.storage }}</td>
+                                                                    <td>{{ tool.layer }}</td>
+                                                                    <td class="table-img">
+                                                                        <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="green-circle" id="green-circle-remove"></div>
+                                                                        <br>
+                                                                        <input type="number" data-tool-id="{{ tool.pk }}" class="rfid_scan" id="rfid_scan_remove" />
+                                                                        <br>
+                                                                        <small><strong style="color: green; display: none;" class="ready_scan"></strong></small>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                    </table>
+                                                </div>
+       
+                                                <form id="remove_form" action="{% url 'tools_tk' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden"
+                                                            name="remove_tool_id"
+                                                            value="{{ tool.pk }}" 
+                                                        />
+                                                    <input type="submit"
+                                                            class="btn btn-primary me-3"
+                                                            name="remove_tool"
+                                                            id="remove_btn"
+                                                            value="Remove Now"
+                                                            disabled
+                                                        />
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            id="dont_remove_btn"
+                                                    >
+                                                        No, Dont Remove It
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% elif tool.status == "MISSING" %}
+                                    <div class="alert alert-danger" role="alert">
+                                        This tool has marked <strong>MISSING.</strong>
+                                        <span>
+                                            <button type="button"
+                                                    class="btn btn-danger"
+                                                    id="remove_missing_btn"
+                                                    data-bs-target="#remove_missing_modal"
+                                                    data-bs-toggle="modal"
+                                                >
+                                                Remove this tool.
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class="modal fade" id="remove_missing_modal" tabindex="-1" aria-labelledby="remove_missing_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="remove_missing_modalLabel">Remove Missing Tool</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Removing missing tool in the system will not require to scan the RFID tag. Proceed?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="{% url 'tools_tk' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden"
+                                                                name="remove_missing_tool_id"
+                                                                value="{{ tool.pk }}" 
+                                                            />
+                                                        <input type="submit"
+                                                                class="btn btn-primary me-3"
+                                                                name="remove_missing_tool"
+                                                                id="remove_missing_btn"
+                                                                value="YES"
+                                                            />
+                                                        <button type="button"
+                                                                class="btn btn-danger"
+                                                                id="dont_remove_missing_btn"
+                                                                data-bs-dismiss="modal"
+                                                            >
+                                                            No
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif tool.current_user != None %}
+                                    <div class="alert alert-danger" role="alert">
+                                        Can't modify this tool if there is a current user.
+                                    </div>
+
+                                {% elif tool.is_removed == True %}
+                                    <div class="alert alert-danger" role="alert">
+                                        This tool has been removed and won't be available.
+                                    </div>
+
+                                {% elif tool.current_user == None and tool.is_under_maintenance == True %}
+                                    <div class="alert alert-warning" role="alert">
+                                        This tool is under maintenance or repair.
+                                        <span>
+                                            <button type="button"
+                                                    class="btn btn-warning"
+                                                    id="to_available_btn"
+                                                    onclick="openStorageModalAvailable()"
+                                                >
+                                                Click here if it's finished.
+                                            </button>
+                                            <div class="open_storage_modal" id="open_storage_available_modal">
+                                                <div class="open_storage_modal_content">
+                                                    <div class="alert alert-info w-100" role="alert">
+                                                        Click the <strong style="color: #707070;">GRAY CIRCLE</strong> on the RFID column to scan and verify the tool.
+                                                    </div>
+                                                    <div class="table-responsive p-3 w-100">
+                                                        <table class="table table-bordered table-hover table-striped align-middle">
+                                                            <thead class="table-dark justify-content-center">
+                                                                <tr>
+                                                                    <th>Tool ID</th>
+                                                                    <th>Tool Name</th>
+                                                                    <th>Tool Storage</th>
+                                                                    <th>Tool Layer</th>
+                                                                    <th>Image</th>
+                                                                    <th>RFID</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="tabledata">  
+                                                                    <tr>
+                                                                        <td>{{ tool.pk }}</td>
+                                                                        <td>{{ tool.tool_name }}</td>
+                                                                        <td>{{ tool.storage }}</td>
+                                                                        <td>{{ tool.layer }}</td>
+                                                                        <td class="table-img">
+                                                                            <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <div class="green-circle" id="green-circle-available"></div>
+                                                                            <br>
+                                                                            <input type="number" data-tool-id="{{ tool.pk }}" class="rfid_scan" id="rfid_scan_available" />
+                                                                            <br>
+                                                                            <small><strong style="color: green; display: none;" class="ready_scan"></strong></small>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="alert alert-info w-100" role="alert">
+                                                        Unlock <strong>STORAGE {{ tool.storage }}</strong> to return the tool.
+                                                        <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                    </div>
+                                                    <form id="available_form" action="{% url 'tools_tk' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden"
+                                                                name="available_tool_id"
+                                                                value="{{ tool.pk }}" 
+                                                            />
+                                                        <input type="submit"
+                                                                class="btn btn-primary me-3"
+                                                                name="available_tool"
+                                                                id="available_btn"
+                                                                value="Confirm"
+                                                                disabled
+                                                            />
+                                                        <button type="button"
+                                                                class="btn btn-danger"
+                                                                id="dont_available_btn"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                    </span>
+                                    </div>
+                                {% endif %}         
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <form action="" method="POST" enctype="multipart/form-data">
-                <div class="edit-form-wrapper row mb-4">
-                    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <div class="tool-img-wrapper mb-2">
-                            <img id="tool-img" src="{% static 'res/test.png' %}" alt="">
-                        </div>
-                        <input type="file" accept=".png, .jpg, .jpeg">
-                    </div>
-                    <div class="d-flex flex-column col-xl-9 col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <input type="text" name="" id="" placeholder="TOOL ID" disabled>
-                        <input type="text" name="" id="" placeholder="TOOL NAME">
-                        <input type="text" name="" id="" placeholder="STORAGE">
-                        <input type="text" name="" id="" placeholder="LAYER">
-                        <input type="text" name="" id="" placeholder="STATUS">
-                    </div> 
-                </div>
-                <div class="d-flex m-0 p-0 justify-content-between">
-                    <input id="edit" class="btn btn-primary" type="button" value="EDIT">
-                    <input id="save" class="btn btn-success" type="submit" value="SAVE">
-                    <input id="cancel" class="btn btn-danger" type="reset" value="CANCEL">
-                    <input id="remove" class="btn btn-danger" type="button" value="REMOVE TOOL">
-                </div>   
-            </form> -->
         </div>
     </main>
 {% endblock %}

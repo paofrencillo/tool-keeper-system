@@ -31,7 +31,8 @@ $(window).on('load', ()=> {
 
 $('#message_modal_btn').on('click', ()=> {
     $('#message_modal').hide();
-    $('#storages_modal').css('display', 'flex');
+    $('#scan_rfid_tools').css('display', 'flex');
+    $('#rfid_tag').focus();
 });
 
 $('#message_modal_btn_return').on('click', ()=> {
@@ -41,13 +42,12 @@ $('#message_modal_btn_return').on('click', ()=> {
 });
 
 $('#show_rfid_modal').on('click', ()=> {
-    $('#scan_rfid_tools').css('display', 'flex');
+    $('#message_modal').css('display', 'flex');
     $('#storages_modal').hide();
-    $('#rfid_tag').focus();
-    
 });
 
 $('#hide_storages_modal').on('click', ()=> {
+    $('#message_modal').hide();
     $('#storages_modal').hide();
 });
 
@@ -69,7 +69,6 @@ $('#rfid_tag').on('change', ()=> {
 
         if ( rfid_tag == parseInt(get_tool_id) ) {
             if ( tools_id_data[i].getAttribute('data-scanned') == "" ) {
-                console.log(tools_id_data[i])
                 tools_id_data[i].lastElementChild.firstElementChild.style.backgroundColor = "green";
                 tools_id_data[i].setAttribute('data-scanned', 'YES');
                 count -= 1;
@@ -99,7 +98,6 @@ $('#rfid_tag_return').on('change', ()=> {
             if ( tools_id_data[i].getAttribute('data-scanned') == "" ) {
                 tools_id_data[i].children[5].firstElementChild.style.backgroundColor = "green";
                 tools_id_data[i].setAttribute('data-scanned', 'YES');
-                console.log(`row${get_tool_id}`);
                 card_parent = document.getElementById(`row${get_tool_id}`).querySelectorAll('.form-check-input');
             }
         }
@@ -117,11 +115,11 @@ $('.storage_btn').click(function(){
                 "storage": storage
         },
         success: function( response ) {
-            // my_interval = setInterval(()=>{
-            //     console.log(response);
-            // }, 5500);
-            // console.log(response['message']);
-            // // clearInterval(my_interval);
+            my_interval = setInterval(()=>{
+                console.log(response);
+            }, 5500);
+            console.log(response['message']);
+            // clearInterval(my_interval);
             console.log(response["message"])
             
         },
