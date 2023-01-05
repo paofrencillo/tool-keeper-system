@@ -710,7 +710,42 @@ def tools_tk(request):
     except Tools.DoesNotExist:
         messages.add_message(request, messages.ERROR, "Tool was not registered or has been removed.")
         return redirect('storages_tk')
-                   
+    
+    if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
+        tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
+        tool.is_removed = True
+        tool.status = "REMOVED"
+        tool.save()
+
+        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+        return redirect('storage_tk', tool.storage)
+
+    if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
+        tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
+        tool.is_under_maintenance = True
+        tool.status = "UNDER MAINTENANCE/REPAIR"
+        tool.save()
+
+        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+
+    if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
+        tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
+        tool.is_under_maintenance = False
+        tool.status = "AVAILABLE"
+        tool.save()
+
+        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+
+    if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
+        tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
+        tool.is_removed = True
+        tool.status = "REMOVED"
+        tool.save()
+
+        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+        return redirect('storage_tk', tool.storage)            
     if request.method == "POST" and request.FILES.get('imageUpload'):
         img = request.FILES.get('imageUpload')
         tool = Tools.objects.get(pk=int(request.POST.get('tool_id')))
@@ -756,42 +791,6 @@ def tools_tk(request):
 
         messages.add_message(request, messages.SUCCESS, "Tool location changed!", extra_tags="location_change_success")
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
-
-    if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
-        tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
-        tool.is_removed = True
-        tool.status = "REMOVED"
-        tool.save()
-
-        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
-        return redirect('storage_tk', tool.storage)
-
-    if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
-        tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
-        tool.is_under_maintenance = True
-        tool.status = "UNDER MAINTENANCE/REPAIR"
-        tool.save()
-
-        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
-
-    if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
-        tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
-        tool.is_under_maintenance = False
-        tool.status = "AVAILABLE"
-        tool.save()
-
-        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
-
-    if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
-        tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
-        tool.is_removed = True
-        tool.status = "REMOVED"
-        tool.save()
-
-        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
-        return redirect('storage_tk', tool.storage)
             
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
