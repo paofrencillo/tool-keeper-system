@@ -151,3 +151,27 @@ $('#dont_available_btn').on('click', ()=> {
     $('#maintenance_btn').prop("disabled", true);
     $('#available_btn').prop("disabled", true);
 });
+
+$('.storage_btn').click(function(){
+    var storage = $(this).attr("data-storage");
+    $.ajax(
+    {
+        type:"GET",
+        url: "/openStorage",
+        data:{
+                "storage": storage
+        },
+        success: function( response ) {
+            my_interval = setInterval(()=>{
+                console.log(response);
+            }, 5500);
+            console.log(response['message']);
+            clearInterval(my_interval);
+            console.log(response["message"])
+            
+        },
+        error: function(err) {
+            console.log(err);
+        }
+     });
+});

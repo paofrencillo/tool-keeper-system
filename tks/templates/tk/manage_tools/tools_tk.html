@@ -278,7 +278,7 @@
                                             <div class="open_storage_modal_content">
                                                 <div class="alert alert-info w-100" role="alert">
                                                     Unlock <strong>STORAGE {{ tool.storage }}</strong> to get the tool.
-                                                    <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                    <button type="button" class="storage_btn btn btn-info" data-storage="{{ tool.storage }}">Click here to unlock</button>
                                                 </div>
                                                 <div class="alert alert-info w-100" role="alert">
                                                     Click the <strong style="color: #707070;">GRAY CIRCLE</strong> on the RFID column to scan and verify the tool.
@@ -342,7 +342,7 @@
                                             <div class="open_storage_modal_content">
                                                 <div class="alert alert-info w-100" role="alert">
                                                     Unlock <strong>STORAGE {{ tool.storage }}</strong> to get the tool.
-                                                    <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                    <button type="button" class="storage_btn btn btn-info" data-storage="{{ tool.storage }}">Click here to unlock</button>
                                                 </div>
                                                 <div class="alert alert-info w-100" role="alert">
                                                     Click the <strong style="color: #707070;">GRAY CIRCLE</strong> on the RFID column to scan and verify the tool.
@@ -513,7 +513,7 @@
                                                     </div>
                                                     <div class="alert alert-info w-100" role="alert">
                                                         Unlock <strong>STORAGE {{ tool.storage }}</strong> to return the tool.
-                                                        <button type="button" class="btn btn-info">Click here to unlock</button>
+                                                        <button type="button" class="storage_btn btn btn-info" data-storage="{{ tool.storage }}">Click here to unlock</button>
                                                     </div>
                                                     <form id="available_form" action="{% url 'tools_tk' %}" method="post">
                                                         {% csrf_token %}

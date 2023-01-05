@@ -119,7 +119,7 @@ $('.storage_btn').click(function(){
                 console.log(response);
             }, 5500);
             console.log(response['message']);
-            // clearInterval(my_interval);
+            clearInterval(my_interval);
             console.log(response["message"])
             
         },

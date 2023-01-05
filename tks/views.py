@@ -256,7 +256,6 @@ def reservation_sf(request):
             return redirect('home_sf')
 
         elif request.POST.get('submit_option') == "YES":
-            print("!!!!!!!!!!!!!!!!!!!!!")
             return redirect('home_sf')
 
     if request.method == "GET":
@@ -479,6 +478,11 @@ def transaction_details_tk(request, transaction_id):
             return redirect("home_sf")
             
     if request.method == "POST":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         if request.POST.get('option_btn') == "BORROW":
             storages = []
             for tool in tools_borrowed:
@@ -589,12 +593,12 @@ def transaction_details_tk(request, transaction_id):
     return render(request, 'tk/transaction_details_tk.html', context)
 
 def storages_tk(request):
-    # try:
-    #     r = requests.get("http://192.168.0.102:8080/checkRPI")
-    #     print(r.json())
+    try:
+        r = requests.get("http://172.16.18.242:8080/checkRPI")
+        print(r.json())
 
-    # except requests.Timeout:
-    #     return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+    except requests.Timeout:
+        return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
 
     s1_count = Tools.objects.filter(storage=1).exclude(is_removed=True).count()
     s2_count = Tools.objects.filter(storage=2).exclude(is_removed=True).count()
@@ -619,6 +623,13 @@ def storages_tk(request):
     return render(request, 'tk/manage_tools/storages_tk.html', context)
 
 def storage_tk(request, storage):
+    try:
+        r = requests.get("http://172.16.18.242:8080/checkRPI")
+        print(r.json())
+
+    except requests.Timeout:
+        return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+
     tools = Tools.objects.filter(storage=storage).exclude(is_removed=True).order_by('layer')
     context =  {
         'tools': tools,
@@ -668,6 +679,9 @@ def add_tools_tk(request):
         except IntegrityError:
             messages.add_message(request, messages.ERROR, "DUPLICATE ENTRY", extra_tags="duplicate_entry_error")
 
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -712,6 +726,13 @@ def tools_tk(request):
         return redirect('storages_tk')
     
     if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+
         tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
         tool.is_removed = True
         tool.status = "REMOVED"
@@ -721,6 +742,12 @@ def tools_tk(request):
         return redirect('storage_tk', tool.storage)
 
     if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
         tool.is_under_maintenance = True
         tool.status = "UNDER MAINTENANCE/REPAIR"
@@ -730,6 +757,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
     if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
         tool.is_under_maintenance = False
         tool.status = "AVAILABLE"
@@ -739,6 +772,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
     if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
         tool.is_removed = True
         tool.status = "REMOVED"
@@ -747,6 +786,12 @@ def tools_tk(request):
         messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
         return redirect('storage_tk', tool.storage)            
     if request.method == "POST" and request.FILES.get('imageUpload'):
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         img = request.FILES.get('imageUpload')
         tool = Tools.objects.get(pk=int(request.POST.get('tool_id')))
         tool.tool_image = img
@@ -755,6 +800,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
     
     if request.method == "POST" and request.POST.get('change_tool_name') != None:
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool_name = request.POST.get('change_tool_name')
         tool = Tools.objects.get(pk=int(request.POST.get('tool_id_hidden')))
         tool.tool_name = tool_name
@@ -764,6 +815,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
     
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') == None:
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool_storage = int(request.POST.get('select_storage'))
         tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
         tool.storage = tool_storage
@@ -773,6 +830,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
     
     if request.method == "POST" and request.POST.get('select_storage') == None and request.POST.get('select_layer') != "0":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool_layer = int(request.POST.get('select_layer'))
         tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
         tool.layer = tool_layer
@@ -782,6 +845,12 @@ def tools_tk(request):
         return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
     
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') != "0":
+        try:
+            r = requests.get("http://172.16.18.242:8080/checkRPI")
+            print(r.json())
+
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
         tool_storage = int(request.POST.get('select_storage'))
         tool_layer = int(request.POST.get('select_layer'))
         tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
@@ -903,6 +972,6 @@ def openStorage(request):
     if request.method == "GET":
         # Receive data from ajax and ge the storage value
         storage = request.GET.get('storage')
-        requests.get(f"http://192.168.0.102:8080/S{storage}")
+        requests.get(f"http://172.16.18.242:8080/S{storage}")
         # Send request to RPI to open specific storage
         return JsonResponse({"message": f"Storage {storage} is open."}, status=200)
