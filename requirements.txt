@@ -25,3 +25,4 @@ sqlparse==0.4.3
 tzdata==2022.6
 urllib3==1.26.13
 virtualenv==20.17.1
+whitenoise==6.3.0
