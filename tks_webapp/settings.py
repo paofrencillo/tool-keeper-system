@@ -92,10 +92,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'pwDio7wz4xc5lZa67sSn', # Note: Don't forgot to put a password before deployment!! 
         'HOST': 'containers-us-west-195.railway.app',
-        'PORT': '7866'
+        'PORT': '7866',
     }
-
-
 }
 
 
