@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Home
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/home_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.extra_tags == "has_ongoing_transaction" %}
+                <div class="block_tool_reservation">
+                    <div class="block_message">                    
+                        <h2>{{ message }}</h2>
+                        <form action="{% url 'transactions_sf' %}" method="GET">
+                            <input type="submit" class="btn btn-primary" value="Go to my transactions">
+                        </form>
+                    </div>
+                </div>
+
+            {% elif message.extra_tags == "no_tools" %}
+                <div class="alert alert-primary alert-dismissible" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="filter_wrapper">
+            <div class="filter_search me-4">
+                <div class="input-group">
+                    <div class="form-outline">
+                      <input type="search" id="search_tool" class="form-control" placeholder="Search tool" />
+                    </div>
+                    <button type="button" class="btn btn-secondary">
+                        <i class="bi bi-search" onclick="search_tools()"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-danger" onclick="resetFilter()">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>  
+        </div>
+
+        <main>
+            <div class="tools_wrapper">
+                <div class="cards row justify-content-center">
+                    {% for tool in tools %}
+                        <div class="tools card align-items-center"
+                            data-is-selected="no"
+                            id="{{ tool.tool_id }}"
+                            data-tool-name="{{ tool.tool_name }}"
+                            data-storage="{{ tool.storage }}"
+                            data-layer="{{ tool.layer }}"
+                            onclick="getTools(this);">
+                            <h5>{{ tool.tool_name }}</h5>
+                            <img src="{{ tool.tool_image.url }}" alt="">
+                            <h6 id="tool-status">{{ tool.status }}</h6>
+                        </div>
+                    {% endfor%}
+                </div>
+            </div>
+            <div class="selected_tools_wrapper">
+                <form method="GET" id="tool-selected-form" action="{% url 'reservation_sf' %}">
+                    <h5 class="mb-4">Tools Selected</h5>
+                    <div id="tool-selected">
+                        <!-- SELECTED TOOLS -->           
+                    </div>
+                    <input type="hidden" name="selected-tools-all" id="selected-tools-all">  
+                    <div id="options">
+                        <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
+                        <button class="btn btn-outline-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>
+                    </div>
+                </form>
+            </div>
+        </main>           
+    {% endif %}  
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/sf/home_sf.js' %}"></script>
+{% endblock %} 

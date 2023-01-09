@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.storages_modal {
+    position: fixed;
+    z-index: 1;
+    background-color: rgba(180, 180, 180, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;;
+}
+
+.storages_modal_content {
+    background-color: #FFFFFF;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    border: 2px solid #0000FF;
+    border-radius: 20px;
+}
+
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 25px;
+}
+
+.tool_details h5 {
+    margin: 0;
+    padding: 1rem 2.5rem;
+    border-radius: 20px 20px 0 0;
+    background-color: #3e3e3e;
+    color: #FFFFFF;
+}
+
+.tool_details_body, .tool_image_body {
+    padding: 1rem 10rem;
+}
+
+.tool_image_body {
+    border-bottom: 1px solid #3E3E3E;
+}
+
+.input-text-wrapper {
+    border: 2px solid #303030;
+    border-radius: 15px;
+    padding-right: 1rem;
+}
+
+.tool_image h5 {
+    margin: 0;
+    padding: 1rem 2.5rem;
+    background-color: #3e3e3e;
+    color: #FFFFFF;
+}
+
+#capture_img_wrapper {
+    display: none;
+    width: 100%;
+    border: 2px solid #1F1F1F;
+}
+
+#canvas {
+    display: none;
+}
+
+.output img {
+    display: none;
+}
+
+.cam_option_btns {
+    display: none;
+}
+
+#video {
+    width: 100%;
+}
+
+#tool-img {
+    width: 200px;
+    border-radius: 20px;
+}
+
+input[type="file"] {
+    font-size: 12px;
+}
+
+input[type="text"], select {
+    height: 40px;
+    padding-left: 1rem;
+    border-radius: 15px;
+    border: 0;
+    font-weight: 600;
+}
+
+#rfid {
+    cursor: pointer;
+}
+
+.modal-content {
+    border: 5px solid #517FD7;
+}
+
+.rfid_modal_description {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+#rfid_hidden {
+    opacity:0;
+    filter:alpha(opacity=0);
+}
+
+#rfid_img {
+    width: 40%;
+}
+
+select {
+    cursor: pointer;
+}
+
+select:invalid {
+    color: gray;
+}
+
+option[disabled] {
+    display: none;
+}
+
+option {
+    color: black;  
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+}
+
+input#save, input#cancel {
+    display: none;
+}
+
+video {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+
+.green-circle {
+    background-color:#878787;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.img-options-btns button {
+    width: 30% !important;
+    height: 50px;
+}
+
+.alert {
+    padding: 0.5rem 1rem;
+    animation: fadeOut 1s forwards;
+    animation-delay: 5s;
+    align-items: center !important
+}
+
+.alert-success {
+    position: fixed;
+    top:0 ;
+    width: 100%;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+.btn-close {
+    height: 0
+}
+
+.options_btns {
+    width: 150px;
+}
+
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 14px;
+    }
+    
+    .top-container {
+        justify-content: center !important;
+    }
+
+    .top-container button a {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}

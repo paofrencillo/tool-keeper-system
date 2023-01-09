@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}TKS | Scan QR Code{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/scanqr_tk.css' %}" /> 
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <h2 class="qr-text">PLACE THE QR CODE IN FRONT OF VIDEOCAMERA</h2>
+            <div class="row">
+                <div class="preview-wrapper d-flex justify-content-center">
+                    <video class="preview" id="preview" autoplay></video>
+                </div>
+                <div>
+                    <form id="qrcode_form" action="{% url 'scanqr_tk' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input
+                        type="hidden"
+                        name="qrcode"
+                        id="qrcode"
+                        placeholder="scan qrcode"
+                        readonly />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="{% static 'js/tk/scanqr_tk.js' %}"></script>
+{% endblock %}  
