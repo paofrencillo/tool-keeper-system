@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 # if DEBUG:  # for DEVELOPMENT ONLY!!
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
@@ -37,8 +36,8 @@ EMAIL_PORT = 587
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app']
 
 
-if not DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app']
+# if not DEBUG:
+CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app']
 
 # Application definition
 
