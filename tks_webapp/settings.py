@@ -21,8 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ['SECRET_KEY']
-SECRET_KEY = 'django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -35,7 +34,7 @@ EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
 EMAIL_HOST_PASSWORD = 'uotavuxgfiztjfgi'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['web-production-91b5.up.railway.app']
 
 
 # Application definition
