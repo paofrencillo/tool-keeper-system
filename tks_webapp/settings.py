@@ -37,6 +37,9 @@ EMAIL_PORT = 587
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app']
 
 
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['web-production-91b5.up.railway.app']
+
 # Application definition
 
 INSTALLED_APPS = [
