@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 2rem;
+    padding: 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 25px;
+}
+
+.alert-danger {
+    animation: fadeOut 1s forwards;
+    animation-delay: 5s;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;
+        width: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;}
+}
+
+.modal-body input[type="number"] {
+    opacity: 0;
+    font-size: 20px;
+}
+
+.modal-body > img {
+    width: 150px;
+    height: 150px;
+}
+
+.storages {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.storage {
+    cursor: pointer;
+    border: 1px solid #3E3E3E;
+    border-start-start-radius: 10px;
+    border-start-end-radius: 10px; 
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    transition: transform .2s;
+}
+
+.storage:hover {
+    transform: scale(1.1);
+}
+
+.storage > img {
+    margin: 0.5rem;
+    width: 175px;
+    height: 250px;
+    object-fit: contain;
+}
+
+.description {
+    padding: 0.5rem;
+    text-align: center;
+    background-color: #3E3E3E;
+    color: #FFFFFF;
+}
+
+.description > h5,
+.description > small {
+    text-align: center;
+}
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}
