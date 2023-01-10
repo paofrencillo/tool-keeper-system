@@ -33,7 +33,7 @@ EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
 EMAIL_HOST_PASSWORD = 'uotavuxgfiztjfgi'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['web-production-91b5.up.railway.app']
+ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
 
 
 # if not DEBUG:
