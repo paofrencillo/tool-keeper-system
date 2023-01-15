@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    TKS | Tool Keeper Storage {{ storage }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/manage_tools/storage_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />   
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">Storage {{ storage }}</h4>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary me-3" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
+                            <button type="button"
+                                class="btn btn-success"
+                                id="scan_rfid_btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#scan_rfid_modal"
+                                >
+                                <i class="bi bi-upc-scan"></i>
+                                Scan RFID
+                            </button>
+                            <div class="modal fade" id="scan_rfid_modal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <h3>SCAN RFID TAG ON THE TOOL</h3>
+                                            <form action="{% url 'tools_tk' %}"
+                                                method="GET"
+                                                id="rfid_get_tool_form"
+                                                name="rfid_get_tool_form"
+                                                >
+                                                <input type="number" id="rfid" name="rfid" class="w-100">
+                                            </form>       
+                                            <img src="{% static 'res/rfid.png' %}" alt="">   
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+   
+                    </div>
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.extra_tags == "tool_removed_error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>{{ message }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-responsive mt-4 p-0">
+                        <table id="storages-table" class="table table-bordered table-hover table-striped align-middle">
+                            <thead class="table-dark justify-content-center">
+                                <tr>
+                                  <th></th>
+                                  <th>Tool ID</th>
+                                  <th>Tool Name</th>
+                                  <th>Tool Layer</th>
+                                  <th>Image</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <form action="{% url 'tools_tk' %}"
+                                    method="GET"
+                                    id="get_tool_form"
+                                    name="get_tool_form">
+                                    <input type="hidden" id="tool_id" name="tool_id">
+                                </form>
+                                <tbody id="tabledata">  
+                                    {% for tool in tools %}
+                                    <tr class="rows">
+                                        <td class="view_btns">
+                                            <button type="button"
+                                                    value="{{ tool.pk }}"
+                                                    class="get_tool btn btn-secondary w-100"
+                                                    >
+                                                    View
+                                            </button>
+                                        </td>
+                                        <td>{{ tool.pk }}</td>
+                                        <td>{{ tool.tool_name }}</td>
+                                        <td>{{ tool.layer }}</td>
+                                        <td class="table-img">
+                                            <img class="table-img" src="{{ tool.tool_image.url }}" alt="{{ tool.tool_name }} image">
+                                        </td>
+                                        <td>{{ tool.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>     
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script src="{% static 'js/tk/manage_tools/storage_tk.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Account Registration
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+{% endblock %}
+
+{% block main_content %}
+  <form method="POST" action="{% url 'registration_faculty' %}" name="reg-form" class="was-validated m-0 reg-form">
+    {% csrf_token %}
+    <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
+    <h3>REGISTRATION</h3>
+    <hr>
+
+    {{ registration_form.first_name|as_crispy_field }}
+    {{ registration_form.last_name|as_crispy_field }}
+    {{ registration_form.role|as_crispy_field }}
+    {{ registration_form.tupc_id|as_crispy_field }}
+    {{ registration_form.email|as_crispy_field }}
+
+    {{ registration_form.username|as_crispy_field }}
+    {{ registration_form.password1|as_crispy_field }}
+    {{ registration_form.password2|as_crispy_field }}
+    
+    <div class="form-group mt-4 mb-2">
+        <input class="btn btn-block w-100" type="submit" value="Register">
+    </div>
+    <div class="form-group my-4">
+        <a href="{% url 'index' %}"> I already have an account </a>
+    </div>  
+  </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/registration_faculty.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    TKS | Tool Keeper Storages
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/manage_tools/storages_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />   
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-4">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <a class="btn btn-primary me-3" href="{% url 'add_tools_tk' %}" role="button">+ Add Tool</a>
+                        <button type="button"
+                                class="btn btn-success"
+                                id="scan_rfid_btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#scan_rfid_modal"
+                                >
+                            <i class="bi bi-upc-scan"></i>
+                            Scan RFID
+                        </button>
+                        <div class="modal fade" id="scan_rfid_modal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h3>SCAN RFID TAG ON THE TOOL</h3>
+                                        <form action="{% url 'tools_tk' %}"
+                                            method="GET"
+                                            id="rfid_get_tool_form"
+                                            name="rfid_get_tool_form"
+                                            >
+                                            <input type="number" id="rfid" name="rfid" class="w-100">
+                                        </form>       
+                                        <img src="{% static 'res/rfid.png' %}" alt="">   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="storages">
+                        <a href="{% url 'storage_tk' 1 %}">
+                            {% if s1_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 1</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s1_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 1</h5>
+                                        <small>Tools: {{ s1_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+    
+                        <a href="{% url 'storage_tk' 2 %}">
+                            {% if s2_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 2</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s2_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 2</h5>
+                                        <small>Tools: {{ s2_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'storage_tk' 3 %}">
+                            {% if s3_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 3</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s3_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 3</h5>
+                                        <small>Tools: {{ s3_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'storage_tk' 4 %}">
+                            {% if s4_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 4</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s4_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 4</h5>
+                                        <small>Tools: {{ s4_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'storage_tk' 5 %}">
+                            {% if s5_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 5</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s5_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 5</h5>
+                                        <small>Tools: {{ s5_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'storage_tk' 6 %}">
+                            {% if s6_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 6</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s6_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 6</h5>
+                                        <small>Tools: {{ s6_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+                        
+                        <a href="{% url 'storage_tk' 7 %}">
+                            {% if s7_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 7</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s7_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 7</h5>
+                                        <small>Tools: {{ s7_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'storage_tk' 8 %}">
+                            {% if s8_count == 0 %}
+                                <div class="storage empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description empty">
+                                        <h5>STORAGE 8</h5>
+                                        <small>Empty</small>
+                                    </div>
+                                </div>
+                            {% elif s8_count != 0 %}
+                                <div class="storage not_empty_border">
+                                    <img src="{% static 'res/cabinet.jpg' %}" alt="">  
+                                    <div class="description not_empty">
+                                        <h5>STORAGE 8</h5>
+                                        <small>Tools: {{ s8_count }}</small>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </a>
+
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script src="{% static 'js/tk/manage_tools/STORAGEs_tk.js' %}"></script>
+{% endblock %}

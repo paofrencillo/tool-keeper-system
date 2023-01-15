@@ -1,0 +1,42 @@
+.tool_wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.tool {
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.tool:hover {
+    background-color: #eaeaea;
+}
+
+.tool_wrapper .tool h6 {
+    padding: 1rem 3rem;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.tool_name_header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.tool_name_header > h6 {
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-weight: 600;
+}
+
+.tool_info {
+    display: flex;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    column-gap: 4rem;
+}

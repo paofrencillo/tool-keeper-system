@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  TKS | Account Registration
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/register_as.css' %}">
+{% endblock %}
+
+{% block main_content %}
+  <div class="wrapper">
+    <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
+    <div class="header">
+      <h3 class="title"> Register as... </h3>
+    </div>
+    <hr>
+      <a class="role-btn" href="{% url 'registration_student' %}">
+        <button class="btn-block w-100">STUDENT</button>
+      </a> 
+      <a class="role-btn" href="{% url 'registration_faculty' %}">
+        <button class="btn-block w-100">FACULTY</button>
+      </a> 
+      <a class="login-link" href="{% url 'index' %}">I already have an account</a>   
+  </div>  
+{% endblock %}

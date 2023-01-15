@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load tz %}
+
+{% block title %}
+  TKS | My Transactions
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/transactions_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+
+    <main>
+        <div class="main_wrapper">
+            <div class="table-responsive p-0">
+                <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle p-0 m-0 pt-4">
+                    <thead class="table p-0 m-0 justify-content-center">
+                        <tr>
+                            <th></th>
+                            <th>Reserved On</th>
+                            <th>Expected Borrow</th>
+                            <th>Actual Borrow</th>
+                            <th>Expected Return</th>
+                            <th>Actual Return</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabledata">
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td class="text-center">
+                                    <a href="{% url 'transaction_details_sf' transaction.pk %}" class="btn btn-secondary w-100">
+                                        View
+                                    </a>
+                                </td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.entry_datetime }} {% endtimezone %}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.expected_borrow }} {% endtimezone %}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</td>
+                                <td class="ps-3">{% timezone "Asia/Manila" %} {{ transaction.actual_returned }} {% endtimezone %}</td>
+                                <td class="status" data-status="{{ transaction.status }}">{{ transaction.status }}</td>
+                            </tr>         
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script src="{% static 'js/sf/transactions_sf.js' %}"></script>
+{% endblock %} 

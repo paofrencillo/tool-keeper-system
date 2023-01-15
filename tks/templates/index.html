@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Login
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'success' %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  <div class="login_form"> 
+    <form method="POST" action="{% url 'index' %}" class="was-validated">
+      {% csrf_token %}
+      <img src="{% static 'res/tup_logo.png' %}" class="bg-image">
+      <div>
+        <p>Technological University of the Philippines - Cavite</p>
+        <p>Department of Industrial Technology</p>
+        <h3>TOOL KEEPER SYSTEM</h3>
+        <hr>
+          {{ login_form.username|as_crispy_field }}
+          {{ login_form.password|as_crispy_field }}
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger">
+            {{ message }}
+          </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <input class="btn btn-block w-100 mt-4 mb-2" type="submit" value="LOGIN">  
+        
+        <div class="form-group">
+          <a href="{% url 'reset_password' %}">Forgot Password?</a>
+        </div> 
+        <hr>  
+      </div>  
+    </form>
+    <div class="container-fluid row justify-content-center m-0">
+      <a href="{% url 'registration_role' %}" class="row justify-content-center w-100">
+        <button class="btn btn-success w-75">Create Account</button>
+      </a> 
+    </div>
+  </div>  
+{% endblock %}
+
+{% block js %}
+
+{% endblock %} 

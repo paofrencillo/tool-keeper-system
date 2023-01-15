@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | Home
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/home_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.extra_tags == "has_ongoing_transaction" %}
+                <div class="block_tool_reservation">
+                    <div class="block_message">                    
+                        <h2>{{ message }}</h2>
+                        <form action="{% url 'transactions_sf' %}" method="GET">
+                            <input type="submit" class="btn btn-primary" value="Go to my transactions">
+                        </form>
+                    </div>
+                </div>
+
+            {% elif message.extra_tags == "no_tools" %}
+                <div class="alert alert-primary" role="alert">
+                    {{ message }}
+                </div>
+            
+
+            {% elif message.extra_tags == "tools_unavailable" %}
+                <div class="alert alert-danger alert-dismissible show" role="alert">
+                    Sorry, <strong>{{ message }}</strong> are not currently unavailable at this moment. You have been redirected to home page.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="filter_wrapper">
+            <div class="filter_search me-4">
+                <div class="input-group">
+                    <div class="form-outline">
+                      <input type="search" id="search_tool" class="form-control" placeholder="Search tool" />
+                    </div>
+                    <button type="button" class="btn btn-secondary">
+                        <i class="bi bi-search" onclick="search_tools()"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-danger" onclick="resetFilter()">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>  
+        </div>
+        <main>
+            <div class="tools_wrapper">
+                    {% for key, values in tools.items %}   
+                    <div id="{{ key }}" class="carousel-wrapper">
+                        <div id="{{ key }}carousel" class="carousel slide">   
+                            <div class="carousel-indicators"> 
+                                {% for value in values %}
+                                    <button type="button" data-bs-target="#{{ key }}carousel" data-bs-slide-to="{{ forloop.counter0 }}" aria-label="Slide {{ forloop.counter0 }}"></button>
+                                {% endfor%}   
+                            </div>
+                            <div class="carousel-inner">
+                                {% for value in values %}
+                                    <div class="carousel-item active">
+                                        <img src="{% static 'res/cabinet.jpg' %}" class="d-block w-100" alt="...">
+                                    </div>
+                                {% endfor%}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#{{ key }}carousel" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#{{ key }}carousel" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div class="carousel-description" id="carousel-description-{{ key }}" onclick="getTools(this)" data-toggle="tooltip" data-placement="bottom" title="{{ key }}">
+                            {{ key }}    
+                        </div>
+                    </div>
+                    {% endfor%}
+            </div>
+            <div class="selected_tools_wrapper">
+                <form method="GET" id="tool-selected-form" action="{% url 'reservation_sf' %}">
+                    <h5 class="mb-4">Tools Selected</h5>
+                    <div id="tool-selected">
+                        <!-- SELECTED TOOLS -->           
+                    </div>
+                    <input type="hidden" name="selected-tools-all" id="selected-tools-all">  
+                    <div id="options">
+                        <button class="btn btn-success" id="reserve-btn" type="submit">RESERVE</button>
+                        <button class="btn btn-outline-danger" type="button" onclick="removeAllSelectedTools()">CLEAR</button>
+                    </div>
+                </form>
+            </div>
+        </main>           
+    {% endif %}  
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/sf/home_sf.js' %}"></script>
+{% endblock %} 

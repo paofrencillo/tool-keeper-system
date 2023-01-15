@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+  TKS | View Transaction
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/transactions/borrowed.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/transaction_details_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    <div id="scan_rfid_tools_return" class="scan_rfid_tools_return">
+        <input type="number" id="rfid_tag_return">
+        <form id="return_form" action="{% url 'return_tools_tk' transaction.pk %}" method="POST">
+            {% csrf_token %}
+            <div class="alert alert-primary mb-1" role="alert">
+                • Scan RFID tag on the tools.
+                <br>
+                • If RFID tag or tool was missing, mark it as "MISSING TOOL".
+                <br>
+                • If tool was damaged, mark it as "DAMAGED TOOL"
+              </div>
+            <input type="hidden" name="rfid_scanned_return" value="DONE RETURN">
+            <div class="table-responsive p-3 w-100">
+              <table id="return-table" class="table table-bordered table-hover table-striped align-middle">
+                <thead class="table-dark justify-content-center">
+                    <tr class="text-center" id="row{{ tools.pk }}">
+                      <th>Tool ID</th>
+                      <th>Tool Name</th>
+                      <th>Tool Image</th>
+                      <th>Storage</th>
+                      <th>Layer</th>
+                      <th>RFID</th>
+                      <th>Add Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="tabledata">
+                  {% for tools in tools_borrowed %}
+                    <tr class="tools_to_scan text-center" id="row{{ tools.pk }}" data-tool-id="{{ tools.pk }}" data-scanned="">
+                      <td>{{ tools.pk }}</td>
+                      <td>{{ tools.tool_name }}</td>
+                      <td class="table-img">
+                        <img src="{{ tools.tool_image.url }}" alt="" class="table-img">
+                      </td>
+                      <td>{{ tools.storage }}</td>
+                      <td>{{ tools.layer }}</td>
+                      <td>
+                        <div class="green-circle"></div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" id="flexCheckDefault1" name="add_remarks{{ tools.pk }}" value="r1">
+                          <label class="form-check-label" for="flexCheckDefault1">
+                            DAMAGED TOOL
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" id="flexCheckDefault2" name="add_remarks{{ tools.pk }}" value="r2">
+                          <label class="form-check-label" for="flexCheckDefault2">
+                            MISSING TOOL
+                          </label>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>  
+            </div>
+            <div class="table_btns">
+                <div class=>
+                    {% for storage in storages %}
+                        <button type="button" class="storage_btn btn btn-primary me-2" data-storage="{{ storage }}">Open STORAGE {{ storage }}</button>
+                    {% endfor %}  
+                </div>
+                <button type="submit" class="btn btn-info">RETURN TOOLS</button> 
+            </div>
+        </form>
+    </div>
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+                    <div class="top-wrapper p-3">
+                        <h5>Borrower's Information</h5>
+                        <div class="borrower-info-wrapper d-flex justify-content-center align-items-center m-0">
+                            <div>
+                                <div class="borrower-img-wrapper">
+                                    {% if borrower.user_img == None or borrower.user_img == '' %}
+                                    <img id="borrower-img" src="{% static 'res/free-avatar.png' %}" alt="">
+                                    {% elif borrower.user_img != None or borrower.user_img != '' %}
+                                    <img id="borrower-img" src="{{ borrower.user_img.url }}" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="borrower-wrapper ms-2">
+                                <p>{{ borrower.first_name }} {{ borrower.last_name }}</p>
+                                {% if borrower.role == 'STUDENT' %}
+                                    <p>{{ borrower.year_course }}</p>
+                                {% elif borrower.role == 'FACULTY' %}
+                                    <p>{{ borrower.role }}</p>
+                                {% endif %}
+                                <p>{{ borrower.tupc_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+                <div class="top-wrapper p-3">
+                    <div class="transaction-details-wrapper m-0">
+                    <div class="flex-row">
+                        <p class="transaction-details m-2">Reserved On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.entry_datetime }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Expected Borrow:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_borrow }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Expected Return:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Borrowed On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Returned On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.actual_returned }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{{ transaction.status }}</span></p>
+                    </div>
+                    </div>
+                </div>   
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-start align-items-center mb-4">
+                <h5 class="my-0 me-4">TOOLS</h5>
+                <button type="button" name="option_btn" class="btn btn-info option-btn" id="return_btn">RETURN</button>
+            </div>
+            <div class="table-responsive mt-4 p-0">
+                <table id="borrowed-table" class="table table-bordered table-hover table-striped align-middle pt-2">
+                  <thead class="table-dark justify-content-center">
+                      <tr class="text-center">
+                        <th>Tool ID</th>
+                        <th>Tool Name</th>
+                        <th>Tool Image</th>
+                        <th>Storage</th>
+                        <th>Layer</th>
+                        <th>Status</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tabledata">
+                    {% for tools in tools_borrowed %}
+                        <tr class="text-center">
+                            <td>{{ tools.pk }}</td>
+                            <td>{{ tools.tool_name }}</td>
+                            <td class="table-img">
+                            <img src="{{ tools.tool_image.url }}" alt="" class="table-img">
+                            </td>
+                            <td>{{ tools.storage }}</td>
+                            <td>{{ tools.layer }}</td>
+                            <td>{{ tools.status }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/tk/transactions/borrowed.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  TKS | My Transaction Details - {{ transaction_details.pk }}
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/sf/transaction_details_sf.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sf/navbar_sf.css' %}" />  
+{% endblock %}
+
+{% block main_content %}
+    {% include 'sf/navbar_sf.html' %}
+    <main>
+        <div class="card">
+            <div class="card_content">
+                <div class="card_header">
+                    <h5>Transaction Details</h5>
+                    {% if transaction.status == "RESERVED" %}
+                        <span><button class="btn btn-danger px-3" data-bs-toggle="modal" data-bs-target="#void_modal">VOID</button></span>
+                    {% endif %}     
+                </div>
+                <div class="card_body">
+                    <div class="card_details">
+                        <h6>Reserved On:</h6> 
+                        <span>{% timezone "Asia/Manila" %} {{ transaction.entry_datetime }} {% endtimezone %}</span>
+                    </div>
+                    {% if transaction.status == "RESERVED" %}
+                        <div class="card_details">
+                            <h6>Will Borrow On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.expected_borrow }} {% endtimezone %}</span>
+                        </div>
+                        <div class="card_details">
+                            <h6>Will Return On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</span>
+                        </div>
+                    {% elif transaction.status == "VOIDED" %}
+                        <div class="card_details">
+                            <h6>Voided On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.voided_on }} {% endtimezone %}</span>
+                        </div>
+                        <div class="card_details">
+                            <h6>Voided By:</h6>
+                            {% if transaction.voided_by.role == "TOOL KEEPER" %}
+                                <span>{{ transaction.voided_by.role }}</span>
+                            {% else %}
+                                <span>Me</span>
+                            {% endif %}
+                        </div>
+                    {% elif transaction.status == "BORROWED" %}
+                        <div class="card_details">
+                            <h6>Borrowed On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</span>
+                        </div>
+                        <div class="card_details">
+                            <h6>Will Return On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</span>
+                        </div>
+                    {% else %}
+                        <div class="card_details">
+                            <h6>Borrowed On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</span>
+                        </div>
+                        <div class="card_details">
+                            <h6>Returned On:</h6>
+                            <span>{% timezone "Asia/Manila" %} {{ transaction.actual_returned }} {% endtimezone %}</span>
+                        </div>     
+                    {% endif %}
+ 
+                    <div class="card_details">
+                        <h6>Status:</h6>
+                        <span id="status" data-status="{{ transaction.status }}">{{ transaction.status }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card_content">
+                <div class="card_header">
+                    <h5>Tools</h5>
+                </div>
+                {% if transaction.status == "RESERVED" %}
+                    {% for tool in reserved_tools %}
+                        <div class="card_details">
+                            {{ tool.tool_name }}
+                        </div>
+                    {% endfor %}
+                {% elif transaction.status == "VOIDED" %}
+                    {% for tool in voided %}
+                        <div class="card_details">
+                            {{ tool.tool_name }}
+                        </div>
+                    {% endfor %}
+
+                {% elif transaction.status == "BORROWED" %}
+                    <div class="card_tool_wrapper">
+                        {% for tool in tools %}
+                        <div class="card_tool borrow">
+                            {{ tool.tool_name }}
+                            <img src="{{ tool.tool_image.url }}" alt="">
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                {% else %}
+                    <div class="card_tool_wrapper">
+                        {% for tool in finished %}
+                        <div class="card_tool returned">
+                            {{ tool.tool_borrowed.tool_name }}
+                            <img src="{{ tool.tool_borrowed.tool_image.url }}" alt="">
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal fade" id="void_modal" tabindex="-1" aria-labelledby="void_modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="void_modalLabel">Void Transaction</h1>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to void this transaction?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{% url 'transaction_details_sf' transaction.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Yes, Void It</button>
+                        </form> 
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/sf/transaction_details_sf.js' %}"></script>
+{% endblock %} 
