@@ -679,13 +679,13 @@ def transaction_details_tk(request, transaction_id):
     return render(request, 'tk/transaction_details_tk.html', context)
 
 def storages_tk(request):
-    try:
-        rpi_ip = RpiIP.objects.get(pk=1)
-        r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-        print(r.json())
+#     try:
+#         rpi_ip = RpiIP.objects.get(pk=1)
+#         r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
+#         print(r.json())
 
-    except requests.Timeout:
-        return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+#     except requests.Timeout:
+#         return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
 
     s1_count = Tools.objects.filter(storage=1).exclude(is_removed=True).count()
     s2_count = Tools.objects.filter(storage=2).exclude(is_removed=True).count()
