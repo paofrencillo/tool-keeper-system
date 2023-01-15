@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+main {
+    margin-left: 200px;
+}
+
+.main_wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 1rem;
+    padding: 2rem;
+    border: 2px solid #3E3E3E;
+    border-radius: 40px;
+}
+
+/* ========== TABLE ========== */
+.dataTables_length, .dataTables_filter {
+    margin-bottom: 1rem;
+}
+
+.dataTables_info, .dataTables_paginate {
+    margin-top: 1rem;
+}
+
+th, td, .btn-secondary {
+    font-size: 14px;
+}
+
+/* ====== SCREEN REPONSIVENESS ====== */
+@media screen and (max-width: 576px) {
+    * {
+        font-size: 8px;
+    }
+    
+    .top-container {
+        justify-content: center !important;
+    }
+
+    .top-container button a {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+}

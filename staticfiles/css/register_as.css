@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+    font-family: 'Inter';
+    font-size: 16px;
+}
+
+body {
+    height: 100vh;
+    background: gray;
+}
+
+.wrapper {  
+    width: 450px;
+    height: min-content;
+    padding: 20px;
+    border-radius: 12px;
+    border-color: #BD2131;
+    background: whitesmoke;
+    z-index: 0;
+    border: 3px solid #BD2131;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.bg-image {
+    opacity: 0.2;
+    width: 230px;
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper hr {
+    position: relative;
+    border: none;
+    height: 3px;
+    background: #BD2131;
+}
+
+.wrapper h3 {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    color: #BD2131; 
+}
+
+.btn-block {
+    height: calc(1.75em + 1.15rem + 1.25px);
+    border-radius: 10px;
+    border: 2px solid #BD2131;
+    font-size: 20px;
+    margin: 10px auto;
+    font-weight: bold;
+    border-radius: 12px;
+    color: rgb(20, 20, 20);
+    background: rgba(189, 33, 49, 0.3);
+    font-size: 20px;
+}
+
+.role-btn:hover {
+    text-decoration: none;
+}
+
+.btn-block:focus {
+    outline: 0 !important;
+}
+
+.btn-block:hover {
+    color: whitesmoke;
+    background: rgba(189, 33, 49, 0.6);
+    font-weight: bolder;
+}
+
+.login-link, .login-link:hover {
+    text-decoration: none;
+}

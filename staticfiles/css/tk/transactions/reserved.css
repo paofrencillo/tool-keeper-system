@@ -1,0 +1,90 @@
+.tool_wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.tool {
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.tool:hover {
+    background-color: #eaeaea;
+}
+
+.tool_wrapper .tool h6 {
+    padding: 1rem 3rem;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+#borrow_modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0.5rem;
+}
+
+.tool_wrapper_modal {
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow:  5px 5px 10px #c4c4c4,
+                -5px -5px 10px #ffffff;
+}
+
+.storage_btn {
+    transition: transform .2s;
+}
+
+.storage_btn:hover {
+    transform: scale(1.025);
+}
+
+#tool_storages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.tool_name_header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.tool_name_header > h6 {
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-weight: 600;
+}
+
+.scanned {
+    padding-right: 0.75rem;
+    display: none;
+}
+
+.bi-check-circle-fill {
+    color: green;
+}
+
+.tool_info {
+    display: flex;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    column-gap: 4rem;
+}
+
+input[type="number"] {
+    width: 0px;
+    opacity: 0;
+}
+
+#scanning_btn,
+#borrow_btn {
+    display: none;
+}
