@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block title %}
+  TKS | Tool Keeper Transactions
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/transactions_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />   
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    
+    <main class="px-5 py-4">
+        <div class="main_wrapper">  
+            <div class="table-responsive p-0">
+                <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
+                    <thead class="table-dark justify-content-center">
+                        <tr>
+                            <th class="text-center"></th>
+                            <th class="text-center">Borrower Name</th>
+                            <th class="text-center">Reserved On</th>
+                            <th class="text-center">Expected Borrow</th>
+                            <th class="text-center">Actual Borrow</th>
+                            <th class="text-center">Expected Return</th>
+                            <th class="text-center">Actual Return</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabledata">
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td class="text-center">
+                                <a class="btn btn-secondary text-center"
+                                    id="{{ transaction.transaction_id }}"
+                                    href="{% url 'transaction_details_tk' transaction.transaction_id %}"
+                                    >
+                                    View
+                                </a>
+                            </td>
+                            <td>{{ transaction.tupc_id.first_name }} {{ transaction.tupc_id.last_name }}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.entry_datetime }} {% endtimezone %}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.expected_borrow }} {% endtimezone %}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.expected_return }}{% endtimezone %}</td>
+                            <td>{% timezone "Asia/Manila" %} {{ transaction.actual_returned }}{% endtimezone %}</td>
+                            <td class="status"><strong>{{ transaction.status }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script src="{% static 'js/tk/transactions_tk.js' %}"></script>
+{% endblock %}

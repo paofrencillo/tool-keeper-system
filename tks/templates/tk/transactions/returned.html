@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+  TKS | View Transaction
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/transactions/borrowed.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/transaction_details_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.css"/>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-1">
+                    <div class="top-wrapper p-3">
+                        <h5>Borrower's Information</h5>
+                        <div class="borrower-info-wrapper d-flex justify-content-center align-items-center m-0">
+                            <div>
+                                <div class="borrower-img-wrapper">
+                                    {% if borrower.user_img == None or borrower.user_img == '' %}
+                                    <img id="borrower-img" src="{% static 'res/free-avatar.png' %}" alt="">
+                                    {% elif borrower.user_img != None or borrower.user_img != '' %}
+                                    <img id="borrower-img" src="{{ borrower.user_img.url }}" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="borrower-wrapper ms-2">
+                                <p>{{ borrower.first_name }} {{ borrower.last_name }}</p>
+                                {% if borrower.role == 'STUDENT' %}
+                                    <p>{{ borrower.year_course }}</p>
+                                {% elif borrower.role == 'FACULTY' %}
+                                    <p>{{ borrower.role }}</p>
+                                {% endif %}
+                                <p>{{ borrower.tupc_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-1">
+                    <div class="top-wrapper p-3">
+                        <div class="transaction-details-wrapper m-0">
+                            <div class="flex-row">
+                                <p class="transaction-details m-2">Reserved On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.entry_datetime }} {% endtimezone %}</span></p>
+                                <p class="transaction-details m-2">Expected Borrow:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_borrow }} {% endtimezone %}</span></p>
+                                <p class="transaction-details m-2">Expected Return:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</span></p>
+                                <p class="transaction-details m-2">Borrowed On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.actual_borrowed }} {% endtimezone %}</span></p>
+                                <p class="transaction-details m-2">Returned On:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.actual_returned }} {% endtimezone %}</span></p>
+                                <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{{ transaction.status }}</span></p>   
+                            </div>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-start align-items-center mb-4">
+                <h5 class="my-0 me-4">TOOLS</h5>
+            </div>
+            <div class="table-responsive mt-4 p-0">
+                <table id="returned-table" class="table table-bordered table-hover table-striped align-middle pt-2">
+                  <thead class="table-dark justify-content-center">
+                      <tr class="text-center">
+                        <th>Tool ID</th>
+                        <th>Tool Name</th>
+                        <th>Tool Image</th>
+                        <th>Storage</th>
+                        <th>Layer</th>
+                        <th>Status</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tabledata">
+                    {% for tool in finished %}
+                        <tr class="text-center">
+                            <td>{{ tool.tool_borrowed.pk }}</td>
+                            <td>{{ tool.tool_borrowed.tool_name }}</td>
+                            <td class="table-img">
+                                <img src="{{ tool.tool_borrowed.tool_image.url }}" alt="" class="table-img">
+                            </td>
+                            <td>{{ tool.tool_borrowed.storage }}</td>
+                            <td>{{ tool.tool_borrowed.layer }}</td>
+                            <td>{{ tool.tool_status }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.12.1/datatables.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/tk/transactions/returned.js' %}"></script>
+{% endblock %}

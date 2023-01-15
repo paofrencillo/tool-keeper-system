@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+  TKS | View Transaction
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tk/transaction_details_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/navbar_tk.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tk/transactions/reserved.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+    {% include 'tk/navbar_tk.html' %}
+    <main class="px-5 py-4">
+        <div class="main_wrapper">
+            <div class="justify-content-center row row-cols-2 row-cols-lg-5 g-2 g-lg-3 m-0 p-0">
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+                    <div class="top-wrapper p-3">
+                        <h5>Borrower's Information</h5>
+                        <div class="borrower-info-wrapper d-flex justify-content-center align-items-center m-0">
+                            <div>
+                                <div class="borrower-img-wrapper">
+                                    {% if borrower.user_img == None or borrower.user_img == '' %}
+                                    <img id="borrower-img" src="{% static 'res/free-avatar.png' %}" alt="">
+                                    {% elif borrower.user_img != None or borrower.user_img != '' %}
+                                    <img id="borrower-img" src="{{ borrower.user_img.url }}" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="borrower-wrapper ms-2">
+                                <p>{{ borrower.first_name }} {{ borrower.last_name }}</p>
+                                {% if borrower.role == 'STUDENT' %}
+                                    <p>{{ borrower.year_course }}</p>
+                                {% elif borrower.role == 'FACULTY' %}
+                                    <p>{{ borrower.role }}</p>
+                                {% endif %}
+                                <p>{{ borrower.tupc_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12 p-2">
+                <div class="top-wrapper p-3">
+                    <div class="transaction-details-wrapper m-0">
+                    <div class="flex-row">
+                        <p class="transaction-details m-2">DateTime of Borrow:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_borrow}} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">DateTime of Return:<span class="ms-2">{% timezone "Asia/Manila" %} {{ transaction.expected_return }} {% endtimezone %}</span></p>
+                        <p class="transaction-details m-2">Status:<span class="ms-2" id="status">{{ transaction.status }}</span></p>
+                    </div>
+                    </div>
+                </div>   
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-start align-items-center mb-4">
+                <h5 class="my-0 me-4">TOOLS</h5>      
+                <button type="button" name="option_btn" class="btn btn-success option-btn me-2" data-bs-toggle="modal" data-bs-target="#borrow_modal">
+                  BORROW
+                </button>
+                <button type="button" name="option_btn" class="btn btn-danger option-btn" data-bs-toggle="modal" data-bs-target="#void_modal">
+                  VOID
+                </button>
+            </div>
+            <div class="tool_wrapper">
+                {% for key in reserved_tools %}
+                    <div class="tool">
+                        <h6>• {{ key }}</h6>  
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="modal" id="borrow_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="borrow_modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="borrow_modalLabel">Borrow Tools</h5>
+                        <form action="{% url 'scan_tools' %}" method="get" id="borrow_form"></form>   
+                            <input type="number" id="rfid">
+                        </form>
+                    </div>
+                    <form action="{% url 'borrow_tools_tk' transaction.pk %}" method="post">
+                        <div class="modal-body">
+                            <div id="tool_storages"> </div>
+                            
+                                {% csrf_token %}
+                                {% for key, value in reserved_tools.items %} 
+                                    <div class="tool_wrapper_modal" id="{{ key }}">
+                                        <div class="tool_name_header">
+                                            <h6>{{ key }}</h6>
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" name="{{ key }}_input" id="{{ key }}_input" readonly />
+                                                <p class="scanned mb-0" id="{{ key }}_scanned"><strong><small>SCANNED</small></strong><i class="bi bi-check-circle-fill ms-1"></i></p>
+                                            </div>
+                                        </div>
+                                        {% for item in value %}
+                                        <div class="tool_info">       
+                                            <div class="tool_locations" data-location="{{ item.storage }}">Tool Location: <span style="color: #0d6efd;"><strong>Storage {{ item.storage }} | Layer {{ item.layer}}</strong></span></div>
+                                            <div>Tool Count: <span style="color: #0d6efd;"><strong>{{ item.count }}</strong></span></div>   
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="scanning_btn" name="option_btn" class="btn btn-success option-btn w-50" disabled>Scanning RFID...</button>
+                            <button type="button" id="scan_btn" name="option_btn" class="btn btn-success option-btn">Scan RFID</button>
+                            <button type="submit" id="borrow_btn" name="option_btn" class="btn btn-success option-btn">BORROW</button>
+                        </div>
+                    </form>          
+                </div>    
+            </div>
+        </div>
+        <div class="modal" id="void_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="void_modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="void_modalLabel">Void Transaction</h5>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to void this transaction?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{% url 'void_tools_tk' transaction.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="option_btn" class="btn btn-danger option-btn">Yes, Void It</button>
+                        </form>
+                        <button type="button" class="btn btn-outline-secondary option-btn" data-bs-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/tk/transactions/reserved.js' %}"></script>
+{% endblock %}
