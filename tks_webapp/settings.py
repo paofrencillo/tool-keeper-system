@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # if DEBUG:  # for DEVELOPMENT ONLY!!
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
