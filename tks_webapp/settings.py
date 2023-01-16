@@ -35,7 +35,7 @@ EMAIL_HOST_USER = 'paolo.frencillo@gsfe.tupcavite.edu.ph'
 EMAIL_HOST_PASSWORD = 'rnlvxmhyfgzefgpz'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
+ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com', '127.0.0.1']
 # ALLOWED_HOSTS = []
 
 # if not DEBUG:

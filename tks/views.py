@@ -464,7 +464,7 @@ def borrow_tools_tk(request, transaction_id):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and storages are connected.</h1>')
@@ -496,7 +496,7 @@ def return_tools_tk(request, transaction_id):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and storages are connected.</h1>')
@@ -682,7 +682,7 @@ def storages_tk(request):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
         r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-        print(r.json())
+        
 
     except requests.Timeout:
         return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -713,7 +713,7 @@ def storage_tk(request, storage):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
         r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-        print(r.json())
+        
 
     except requests.Timeout:
         return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -833,7 +833,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -853,7 +853,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -885,7 +885,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -901,7 +901,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -931,7 +931,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
             tool_storage = int(request.POST.get('select_storage'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
             requests.get(f"http://{rpi_ip.ip_address}/S{tool.storage}")
@@ -949,7 +949,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
             requests.get(f"http://{rpi_ip.ip_address}/S{tool.storage}")
@@ -966,7 +966,7 @@ def tools_tk(request):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             r = requests.get(f"http://{rpi_ip.ip_address}/checkRPI")
-            print(r.json())
+            
             tool_storage = int(request.POST.get('select_storage'))
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
