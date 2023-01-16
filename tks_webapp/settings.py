@@ -35,8 +35,8 @@ EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
 EMAIL_HOST_PASSWORD = 'bgczmrzvvjnznmkr'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
+ALLOWED_HOSTS = []
 
 # if not DEBUG:
 CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com']

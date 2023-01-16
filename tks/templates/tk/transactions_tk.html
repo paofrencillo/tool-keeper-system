@@ -15,7 +15,8 @@
     {% include 'tk/navbar_tk.html' %}
     
     <main class="px-5 py-4">
-        <div class="main_wrapper">  
+        <div class="main_wrapper"> 
+            <a class="btn btn-success mb-3" href="{% url 'transaction_csv' %}">Generate Report</a>
             <div class="table-responsive p-0">
                 <table id="transactions-table" class="table table-bordered table-hover table-striped align-middle">
                     <thead class="table-dark justify-content-center">

@@ -25,12 +25,65 @@ from django.http import HttpResponse
 from .models import *
 from .forms import *
 from datetime import datetime
+import pytz
 import base64
 import ast
 import requests
 import qrcode
 import os
+import csv
 
+# Generate CSV
+def transaction_csv(request):
+    # Retrieve all users and their orders from the database
+    transactions = FinishedTransactions.objects.all()
+
+
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Tool_Keeper_System.csv"'
+
+    # Create the CSV writer
+    writer = csv.writer(response)
+
+    # Write the header row
+    writer.writerow(['Transaction ID',
+                    'TUPC ID',
+                    'Borrower',
+                    'Tool ID',
+                    'Tool',
+                    'Reserved On',
+                    'Expected Borrow On',
+                    'Expected Return On',
+                    'Borrowed On',
+                    'Returned On'])
+
+    # Write the data rows
+    for transaction in transactions:
+        ro_datetime = str(transaction.transaction_id.entry_datetime)
+        eb_datetime = str(transaction.transaction_id.expected_borrow)
+        er_datetime = str(transaction.transaction_id.expected_return)
+        ab_datetime = str(transaction.transaction_id.actual_borrowed)
+        ar_datetime = str(transaction.transaction_id.actual_returned)
+
+        # formate = '%Y-%m-%d %H:%M:%S%z'
+        # ro_datetime = datetime.strptime(ro_datetime, formate).astimezone(pytz.timezone("Asia/Manila"))
+        # eb_datetime = datetime.strptime(eb_datetime, formate).astimezone(pytz.timezone("Asia/Manila"))
+        # er_datetime = datetime.strptime(er_datetime, formate).astimezone(pytz.timezone("Asia/Manila"))
+        # ab_datetime = datetime.strptime(ab_datetime, formate).astimezone(pytz.timezone("Asia/Manila"))
+        # ar_datetime = datetime.strptime(ar_datetime, formate).astimezone(pytz.timezone("Asia/Manila"))
+
+        writer.writerow([transaction.transaction_id,
+                        transaction.transaction_id.tupc_id.tupc_id,
+                        transaction.transaction_id.tupc_id.first_name + ' ' + transaction.transaction_id.tupc_id.last_name,
+                        transaction.tool_borrowed.tool_id, 
+                        transaction.tool_borrowed.tool_name,
+                        ro_datetime,
+                        eb_datetime,
+                        er_datetime,
+                        ab_datetime, 
+                        ar_datetime])
+    return response
 
 # Create your views here.
 def index(request):
