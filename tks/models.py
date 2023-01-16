@@ -52,4 +52,4 @@ class FinishedTransactions(models.Model):
     tool_status = models.CharField(max_length=25)
 
 class RpiIP(models.Model):
-    ip_address = models.CharField(max_length=25, default=None)
+    ip_address = models.CharField(max_length=255, default=None)
