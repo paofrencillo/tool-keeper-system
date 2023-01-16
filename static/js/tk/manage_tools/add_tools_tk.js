@@ -144,8 +144,9 @@ $('#hide_storages_modal').on('click', ()=> {
 
 $("input[name*='tool_name']").on('change', ()=> {
     let tool_name = $("input[name*='tool_name']").val();
+    let tool_name_replace = tool_name.split(' ').join('_')
 
-    $("input[name*='tool_name']").val(tool_name.toUpperCase())
+    $("input[name*='tool_name']").val(tool_name_replace.toUpperCase())
 });
 
 function openStorage(element) {
