@@ -20,9 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+# SECRET_KEY = os.environ['SECRET_KEY']
 
-# SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
+SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -93,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'X5jkaVh1YyNqKmMzqctO', # Note: Don't forgot to put a password before deployment!! 
-        'HOST': 'containers-us-west-126.railway.app',
-        'PORT': '7161',
+        'PASSWORD': 'MkU8V4hId3mQDPwnj5OW', # Note: Don't forgot to put a password before deployment!! 
+        'HOST': 'containers-us-west-190.railway.app',
+        'PORT': '7349',
     }
 }
 ## database for development
