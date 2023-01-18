@@ -319,7 +319,7 @@ def reservation_sf(request):
                     This will be used for borrowing and returning the tools you reserved.\n\
                     Please keep in mind to save the QR Code to your device.\n\n\
                     Thank You!"
-            sender = f"TUP-C Tool Keeper System <from {settings.EMAIL_HOST_USER}>"
+            sender = settings.EMAIL_HOST_USER
             borrower_email = borrower.email
 
             email = EmailMessage(
