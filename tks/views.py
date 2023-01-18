@@ -516,7 +516,7 @@ def borrow_tools_tk(request, transaction_id):
     if request.method == "POST":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -548,7 +548,7 @@ def return_tools_tk(request, transaction_id):
     if request.method == "POST":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -734,7 +734,7 @@ def transaction_details_tk(request, transaction_id):
 def storages_tk(request):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
-        r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+        r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
         
 
     except requests.Timeout:
@@ -765,7 +765,7 @@ def storages_tk(request):
 def storage_tk(request, storage):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
-        r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+        r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
         
 
     except requests.Timeout:
@@ -885,7 +885,7 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -905,7 +905,7 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -921,7 +921,7 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -937,7 +937,7 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -953,7 +953,7 @@ def tools_tk(request):
     if request.method == "POST" and request.FILES.get('imageUpload'):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
 
         except requests.Timeout:
@@ -968,7 +968,7 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('change_tool_name') != None:
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
@@ -983,12 +983,12 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') == None:
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
             tool_storage = int(request.POST.get('select_storage'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"https://{rpi_ip.ip_address}/S{tool.storage}")
-            requests.get(f"https://{rpi_ip.ip_address}/S{tool_storage}")
+            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
+            requests.get(f"{rpi_ip.ip_address}/S{tool_storage}")
             tool.storage = tool_storage
             tool.save()
 
@@ -1001,11 +1001,11 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('select_storage') == None and request.POST.get('select_layer') != "0":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"https://{rpi_ip.ip_address}/S{tool.storage}")
+            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
             tool.layer = tool_layer
             tool.save()
 
@@ -1018,13 +1018,13 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') != "0":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"https://{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
             
             tool_storage = int(request.POST.get('select_storage'))
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"https://{rpi_ip.ip_address}/S{tool.storage}")
-            requests.get(f"https://{rpi_ip.ip_address}/S{tool_storage}")
+            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
+            requests.get(f"{rpi_ip.ip_address}/S{tool_storage}")
             tool.storage = tool_storage
             tool.layer = tool_layer
             tool.save()
@@ -1149,7 +1149,7 @@ def openStorage(request):
         storage = request.GET.get('storage')
         rpi_ip = RpiIP.objects.get(pk=1)
 
-        requests.get(f"https://{rpi_ip.ip_address}/S{storage}")
+        requests.get(f"{rpi_ip.ip_address}/S{storage}")
         # Send request to RPI to open specific storage
         return JsonResponse({"message": f"Storage {storage} has opened."}, status=200)
 

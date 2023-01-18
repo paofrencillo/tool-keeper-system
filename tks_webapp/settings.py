@@ -28,11 +28,17 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 
 # if DEBUG:  # for DEVELOPMENT ONLY!!
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
+# EMAIL_HOST_PASSWORD = 'bgczmrzvvjnznmkr'
+# EMAIL_PORT = 587
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
-EMAIL_HOST_PASSWORD = 'bgczmrzvvjnznmkr'
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.hostinger.com'
+EMAIL_HOST_USER = 'no-reply@tkstupc.com'
+EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
 EMAIL_PORT = 587
 
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
