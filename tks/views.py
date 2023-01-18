@@ -1120,7 +1120,7 @@ def reset_password(request):
                     message = render_to_string(email_temp_name, parameters)
 
                     try:
-                        send_mail(auth_user=settings.EMAIL_HOST_USER,
+                        send_mail(auth_user=no-reply@tkstupc.com,
                                 subject=subject,
                                 message=message,
                                 from_email='Tool Keeper TUPC',
