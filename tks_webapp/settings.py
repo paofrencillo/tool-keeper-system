@@ -39,7 +39,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_HOST_USER = 'no-reply@tkstupc.com'
 EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
-EMAIL_PORT = 587
+EMAIL_PORT = 465
 
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
 # ALLOWED_HOSTS = []
