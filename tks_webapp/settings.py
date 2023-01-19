@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from django.conf import settings
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,7 +45,7 @@ ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
 # ALLOWED_HOSTS = []
 
 # if not DEBUG:
-# CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com', '*']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com']
 
 # Application definition
 INSTALLED_APPS = [
