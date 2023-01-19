@@ -67,7 +67,7 @@
                             <div class="carousel-inner">
                                 {% for value in values %}
                                     <div class="carousel-item active">
-                                        <img src="{% static 'res/cabinet.jpg' %}" class="d-block w-100" alt="...">
+                                        <img src="{{ value.tool_image.url }}" class="d-block w-100" alt="image">
                                     </div>
                                 {% endfor%}
                             </div>

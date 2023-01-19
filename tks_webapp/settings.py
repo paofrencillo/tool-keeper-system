@@ -21,19 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
-# SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
+# SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# if DEBUG:  # for DEVELOPMENT ONLY!!
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'tkstupc1901@gmail.com'
-# EMAIL_HOST_PASSWORD = 'bgczmrzvvjnznmkr'
-# EMAIL_PORT = 587
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.hostinger.com'
@@ -42,9 +35,7 @@ EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
 EMAIL_PORT = 465
 
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
-# ALLOWED_HOSTS = []
 
-# if not DEBUG:
 CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com']
 
 # Application definition
@@ -101,9 +92,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'MkU8V4hId3mQDPwnj5OW', # Note: Don't forgot to put a password before deployment!! 
-        'HOST': 'containers-us-west-190.railway.app',
-        'PORT': '7349',
+        'PASSWORD': 'Fu8oWc5rg0nrFvoecGZE',
+        'HOST': 'containers-us-west-33.railway.app',
+        'PORT': '5577',
     }
 }
 
@@ -113,17 +104,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': 'QBUlOwxTgJgGfghcRtObggS4Gr4'
 }
 
-# # database for development
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'tool_keeper_system',
-#         'USER': 'root',
-#         'PASSWORD': '', # Note: Don't forgot to put a password before deployment!! 
-#         'HOST': 'localhost',
-#         'PORT': '3306'
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -162,6 +142,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

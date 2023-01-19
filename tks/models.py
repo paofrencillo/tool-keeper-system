@@ -3,9 +3,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     tupc_id = models.IntegerField(default=None, null=True, blank=True, unique=True)
     role = models.CharField(max_length=225)
-    year_course = models.CharField(max_length=20, null=True)
+    year_course = models.CharField(max_length=20, null=True, default=None)
     user_img = models.ImageField(upload_to='profile_pics/', default=None, null=True, blank=True)
     has_ongoing_transaction = models.BooleanField(default=False)
 
@@ -51,4 +52,4 @@ class FinishedTransactions(models.Model):
     tool_status = models.CharField(max_length=25)
 
 class RpiIP(models.Model):
-    ip_address = models.CharField(max_length=255, default=None)
+    host = models.CharField(max_length=255, default=None)

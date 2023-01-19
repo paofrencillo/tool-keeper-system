@@ -146,8 +146,6 @@ $("input[name*='tool_name']").on('change', ()=> {
     let tool_name = $("input[name*='tool_name']").val();
     let tool_name_replace = tool_name.split(' ').join('_')
 
-    console.log(tool_name_replace)
-
     $("input[name*='tool_name']").val(tool_name_replace.toUpperCase())
 });
 

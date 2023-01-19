@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from .models import *
 
 
@@ -49,6 +50,12 @@ class StudentRegistrationForm(UserCreationForm):
         model = User
         fields = ["first_name", "last_name", "year_course", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
+        
+    def clean(self):
+       email = self.cleaned_data.get('email')
+       if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+       return self.cleaned_data
 
 class FacultyRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='', widget=forms.TextInput(
@@ -72,6 +79,12 @@ class FacultyRegistrationForm(UserCreationForm):
         model = User
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
+        
+    def clean(self):
+       email = self.cleaned_data.get('email')
+       if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+       return self.cleaned_data
 
 class ToolKeeperRegistrationForm(UserCreationForm):
     first_name = forms.CharField(label='', widget=forms.TextInput(
@@ -96,8 +109,44 @@ class ToolKeeperRegistrationForm(UserCreationForm):
         model = User
         fields = ["first_name", "last_name", "tupc_id", "role", "email", "username",
                 "password1", "password2",]
+        
+    def clean(self):
+       email = self.cleaned_data.get('email')
+       if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+       return self.cleaned_data
 
-class EditUserForm(forms.ModelForm):
+class EditUserForm1(forms.ModelForm):
+    first_name = forms.CharField(label="Firstname",
+                                max_length=255,
+                                required=False)
+    last_name = forms.CharField(label="Lastname",
+                                max_length=255,
+                                required=False)
+    year_course = forms.CharField(label='Year and Course',
+                                required=False)
+    tupc_id = forms.IntegerField(label='TUPC ID',
+                                widget=forms.NumberInput(attrs={'readonly': ''}),
+                                required=False)
+    email = forms.EmailField(label="Email Address",
+                            max_length=255,
+                            required=False)
+
+    username = forms.CharField(label="Username",
+                                max_length=255,
+                                required=False)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'year_course', 'tupc_id','email', 'username']
+
+    def clean(self):
+       email = self.cleaned_data.get('email')
+       if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+       return self.cleaned_data
+    
+class EditUserForm2(forms.ModelForm):
     first_name = forms.CharField(label="Firstname",
                                 max_length=255,
                                 required=False)
@@ -122,6 +171,11 @@ class EditUserForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'role', 'tupc_id','email', 'username']
 
+    def clean(self):
+       email = self.cleaned_data.get('email')
+       if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+       return self.cleaned_data
 
 class ChangePasswordForm(forms.Form):
     password = forms.CharField(label="New Password",

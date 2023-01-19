@@ -152,6 +152,14 @@ $('#dont_available_btn').on('click', ()=> {
     $('#available_btn').prop("disabled", true);
 });
 
+$("input[name*='change_tool_name']").on('keyup', ()=> {
+    let tool_name = $("input[name*='change_tool_name']").val();
+    let tool_name_replace = tool_name.split(' ').join('_')
+
+    $("input[name*='change_tool_name']").val(tool_name_replace.toUpperCase())
+});
+
+
 $('.storage_btn').click(function(){
     var storage = $(this).attr("data-storage");
     $.ajax(

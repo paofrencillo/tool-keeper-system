@@ -23,7 +23,6 @@ urlpatterns = [
     path('transactions/<str:transaction_id>/', views.transaction_details_sf, name='transaction_details_sf'),
     path('change_password/', views.change_password_sf, name='change_password_sf'),
    
-
     # Tool Keeper
     # transactions tool keeper
     path('tk/transactions/', views.transactions_tk, name='transactions_tk'),
@@ -42,7 +41,6 @@ urlpatterns = [
     path('tk/transactions/<str:transaction_id>/return/', views.return_tools_tk, name='return_tools_tk'),
     path('tk/transactions/<str:transaction_id>/void/', views.void_tools_tk, name='void_tools_tk'),
     path('scan_tools/', views.scan_tools, name='scan_tools'),
-
 
     # storages toolkeeper
     path('tk/manage_tools/storages/', views.storages_tk, name='storages_tk'),

@@ -196,7 +196,6 @@ def registration_toolkeeper(request):
     context = {"registration_form": registration_form}
     return render(request, 'register_toolkeeper.html', context)
 
-
 @login_required(login_url='index')
 def home_sf(request):
     tools = Tools.objects.filter(status="AVAILABLE").exclude(is_removed=True).order_by("tool_name").values_list('tool_name', flat=True).distinct()
@@ -234,7 +233,6 @@ def home_sf(request):
 
     context = {"tools": group_by_value}
     return render(request, 'sf/home_sf.html', context)
-
 
 @login_required(login_url='index')
 def reservation_sf(request):
@@ -433,7 +431,7 @@ def profile_sf(request):
             return redirect("transactions_tk")
 
     if request.method == 'POST' and request.FILES.get('imageUpload') == None:
-        form = EditUserForm(request.POST, instance=request.user)
+        form = EditUserForm1(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
@@ -449,11 +447,9 @@ def profile_sf(request):
 
         return redirect('profile_sf')
     
-    form = EditUserForm(instance=request.user)
+    form = EditUserForm1(instance=request.user)
         
-    context = {
-        'form': form,
-    }
+    context = {'form': form}
 
     return render(request, 'sf/profile_sf.html', context)
 
@@ -495,8 +491,6 @@ def scanqr_tk(request):
 
     return render(request, 'tk/scanqr_tk.html')
 
-
-
 @login_required(login_url='index') 
 def transactions_tk(request):
     if request.user.is_authenticated:
@@ -515,7 +509,7 @@ def borrow_tools_tk(request, transaction_id):
     if request.method == "POST":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            r = requests.get(f"{rpi_ip.host}/checkRPI")
             
 
         except requests.Timeout:
@@ -547,8 +541,7 @@ def return_tools_tk(request, transaction_id):
     if request.method == "POST":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
-            
+            requests.get(f"{rpi_ip.host}/checkRPI")      
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and storages are connected.</h1>')
@@ -730,12 +723,12 @@ def transaction_details_tk(request, transaction_id):
 
     return render(request, 'tk/transaction_details_tk.html', context)
 
+@login_required(login_url='index')
 def storages_tk(request):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
-        r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+        requests.get(f"{rpi_ip.host}/checkRPI")
         
-
     except requests.Timeout:
         return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
 
@@ -761,12 +754,12 @@ def storages_tk(request):
 
     return render(request, 'tk/manage_tools/storages_tk.html', context)
 
+@login_required(login_url='index')
 def storage_tk(request, storage):
     try:
         rpi_ip = RpiIP.objects.get(pk=1)
-        r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+        requests.get(f"{rpi_ip.host}/checkRPI")
         
-
     except requests.Timeout:
         return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
 
@@ -777,7 +770,6 @@ def storage_tk(request, storage):
     }
 
     return render(request, 'tk/manage_tools/storage_tk.html', context)
-
 
 @login_required(login_url='index')
 def add_tools_tk(request):
@@ -840,7 +832,6 @@ def add_tools_tk(request):
 
     return render(request, 'tk/manage_tools/add_tools_tk.html')
 
-
 @login_required(login_url='index')
 def tools_tk(request):
     if request.user.is_authenticated:
@@ -884,110 +875,111 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('remove_tool') == "Remove Now":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
-            
+            requests.get(f"{rpi_ip.host}/checkRPI")  
+
+            tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
+            tool_quantity = ToolQuantity.objects.get(tool_name=tool.tool_name)
+            tool.quantity -= 1
+            tool.is_removed = True
+            tool.status = "REMOVED"
+            tool.save()
+            tool_quantity.save()
+
+            messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+            return redirect('storage_tk', tool.storage)
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-
-        tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
-        tool_quantity = ToolQuantity.objects.get(tool_name=tool.tool_name)
-        tool_quantity -= 1
-        tool.is_removed = True
-        tool.status = "REMOVED"
-        tool.save()
-        tool_quantity.save()
-
-        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
-        return redirect('storage_tk', tool.storage)
 
     if request.method == "POST" and request.POST.get('maintenance_tool') == "Proceed":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
-            
+            requests.get(f"{rpi_ip.host}/checkRPI")
 
+            tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
+            tool.is_under_maintenance = True
+            tool.status = "UNDER MAINTENANCE/REPAIR"
+            tool.save()
+
+            messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+            return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+            
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-        tool = Tools.objects.get(pk=int(request.POST.get('maintenance_tool_id')))
-        tool.is_under_maintenance = True
-        tool.status = "UNDER MAINTENANCE/REPAIR"
-        tool.save()
-
-        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
     if request.method == "POST" and request.POST.get('available_tool') == "Confirm":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
+            
+            tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
+            tool.is_under_maintenance = False
+            tool.status = "AVAILABLE"
+            tool.save()
+
+            messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
+            return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-
-        tool = Tools.objects.get(pk=int(request.POST.get('available_tool_id')))
-        tool.is_under_maintenance = False
-        tool.status = "AVAILABLE"
-        tool.save()
-
-        messages.add_message(request, messages.WARNING, "Tool under maintenance or repair!", extra_tags="tool_maintenance_warning")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
     if request.method == "POST" and request.POST.get('remove_missing_tool') == "YES":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
+
+            tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
+            tool.is_removed = True
+            tool.status = "REMOVED"
+            tool.save()
+
+            messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
+            return redirect('storage_tk', tool.storage) 
             
-
         except requests.Timeout:
-            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-        tool = Tools.objects.get(pk=int(request.POST.get('remove_missing_tool_id')))
-        tool.is_removed = True
-        tool.status = "REMOVED"
-        tool.save()
-
-        messages.add_message(request, messages.ERROR, f"Tool with name {tool.tool_name} has been removed!", extra_tags="tool_removed_error")
-        return redirect('storage_tk', tool.storage)     
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')    
                
     if request.method == "POST" and request.FILES.get('imageUpload'):
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
-            
+            requests.get(f"{rpi_ip.host}/checkRPI")
 
+            img = request.FILES.get('imageUpload')
+            tool = Tools.objects.get(pk=int(request.POST.get('tool_id')))
+            tool.tool_image = img
+            tool.save()
+            messages.add_message(request, messages.SUCCESS, "Tool image updated!", extra_tags="img_change_success")
+            return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+            
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-        img = request.FILES.get('imageUpload')
-        tool = Tools.objects.get(pk=int(request.POST.get('tool_id')))
-        tool.tool_image = img
-        tool.save()
-        messages.add_message(request, messages.SUCCESS, "Tool image updated!", extra_tags="img_change_success")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
     
     if request.method == "POST" and request.POST.get('change_tool_name') != None:
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
+
+            tool_name = request.POST.get('change_tool_name')
+            tool = Tools.objects.get(pk=int(request.POST.get('tool_id_hidden')))
+            tool.tool_name = tool_name
+            tool.save()
+
+            messages.add_message(request, messages.SUCCESS, "Tool name changed!", extra_tags="name_change_success")
+            return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-        tool_name = request.POST.get('change_tool_name')
-        tool = Tools.objects.get(pk=int(request.POST.get('tool_id_hidden')))
-        tool.tool_name = tool_name
-        tool.save()
-
-        messages.add_message(request, messages.SUCCESS, "Tool name changed!", extra_tags="name_change_success")
-        return redirect(reverse('tools_tk') + f'?tool_id={tool.pk}')
+        
     
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') == None:
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
             
             tool_storage = int(request.POST.get('select_storage'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
-            requests.get(f"{rpi_ip.ip_address}/S{tool_storage}")
+            requests.get(f"{rpi_ip.host}/S{tool.storage}")
+            requests.get(f"{rpi_ip.host}/S{tool_storage}")
             tool.storage = tool_storage
             tool.save()
 
@@ -1000,11 +992,11 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('select_storage') == None and request.POST.get('select_layer') != "0":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
             
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
+            requests.get(f"{rpi_ip.host}/S{tool.storage}")
             tool.layer = tool_layer
             tool.save()
 
@@ -1017,13 +1009,13 @@ def tools_tk(request):
     if request.method == "POST" and request.POST.get('select_storage') != "0" and request.POST.get('select_layer') != "0":
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
-            r = requests.get(f"{rpi_ip.ip_address}/checkRPI")
+            requests.get(f"{rpi_ip.host}/checkRPI")
             
             tool_storage = int(request.POST.get('select_storage'))
             tool_layer = int(request.POST.get('select_layer'))
             tool = Tools.objects.get(pk=int(request.POST.get('location_tool_id')))
-            requests.get(f"{rpi_ip.ip_address}/S{tool.storage}")
-            requests.get(f"{rpi_ip.ip_address}/S{tool_storage}")
+            requests.get(f"{rpi_ip.host}/S{tool.storage}")
+            requests.get(f"{rpi_ip.host}/S{tool_storage}")
             tool.storage = tool_storage
             tool.layer = tool_layer
             tool.save()
@@ -1033,8 +1025,7 @@ def tools_tk(request):
 
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
-
-            
+     
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 @login_required(login_url='index')
@@ -1044,7 +1035,7 @@ def profile_tk(request):
             return redirect("home_sf")
 
     if request.method == 'POST' and request.FILES.get('imageUpload') == None:
-        form = EditUserForm(request.POST, instance=request.user)
+        form = EditUserForm2(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
@@ -1060,15 +1051,10 @@ def profile_tk(request):
 
         return redirect('profile_tk')
     
-    form = EditUserForm(instance=request.user)
-        
-    context = {
-        'form': form,
-    }
+    form = EditUserForm2(instance=request.user)
+    context = {'form': form}
 
     return render(request, 'tk/profile_tk.html', context)
-
-
 
 @login_required(login_url='index')
 def change_password_tk(request):
@@ -1087,9 +1073,7 @@ def change_password_tk(request):
     else:
         form = PasswordChangeForm(user=request.user)
     
-    context = {
-        'form': form
-    }
+    context = {'form': form}
     
     return render(request, 'tk/change_password_tk.html', context)
 
@@ -1103,7 +1087,7 @@ def reset_password(request):
             user_email = User.objects.filter(Q(email=data))
             if user_email.exists():
                 for user in user_email:
-                    subject = "TKS Transaction Code"
+                    subject = "Reset Password"
                     sender = settings.EMAIL_HOST_USER
                     email_temp_name = 'password_reset/email_pass_message.txt'
                     current_site = get_current_site(request)
@@ -1116,7 +1100,6 @@ def reset_password(request):
                         'token' : default_token_generator.make_token(user),
                         'protocol' : 'https', 
                     }
-                    print("!!!!!", current_site)
 
                     message = render_to_string(email_temp_name, parameters)
 
@@ -1149,14 +1132,21 @@ def reset_password(request):
 
 ########## AJAX ##############
 def openStorage(request):
-    if request.method == "GET":
-        # Receive data from ajax and ge the storage value
-        storage = request.GET.get('storage')
-        rpi_ip = RpiIP.objects.get(pk=1)
+    if request.method == "GET" and request.GET.get('storage') != None:
+        try:
+            rpi_ip = RpiIP.objects.get(pk=1)
+            requests.get(f"{rpi_ip.host}/checkRPI")
+            # Receive data from ajax and ge the storage value
+            storage = request.GET.get('storage')
 
-        requests.get(f"{rpi_ip.ip_address}/S{storage}")
-        # Send request to RPI to open specific storage
-        return JsonResponse({"message": f"Storage {storage} has opened."}, status=200)
+            requests.get(f"{rpi_ip.host}/S{storage}")
+            # Send request to RPI to open specific storage
+            return JsonResponse({"message": f"Storage {storage} has opened."}, status=200)
+        
+        except requests.Timeout:
+            return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
+
+    return HttpResponseNotFound("<h1>Page not found</h1>")
 
 # AJAX request for getting tools to borrow
 def scan_tools(request):
@@ -1175,6 +1165,3 @@ def scan_tools(request):
             return JsonResponse({"message": "Not Found"})
 
     return HttpResponseNotFound("<h1>Page not found</h1>")
-
-    
-   
