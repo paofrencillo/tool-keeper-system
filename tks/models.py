@@ -1,15 +1,12 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from storages.backends.sftpstorage import SFTPStorage
-
-SFS = SFTPStorage()
 # Create your models here.
 class User(AbstractUser):
     tupc_id = models.IntegerField(default=None, null=True, blank=True, unique=True)
     role = models.CharField(max_length=225)
     year_course = models.CharField(max_length=20, null=True)
-    user_img = models.ImageField(upload_to='profile_pics/', default=None, null=True, blank=True, storage=SFS)
+    user_img = models.ImageField(upload_to='profile_pics/', default=None, null=True, blank=True)
     has_ongoing_transaction = models.BooleanField(default=False)
 
 class Tools(models.Model):
