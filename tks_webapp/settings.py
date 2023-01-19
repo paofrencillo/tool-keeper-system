@@ -150,7 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
-SFTP_STORAGE_HOST = 'https://tkstupc.com'
+SFTP_STORAGE_HOST = 'tkstupc.com'
 SFTP_STORAGE_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
