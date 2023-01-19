@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # if DEBUG:  # for DEVELOPMENT ONLY!!
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -149,13 +149,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
-SFTP_STORAGE_HOST = 'tkstupc.com'
-SFTP_STORAGE_ROOT = os.path.join(BASE_DIR, 'media')
+# DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
+# SFTP_STORAGE_HOST = 'tkstupc.com'
+# SFTP_STORAGE_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = 'https://tkstupc.com/media/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
