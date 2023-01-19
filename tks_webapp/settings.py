@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from django.conf import settings
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
