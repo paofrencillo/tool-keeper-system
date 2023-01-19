@@ -348,7 +348,6 @@ def reservation_sf(request):
         for item in selected_tools:
             if ToolQuantity.objects.get(tool_name=item).quantity == 0:
                 not_available_tools.append(item)
-                print(not_available_tools)
 
         if not_available_tools != []:
             messages.add_message(request,

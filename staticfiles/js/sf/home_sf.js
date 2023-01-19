@@ -83,12 +83,12 @@ function search_tools() {
     let tools = document.getElementsByClassName('carousel-wrapper');
 
     for ( let tool of tools ) { 
-        let tool_name = tool.getAttribute('data-tool-name').toLowerCase();
+        let tool_name = tool.getAttribute('id').toLowerCase();
 
         if ( re.test(tool_name) == true ) {
-            tool.parentNode.style.display = "block";
+            tool.style.display = "block";
         } else {
-            tool.parentNode.style.display = "none";           
+            tool.style.display = "none";           
         }
     }
 }

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # if DEBUG:  # for DEVELOPMENT ONLY!!
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -40,11 +40,11 @@ EMAIL_HOST_USER = 'no-reply@tkstupc.com'
 EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
 EMAIL_PORT = 465
 
-ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
+ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com', '*']
 # ALLOWED_HOSTS = []
 
 # if not DEBUG:
-CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com']
+# CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com', '*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'crispy_forms',
     'tks',
 ]
@@ -103,7 +105,14 @@ DATABASES = {
         'PORT': '7349',
     }
 }
-## database for development
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dwnucn5f9',
+    'API_KEY': '984263171514868',
+    'API_SECRET': 'QBUlOwxTgJgGfghcRtObggS4Gr4'
+}
+
+# # database for development
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -149,13 +158,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
-# SFTP_STORAGE_HOST = 'tkstupc.com'
-# SFTP_STORAGE_ROOT = os.path.join(BASE_DIR, 'media')
-
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
