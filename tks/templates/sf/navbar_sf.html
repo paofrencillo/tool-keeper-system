@@ -17,7 +17,7 @@
                     {% if request.user.user_img == None or request.user.user_img == '' %}
                         <img id="avatar" class="rounded-circle" src="{% static 'res/free-avatar.png' %}" alt="">
                     {% elif request.user.user_img != None or request.user.user_img != ''%}
-                        <img id="avatar" class="rounded-circle" src="{{ request.user.user_img.url }}" alt="">
+                        <img id="avatar" class="rounded-circle" src="{{ request.user.user_img }}" alt="">
                     {% endif %}
 
                 </a>
