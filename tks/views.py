@@ -1103,7 +1103,8 @@ def reset_password(request):
             user_email = User.objects.filter(Q(email=data))
             if user_email.exists():
                 for user in user_email:
-                    subject = 'Password Reset Request'
+                    subject = "TKS Transaction Code"
+                    sender = settings.EMAIL_HOST_USER
                     email_temp_name = 'password_reset/email_pass_message.txt'
                     current_site = get_current_site(request)
                     parameters = {
@@ -1119,12 +1120,16 @@ def reset_password(request):
                     message = render_to_string(email_temp_name, parameters)
 
                     try:
-                        send_mail(auth_user=settings.EMAIL_HOST_USER,
-                                subject=subject,
-                                message=message,
-                                from_email=settings.EMAIL_HOST_USER,
-                                recipient_list=[user.email],
-                                fail_silently=False)
+                        # Send email to user         
+                        email = EmailMessage(
+                            subject=subject,
+                            body=message,
+                            from_email=sender,
+                            to=[user.email],
+                            headers={'Message-ID': 'Reset Password'},
+                        )
+
+                        email.send()
 
                         return redirect('reset_password_sent')
             
