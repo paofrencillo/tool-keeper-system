@@ -1113,7 +1113,7 @@ def reset_password(request):
                         'domain' : current_site.domain,
                         'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
                         'token' : default_token_generator.make_token(user),
-                        'protocol' : 'http', 
+                        'protocol' : 'https', 
                     }
 
                     message = render_to_string(email_temp_name, parameters)
