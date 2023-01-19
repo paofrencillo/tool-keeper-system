@@ -21,18 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ['SECRET_KEY']
-SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07p2k07^c&ay%"
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.hostinger.com'
-EMAIL_HOST_USER = 'no-reply@tkstupc.com'
-EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
-EMAIL_PORT = 465
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = os.environ['EMAIL_PORT']
 
 ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
 
@@ -90,18 +89,18 @@ WSGI_APPLICATION = 'tks_webapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'USER': 'root',
-        'PASSWORD': 'Fu8oWc5rg0nrFvoecGZE',
-        'HOST': 'containers-us-west-33.railway.app',
-        'PORT': '5577',
+        'NAME': os.environ['MYSQLDATABASE'],
+        'USER': os.environ['MYSQLUSER'],
+        'PASSWORD': os.environ['MYSQLPASSWORD'],
+        'HOST': os.environ['MYSQLHOST'],
+        'PORT': os.environ['MYSQLPORT'],
     }
 }
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dwnucn5f9',
-    'API_KEY': '984263171514868',
-    'API_SECRET': 'QBUlOwxTgJgGfghcRtObggS4Gr4'
+    'CLOUD_NAME': os.environ['CLOUDINARY_STORAGE_NAME'],
+    'API_KEY': os.environ['CLOUDINARY_STORAGE_API_KEY'],
+    'API_SECRET': os.environ['CLOUDINARY_STORAGE_API_SECRET']
 }
 
 
