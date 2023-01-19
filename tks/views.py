@@ -1116,6 +1116,7 @@ def reset_password(request):
                         'token' : default_token_generator.make_token(user),
                         'protocol' : 'https', 
                     }
+                    print("!!!!!", current_site)
 
                     message = render_to_string(email_temp_name, parameters)
 
