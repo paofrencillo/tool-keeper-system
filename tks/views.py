@@ -954,7 +954,7 @@ def tools_tk(request):
         except requests.Timeout:
             return HttpResponseNotFound('<h1>Make Sure that the Raspberry Pi is ON and connected.</h1>')
     
-    if request.method == "POST" and request.POST.get('change_tool_name') != None:
+    if request.method == "POST" and request.POST.get('change_tool_name') != None and request.POST.get('change_tool_name') != '':
         try:
             rpi_ip = RpiIP.objects.get(pk=1)
             requests.get(f"{rpi_ip.host}/checkRPI")
