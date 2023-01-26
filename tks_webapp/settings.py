@@ -21,7 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
-# SECRET_KEY = "django-insecure-00h+!gql4c=v=m0ike1n6j96^@fkfd%2(6!vt07"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -33,21 +32,12 @@ EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = os.environ['EMAIL_PORT']
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_SSL = True
-# EMAIL_HOST = 'smtp.hostinger.com'
-# EMAIL_HOST_USER = 'no-reply@tkstupc.com'
-# EMAIL_HOST_PASSWORD = 'email4tks@TUPC'
-# EMAIL_PORT = '465'
+if not DEBUG:
+    ALLOWED_HOSTS = ['tkstupc.com']
+    CSRF_TRUSTED_ORIGINS = ['https://tkstupc.com']
 
-# ALLOWED_HOSTS = ['web-production-91b5.up.railway.app', 'tkstupc.com']
-
-# CSRF_TRUSTED_ORIGINS = ['https://web-production-91b5.up.railway.app', 'https://tkstupc.com']
-
-ALLOWED_HOSTS = ['tool-keeper-system-production.up.railway.app']
-
-CSRF_TRUSTED_ORIGINS = ['https://tool-keeper-system-production.up.railway.app']
-
+if DEBUG:
+    ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
@@ -114,23 +104,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ['CLOUDINARY_STORAGE_API_KEY'],
     'API_SECRET': os.environ['CLOUDINARY_STORAGE_API_SECRET']
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'railway',
-#         'USER': 'root',
-#         'PASSWORD': 'X7pQwlgF3LEL2tKjeoa3',
-#         'HOST': 'containers-us-west-37.railway.app',
-#         'PORT': '6118',
-#     }
-# }
-
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': 'dwnucn5f9',
-#     'API_KEY': '984263171514868',
-#     'API_SECRET': 'QBUlOwxTgJgGfghcRtObggS4Gr4'
-# }
 
 
 # Password validation
