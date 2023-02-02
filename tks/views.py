@@ -879,7 +879,7 @@ def tools_tk(request):
 
             tool = Tools.objects.get(pk=int(request.POST.get('remove_tool_id')))
             tool_quantity = ToolQuantity.objects.get(tool_name=tool.tool_name)
-            tool.quantity -= 1
+            tool_quantity.quantity -= 1
             tool.is_removed = True
             tool.status = "REMOVED"
             tool.save()
